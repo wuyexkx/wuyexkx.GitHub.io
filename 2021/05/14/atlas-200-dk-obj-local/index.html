@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="某一篇博客, miemieda">
+    <meta name="keywords" content="miemieda">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>某一篇博客 | miemieda</title>
+    <title>miemieda</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -225,12 +225,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">某一篇博客</h1>
+                    <h1 class="description center-align post-title"></h1>
                 </div>
             </div>
         </div>
@@ -344,29 +344,12 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/tag1/">
-                                <span class="chip bg-color">tag1</span>
-                            </a>
-                        
-                            <a href="/tags/tag2/">
-                                <span class="chip bg-color">tag2</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/Markdown/" class="post-category">
-                                Markdown
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -375,7 +358,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-12
+                    2021-05-14
                 </div>
                 
 
@@ -384,7 +367,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    73
+                    1.3k
                 </div>
                 
 
@@ -404,19 +387,161 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+                <p>@[toc]</p>
+<h1 id="py-script"><a href="#py-script" class="headerlink" title="py script"></a>py script</h1><pre class="line-numbers language-c" data-language="c"><code class="language-c">获得脚本运行时传入的参数
+启动CPP_EXE，并将脚本收到的参数传入cpp可执行文件	
+	os<span class="token punctuation">.</span><span class="token function">system</span><span class="token punctuation">(</span>CPP_EXE <span class="token operator">+</span> console_params<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h1 id="main"><a href="#main" class="headerlink" title="main"></a>main</h1><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token number">1.</span> 系统初始化 <span class="token function">HIAI_Init</span><span class="token punctuation">(</span>kDeviceId<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<span class="token number">2.</span> 创建并启动图 hiai<span class="token operator">::</span><span class="token class-name">Graph</span><span class="token operator">::</span><span class="token function">CreateGraph</span><span class="token punctuation">(</span>kGraphConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<span class="token number">3.</span> 获取图的实例 graph <span class="token operator">=</span> hiai<span class="token operator">::</span><span class="token class-name">Graph</span><span class="token operator">::</span><span class="token function">GetInstance</span><span class="token punctuation">(</span>kGraphId<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<span class="token number">4.</span> 设置回调函数（根据规则自定义：重载RecvData），
+	main中的回调函数是最后一个Engine传出的数据，这里不需要做什么，只是flag<span class="token operator">--</span> 
+	graph<span class="token operator">-></span><span class="token function">SetDataRecvFunctor</span><span class="token punctuation">(</span>
+      target_port_config<span class="token punctuation">,</span>
+      std<span class="token operator">::</span>shared_ptr<span class="token operator">&lt;</span>CustomDataRecvInterface<span class="token operator">></span><span class="token punctuation">(</span>
+          <span class="token keyword">new</span> <span class="token punctuation">(</span>nothrow<span class="token punctuation">)</span> <span class="token function">CustomDataRecvInterface</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          
+	其中 CustomDataRecvInterface 类的定义有要求：
+	<span class="token comment">// https://www.huaweicloud.com/ascend/doc/Atlas%20200%20DK/1.32.0.0(beta)/zh/zh-cn_topic_0204323953.html</span>
+	<span class="token comment">// https://www.huaweicloud.com/ascend/doc/Atlas%20200%20DK/1.32.0.0(beta)/zh/zh-cn_topic_0204323784.html</span>
+		<span class="token number">1.</span> 继承 hiai<span class="token operator">::</span>DataRecvInterface
+		<span class="token number">2.</span> 重载RecvData方法
+		<span class="token keyword">class</span> <span class="token class-name">CustomDataRecvInterface</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token keyword">public</span> hiai<span class="token operator">::</span><span class="token class-name">DataRecvInterface</span></span> <span class="token punctuation">&#123;</span>
+		<span class="token keyword">public</span><span class="token operator">:</span>
+		  <span class="token comment">/*** @brief: Constructor */</span>
+		  <span class="token function">CustomDataRecvInterface</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
+		  <span class="token operator">~</span><span class="token function">CustomDataRecvInterface</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
+		  <span class="token comment">/*
+		   * @brief: Receive data from call back engine
+		   * @param [in]: received message
+		   * @return: result	   */</span>
+		  HIAI_StatusT <span class="token function">RecvData</span><span class="token punctuation">(</span><span class="token keyword">const</span> std<span class="token operator">::</span>shared_ptr<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">></span><span class="token operator">&amp;</span> message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+		
+		<span class="token comment">// 重写的内容如下，全局flag--，</span>
+		HIAI_StatusT <span class="token class-name">CustomDataRecvInterface</span><span class="token operator">::</span><span class="token function">RecvData</span><span class="token punctuation">(</span>
+		    <span class="token keyword">const</span> std<span class="token operator">::</span>shared_ptr<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">></span><span class="token operator">&amp;</span> message<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		  <span class="token comment">// no need to read any message, only decrease flag</span>
+		  mt<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		  flag<span class="token operator">--</span><span class="token punctuation">;</span>
+		  mt<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		  <span class="token keyword">return</span> HIAI_OK<span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>	
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<span class="token number">5.</span> 发送数据，启动第一个Engine （general_image）
+	 graph<span class="token operator">-></span><span class="token function">SendData</span><span class="token punctuation">(</span>engine_id<span class="token punctuation">,</span> <span class="token string">"ConsoleParams"</span><span class="token punctuation">,</span>
+	        		 static_pointer_cast<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">></span><span class="token punctuation">(</span>param_ptr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>	
+	   <span class="token comment">// 发送到第一个Engine的数据是 shared_ptr&lt;ConsoleParams> param_ptr 类型	</span>
+	   <span class="token comment">// https://support.huaweicloud.com/api-matrix-atlas200dkappc32/atlasmatrix_07_0041.html</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>回调函数，重载而来，需要继承<code>hiai::DataRecvInterface</code>，<br><a target="_blank" rel="noopener" href="https://www.huaweicloud.com/ascend/doc/Atlas%20200%20DK/1.32.0.0%28beta%29/zh/zh-cn_topic_0204323784.html">https://www.huaweicloud.com/ascend/doc/Atlas%20200%20DK/1.32.0.0(beta)/zh/zh-cn_topic_0204323784.html</a><br><img src="images/20200925130054696.png" alt="在这里插入图片描述"></p>
+<h1 id="Engine1-general-image"><a href="#Engine1-general-image" class="headerlink" title="Engine1 - general_image"></a>Engine1 - general_image</h1><h2 id="Init-没做什么"><a href="#Init-没做什么" class="headerlink" title="Init 没做什么"></a>Init 没做什么</h2><p>该引擎运行前需要的初始化操作。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// GeneralImage 继承 hiai::Engine</span>
+<span class="token keyword">class</span> <span class="token class-name">GeneralImage</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token keyword">public</span> hiai<span class="token operator">::</span><span class="token class-name">Engine</span></span> <span class="token punctuation">&#123;</span>
+
+<span class="token comment">// Init什么也没做</span>
+HIAI_StatusT <span class="token class-name">GeneralImage</span><span class="token operator">::</span><span class="token function">Init</span><span class="token punctuation">(</span>
+    <span class="token keyword">const</span> hiai<span class="token operator">::</span>AIConfig<span class="token operator">&amp;</span> config<span class="token punctuation">,</span>
+    <span class="token keyword">const</span> vector<span class="token operator">&lt;</span>hiai<span class="token operator">::</span>AIModelDescription<span class="token operator">></span><span class="token operator">&amp;</span> model_desc<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// do noting</span>
+  <span class="token keyword">return</span> HIAI_OK<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="HIAI-IMPL-ENGINE-PROCESS"><a href="#HIAI-IMPL-ENGINE-PROCESS" class="headerlink" title="HIAI_IMPL_ENGINE_PROCESS"></a>HIAI_IMPL_ENGINE_PROCESS</h2><p><code>HIAI_IMPL_ENGINE_PROCESS</code>宏方法，上个引擎往本引擎发送数据，在这个宏里处理数据，发一次处理一次。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token number">1.</span> 检查arg0，提取input_path
+
+<span class="token number">2.</span> 提取文件路径到file_vec
+
+<span class="token number">3.</span> <span class="token keyword">for</span>，send每张图到 inference engine 
+	用cv读取图像，把图像信息存入shared_ptr<span class="token operator">&lt;</span>EngineTrans<span class="token operator">></span> <span class="token operator">&amp;</span>image_handle
+	发送<span class="token function">SendData</span><span class="token punctuation">(</span>kSendDataPort<span class="token punctuation">,</span> <span class="token string">"EngineTrans"</span><span class="token punctuation">,</span> static_pointer_cast<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">></span><span class="token punctuation">(</span>image_handle<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		发送成功则sleep <span class="token number">200</span>ms，image_handle<span class="token operator">-></span>is_finished <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span> 否则再下一张
+
+<span class="token number">4.</span> 发送结束标志 
+	image_handle<span class="token operator">-></span>is_finished <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+	<span class="token function">SendData</span><span class="token punctuation">(</span>kSendDataPort<span class="token punctuation">,</span> <span class="token string">"EngineTrans"</span><span class="token punctuation">,</span>
+             static_pointer_cast<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">></span><span class="token punctuation">(</span>image_handle<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+             <span class="token comment">// 发送到下一个Engine的数据是 shared_ptr&lt;EngineTrans> &amp;image_handle类型</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">继承 hiai<span class="token operator">::</span>Engine 的 GeneralImage 通过HIAI_IMPL_ENGINE_PROCESS参数 与 底层产生联系<span class="token punctuation">,</span>
+<span class="token function">HIAI_IMPL_ENGINE_PROCESS</span><span class="token punctuation">(</span><span class="token string">"general_image"</span><span class="token punctuation">,</span>
+    GeneralImage<span class="token punctuation">,</span> INPUT_SIZE<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h1 id="Engine2-general-inference"><a href="#Engine2-general-inference" class="headerlink" title="Engine2 - general_inference"></a>Engine2 - general_inference</h1><p>接受<code>Engine1 - general_image</code>发过来的图片，<br>dvpp预处理后交给模型管家前向传播得到输出结果，<br>发送处理结果到<code>Engine3 -  general_post</code>。</p>
+<h2 id="Init"><a href="#Init" class="headerlink" title="Init"></a>Init</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token number">1.</span> 初始化 AI模型管家 aiModelManager
+	std<span class="token operator">::</span>make_shared<span class="token operator">&lt;</span>hiai<span class="token operator">::</span>AIModelManager<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token number">2.</span> 设置模型描述，从graph<span class="token punctuation">.</span>config文件获取模型路径	
+	hiai<span class="token operator">::</span>AIModelDescription fd_model_desc<span class="token punctuation">;</span>
+	fd_model_desc<span class="token punctuation">.</span><span class="token function">set_path</span><span class="token punctuation">(</span>model_path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token number">3.</span> 初始化模型管理器
+	vector<span class="token operator">&lt;</span>hiai<span class="token operator">::</span>AIModelDescription<span class="token operator">></span> model_desc_vec<span class="token punctuation">;</span>
+  	model_desc_vec<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>fd_model_desc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	ai_model_manager_<span class="token operator">-></span><span class="token function">Init</span><span class="token punctuation">(</span>config<span class="token punctuation">,</span> model_desc_vec<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 初始化模型管理器</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="HIAI-IMPL-ENGINE-PROCESS-1"><a href="#HIAI-IMPL-ENGINE-PROCESS-1" class="headerlink" title="HIAI_IMPL_ENGINE_PROCESS"></a>HIAI_IMPL_ENGINE_PROCESS</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token number">1.</span> 检查参数arg0，转化参数类型
+	shared_ptr<span class="token operator">&lt;</span>EngineTrans<span class="token operator">></span> image_handle <span class="token operator">=</span> static_pointer_cast<span class="token operator">&lt;</span>EngineTrans<span class="token operator">></span><span class="token punctuation">(</span>arg0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token number">2.</span> 判断结束标志，发送数据到推理Engine
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>image_handle<span class="token operator">-></span>is_finished<span class="token punctuation">)</span> 
+		<span class="token function">SendToEngine</span><span class="token punctuation">(</span>image_handle<span class="token punctuation">)</span>
+			<span class="token function">SendData</span><span class="token punctuation">(</span>kSendDataPort<span class="token punctuation">,</span> <span class="token string">"EngineTrans"</span><span class="token punctuation">,</span>
+						static_pointer_cast<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">></span><span class="token punctuation">(</span>image_handle<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token comment">// https://support.huaweicloud.com/api-matrix-atlas200dkappc32/atlasmatrix_07_0041.html</span>
+
+<span class="token number">3.</span> 如果没有接收到结束标志，则预处理图片resize 返回 ImageData
+	没有接收到结束标志，但一定接收到了图片（否则不会进入PROCESS），可以预处理图片咯 <span class="token operator">^</span>v<span class="token operator">^</span> 
+	用dvpp resize图片，保证左顶even，右底odd
+
+<span class="token number">4.</span> 目的是丢到AI模型管家前向传播，inference 
+	从dvpp的 ImageData 格式 到 neural格式 到 hiai<span class="token operator">::</span>IAITensor格式
+		ImageData <span class="token operator">--</span> <span class="token operator">></span> hiai<span class="token operator">::</span>AINeuralNetworkBuffer <span class="token operator">--</span><span class="token operator">></span> hiai<span class="token operator">::</span>IAITensor
+	把 hiai<span class="token operator">::</span>IAITensor 图片push到vector<span class="token operator">&lt;</span>shared_ptr<span class="token operator">&lt;</span>hiai<span class="token operator">::</span>IAITensor<span class="token operator">>></span>
+	创建输出Tensor 
+		vector<span class="token operator">&lt;</span>shared_ptr<span class="token operator">&lt;</span>hiai<span class="token operator">::</span>IAITensor<span class="token operator">>></span> output_data<span class="token punctuation">;</span>   			<span class="token comment">// 实参	</span>
+		ai_model_manager_<span class="token operator">-></span><span class="token function">CreateOutputTensor</span><span class="token punctuation">(</span>input_data_vec<span class="token punctuation">,</span> 
+												output_data_vec<span class="token punctuation">)</span><span class="token punctuation">;</span>	<span class="token comment">// 形参</span>
+	开始推理Process
+		ai_model_manager_<span class="token operator">-></span><span class="token function">Process</span><span class="token punctuation">(</span>ai_context<span class="token punctuation">,</span> 
+									input_data_vec<span class="token punctuation">,</span> 
+									output_data_vec<span class="token punctuation">,</span> 
+									kAiModelProcessTimeout<span class="token punctuation">)</span><span class="token punctuation">;</span>		
+<span class="token number">5.</span> 发送结果
+	<span class="token function">SendResult</span><span class="token punctuation">(</span>image_handle<span class="token punctuation">,</span> output_data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">for</span><span class="token punctuation">,</span> 对于每个输出Tensor，output_data_vec
+		image_handle<span class="token operator">-></span>inference_res<span class="token punctuation">.</span><span class="token function">emplace_back</span><span class="token punctuation">(</span>out<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">SendData</span><span class="token punctuation">(</span>kSendDataPort<span class="token punctuation">,</span> <span class="token string">"EngineTrans"</span><span class="token punctuation">,</span>
+                        static_pointer_cast<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">></span><span class="token punctuation">(</span>image_handle<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>		<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="Engine3-general-post"><a href="#Engine3-general-post" class="headerlink" title="Engine3 -  general_post"></a>Engine3 -  general_post</h1><p>接收模型输出的结果，后处理</p>
+<h2 id="Init-1"><a href="#Init-1" class="headerlink" title="Init"></a>Init</h2><pre class="line-numbers language-none"><code class="language-none">什么也没做<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="HIAI-IMPL-ENGINE-PROCESS-2"><a href="#HIAI-IMPL-ENGINE-PROCESS-2" class="headerlink" title="HIAI_IMPL_ENGINE_PROCESS"></a>HIAI_IMPL_ENGINE_PROCESS</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token number">1.</span> 检查参数arg0，转化参数类型
+	shared_ptr<span class="token operator">&lt;</span>EngineTrans<span class="token operator">></span> result <span class="token operator">=</span> static_pointer_cast<span class="token operator">&lt;</span>EngineTrans<span class="token operator">></span><span class="token punctuation">(</span>arg0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token number">2.</span> 判断结束标志 若结束发送空字符串
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token operator">-></span>is_finished<span class="token punctuation">)</span> 
+	  <span class="token function">SendSentinel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>	<span class="token comment">// 哨兵</span>
+	  	shared_ptr<span class="token operator">&lt;</span>string<span class="token operator">></span> <span class="token function">sentinel_msg</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token punctuation">(</span>nothrow<span class="token punctuation">)</span> string<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">SendData</span><span class="token punctuation">(</span>kSendDataPort<span class="token punctuation">,</span> <span class="token string">"string"</span><span class="token punctuation">,</span>
+                 static_pointer_cast<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">></span><span class="token punctuation">(</span>sentinel_msg<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token number">3.</span> 如果不是结束标志 则后处理模型输出 PostProcess
+	解码模型输出的Tensor  decodeTensor		（yolo3的精髓）
+	非极大值抑制算法 nonMaximumSuppression		（yolo3的精髓）
+		返回 std<span class="token operator">::</span>vector<span class="token operator">&lt;</span>BoundingBox<span class="token operator">></span> result<span class="token punctuation">;</span>
+	画框框保存图片<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="一些宏接口"><a href="#一些宏接口" class="headerlink" title="一些宏接口"></a>一些宏接口</h1><h2 id="1-HIAI-REGISTER-DATA-TYPE-自定义数据结构-的宏接口"><a href="#1-HIAI-REGISTER-DATA-TYPE-自定义数据结构-的宏接口" class="headerlink" title="1. HIAI_REGISTER_DATA_TYPE 自定义数据结构 的宏接口"></a>1. HIAI_REGISTER_DATA_TYPE 自定义数据结构 的宏接口</h2><p>宏原型 <code>HIAI_REGISTER_DATA_TYPE(name, type)</code><br>为用户自定义的数据结构类型提供序列化和反序列化机制。<br><a target="_blank" rel="noopener" href="https://support.huaweicloud.com/api-matrix-atlas200dkappc32/atlasmatrix_07_0063.html">https://support.huaweicloud.com/api-matrix-atlas200dkappc32/atlasmatrix_07_0063.html</a></p>
+<h2 id="2-HIAI-DEFINE-PROCESS-定义引擎输入出端口数"><a href="#2-HIAI-DEFINE-PROCESS-定义引擎输入出端口数" class="headerlink" title="2. HIAI_DEFINE_PROCESS 定义引擎输入出端口数"></a>2. HIAI_DEFINE_PROCESS 定义引擎输入出端口数</h2><p><a target="_blank" rel="noopener" href="https://support.huaweicloud.com/api-matrix-atlas200dkappc32/atlasmatrix_07_0048.html">https://support.huaweicloud.com/api-matrix-atlas200dkappc32/atlasmatrix_07_0048.html</a><br>宏原型<code>HIAI_DEFINE_PROCESS（inputPortNum, outputPortNum）</code></p>
+<p>用户直接调用该<code>宏</code> 定义Engine的输入与输出端口数 <code>[1 , 16]</code>。</p>
+<p>用户调用宏的顺序应该是：<code>HIAI_DEFINE_PROCESS</code> –&gt; <code>HIAI_IMPL_ENGINE_PROCESS</code></p>
+<h2 id="3-HIAI-IMPL-ENGINE-PROCESS-接受处理数据"><a href="#3-HIAI-IMPL-ENGINE-PROCESS-接受处理数据" class="headerlink" title="3. HIAI_IMPL_ENGINE_PROCESS 接受处理数据"></a>3. HIAI_IMPL_ENGINE_PROCESS 接受处理数据</h2><p><a target="_blank" rel="noopener" href="https://support.huaweicloud.com/api-matrix-atlas200dkappc32/atlasmatrix_07_0049.html">https://support.huaweicloud.com/api-matrix-atlas200dkappc32/atlasmatrix_07_0049.html</a><br>宏原型<code>HIAI_IMPL_ENGINE_PROCESS(name, engineClass, inPortNum)</code></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">engineClass 需要继承 hiai<span class="token operator">::</span>Engine
+需要重写Init<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="4-HIAI-ENGINE-LOG"><a href="#4-HIAI-ENGINE-LOG" class="headerlink" title="4. HIAI_ENGINE_LOG"></a>4. HIAI_ENGINE_LOG</h2><p><a target="_blank" rel="noopener" href="https://support.huaweicloud.com/api-matrix-atlas200dkappc30/atlasmatrix_07_0149.html">https://support.huaweicloud.com/api-matrix-atlas200dkappc30/atlasmatrix_07_0149.html</a><br>宏原型很多，打印日志的格式有8种。</p>
+<p>调用<code>HIAI_ENGINE_LOG</code>后，系统将日志记录日志文件中，日志文件在<code>Host侧</code>或开发者板的<code>/var</code>目录下。<br><code>Device侧</code>的日志被记录在文件名称以<code>device-id</code>开头的日志文件中，<br><code>Host侧</code>的日志被记录在文件名称以<code>host-0</code>开头的日志文件中。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">最简单的一种
+<span class="token function">HIAI_ENGINE_LOG</span><span class="token punctuation">(</span><span class="token string">"Start initialize!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 
                 
             </div>
@@ -443,7 +568,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wuyexkx.github.io/2021/05/12/hello-world/">https://wuyexkx.github.io/2021/05/12/hello-world/</a>
+                    <a href="https://wuyexkx.github.io/2021/05/14/atlas-200-dk-obj-local/">https://wuyexkx.github.io/2021/05/14/atlas-200-dk-obj-local/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -480,15 +605,7 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/tag1/">
-                                    <span class="chip bg-color">tag1</span>
-                                </a>
-                            
-                                <a href="/tags/tag2/">
-                                    <span class="chip bg-color">tag2</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -659,7 +776,7 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/05/14/atlas-200-dk-obj-local/">
+                <a href="/2021/05/14/atlas-200-dkcam-she-xiang-tou-yolov3-opencv-can-shu-local/">
                     <div class="card-image">
                         
                         
@@ -693,7 +810,7 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
                 <a href="/2021/05/12/hello-world/">
@@ -727,7 +844,6 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     

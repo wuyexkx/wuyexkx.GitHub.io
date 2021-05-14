@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="某一篇博客, miemieda">
+    <meta name="keywords" content="miemieda">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>某一篇博客 | miemieda</title>
+    <title>miemieda</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -225,12 +225,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">某一篇博客</h1>
+                    <h1 class="description center-align post-title"></h1>
                 </div>
             </div>
         </div>
@@ -344,29 +344,12 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/tag1/">
-                                <span class="chip bg-color">tag1</span>
-                            </a>
-                        
-                            <a href="/tags/tag2/">
-                                <span class="chip bg-color">tag2</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/Markdown/" class="post-category">
-                                Markdown
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -375,7 +358,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-12
+                    2021-05-14
                 </div>
                 
 
@@ -384,7 +367,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    73
+                    378
                 </div>
                 
 
@@ -404,19 +387,40 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+                <p>华为云账户：<br>账户：icv-hilens 密码：</p>
+<p>昇腾资源：<a target="_blank" rel="noopener" href="https://www.huaweicloud.com/ascend/resources">https://www.huaweicloud.com/ascend/resources</a></p>
+<p><a target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1Drs_Aiu7xx6S-ix95f9kNsA6ueKRpN2J">https://drive.google.com/drive/folders/1Drs_Aiu7xx6S-ix95f9kNsA6ueKRpN2J</a></p>
+<p>切换root用户 su - root</p>
+<h1 id="RJ45登录"><a href="#RJ45登录" class="headerlink" title="RJ45登录"></a>RJ45登录</h1><p>登录用户名：<code>ssh HwHiAiUser@192.168.0.2</code> (原用户：ssh <a href="mailto:&#x48;&#x77;&#72;&#105;&#65;&#x69;&#85;&#x73;&#x65;&#114;&#64;&#x31;&#57;&#50;&#46;&#49;&#54;&#x38;&#x2e;&#x30;&#46;&#x32;">&#x48;&#x77;&#72;&#105;&#65;&#x69;&#85;&#x73;&#x65;&#114;&#64;&#x31;&#57;&#50;&#46;&#49;&#54;&#x38;&#x2e;&#x30;&#46;&#x32;</a>)<br>登录密码：<code>asdfghjkl</code> (原密码：Mind@123)<br>root用户：切换root用户 <code>su - root</code>，密码<code>asdfghjkl</code> (原密码：Mind@123)</p>
+<h2 id="修改登录用户名-可以改，但是改了Minstudio就连不上了"><a href="#修改登录用户名-可以改，但是改了Minstudio就连不上了" class="headerlink" title="修改登录用户名(可以改，但是改了Minstudio就连不上了)"></a>修改登录用户名(可以改，但是改了Minstudio就连不上了)</h2><ol>
+<li>切换root用户 <code>su - root</code></li>
+<li><code>vim /etc/passwd</code> 修改最后一行的第一个<code>HwHiAiUser</code>为<code>icv</code>，第二个不修改否则登入后找不到/home/icv目录<br><img src="./images/20200710102630268.png" alt="在这里插入图片描述"></li>
+<li><code>vim /etc/shadow</code> 修改一个地方<br><img src="./images/20200710102707953.png" alt="在这里插入图片描述"></li>
+<li><code>vim /etc/group</code> 修改一个地方<br><img src="./images/20200710102727994.png" alt="在这里插入图片描述"></li>
+</ol>
+<h1 id="内部指示灯的状态"><a href="#内部指示灯的状态" class="headerlink" title="内部指示灯的状态"></a>内部指示灯的状态</h1><p><img src="./images/20200709175022645.png" alt="在这里插入图片描述"></p>
+<h1 id="IP配置"><a href="#IP配置" class="headerlink" title="IP配置"></a>IP配置</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">source</span> /etc/network/interfaces.d/*
+auto lo
+iface lo inet loopback
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+auto eth0
+iface eth0 inet static
+address <span class="token number">192.168</span>.1.2
+netmask <span class="token number">255.255</span>.255.0
+gateway <span class="token number">192.168</span>.1.1
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+auto usb0
+iface usb0 inet static
+address <span class="token number">192.168</span>.1.2
+netmask <span class="token number">255.255</span>.255.0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="ssh-跳转失败"><a href="#ssh-跳转失败" class="headerlink" title="ssh 跳转失败"></a>ssh 跳转失败</h1><p>删除“known_hosts”文件。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rm</span> /home/username/.ssh/known_hosts <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="制卡过程"><a href="#制卡过程" class="headerlink" title="制卡过程"></a>制卡过程</h1><p><a target="_blank" rel="noopener" href="https://support.huaweicloud.com/qs-atlas200dkappc32/atlased_04_0028.html">https://support.huaweicloud.com/qs-atlas200dkappc32/atlased_04_0028.html</a></p>
+<h2 id="DDK资源下载（难找啊）"><a href="#DDK资源下载（难找啊）" class="headerlink" title="DDK资源下载（难找啊）"></a>DDK资源下载（难找啊）</h2><p><a target="_blank" rel="noopener" href="https://www.huaweicloud.com/ascend/resources/ResourceDownload/DE51187AC4F0F5DBAB3A468952C95CADAC6308BFFFB5D064B9A30DBD2B73B4ABCEC6BAF7F594AE3C3FA89621AFFF3E3CFB4ED973618F8857D07706003D546332/DDK%20&%20Runtime/be3564c84a0546959b6439ebc4e8ae30/3/1/1?ticket=ST-63818-B0KaxNRDrP3SdJsy5XXR4xd2-sso&locale=zh-cn">https://www.huaweicloud.com/ascend/resources/ResourceDownload/DE51187AC4F0F5DBAB3A468952C95CADAC6308BFFFB5D064B9A30DBD2B73B4ABCEC6BAF7F594AE3C3FA89621AFFF3E3CFB4ED973618F8857D07706003D546332/DDK &amp; Runtime/be3564c84a0546959b6439ebc4e8ae30/3/1/1?ticket=ST-63818-B0KaxNRDrP3SdJsy5XXR4xd2-sso&amp;locale=zh-cn</a></p>
+<h2 id="资源完整性校验"><a href="#资源完整性校验" class="headerlink" title="资源完整性校验"></a>资源完整性校验</h2><p><a target="_blank" rel="noopener" href="https://support.huaweicloud.com/instg-atlas200dkappc32/atlasdd_03_0009.html">https://support.huaweicloud.com/instg-atlas200dkappc32/atlasdd_03_0009.html</a></p>
+<h1 id="安装-MindStudio"><a href="#安装-MindStudio" class="headerlink" title="安装 MindStudio"></a>安装 MindStudio</h1><p>问答：<a target="_blank" rel="noopener" href="https://www.huaweicloud.com/ascend/doc/mindstudio/2.1.0(beta)/zh/zh-cn_topic_0200347813.html">https://www.huaweicloud.com/ascend/doc/mindstudio/2.1.0(beta)/zh/zh-cn_topic_0200347813.html</a><br>所有工具下载：<a target="_blank" rel="noopener" href="https://www.huaweicloud.com/ascend/resources/Tools">https://www.huaweicloud.com/ascend/resources/Tools</a></p>
+<p>下载MindStudio<br><a target="_blank" rel="noopener" href="https://www.huaweicloud.com/ascend/resources/Tools/0">https://www.huaweicloud.com/ascend/resources/Tools/0</a><br>下载DDK<br><a target="_blank" rel="noopener" href="https://www.huaweicloud.com/ascend/resources/Tools/1">https://www.huaweicloud.com/ascend/resources/Tools/1</a></p>
+<h1 id="安装-DDK-和-lib"><a href="#安装-DDK-和-lib" class="headerlink" title="安装 DDK 和 lib"></a>安装 DDK 和 lib</h1><p><a target="_blank" rel="noopener" href="https://support.huaweicloud.com/instg-atlas200dkappc32/atlasdd_03_0013.html">https://support.huaweicloud.com/instg-atlas200dkappc32/atlasdd_03_0013.html</a></p>
 
                 
             </div>
@@ -443,7 +447,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wuyexkx.github.io/2021/05/12/hello-world/">https://wuyexkx.github.io/2021/05/12/hello-world/</a>
+                    <a href="https://wuyexkx.github.io/2021/05/14/atlas-200-dk-deng-lu-mi-ma-zhi-qia-an-zhuang-ddk-he-lib-local/">https://wuyexkx.github.io/2021/05/14/atlas-200-dk-deng-lu-mi-ma-zhi-qia-an-zhuang-ddk-he-lib-local/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -480,15 +484,7 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/tag1/">
-                                    <span class="chip bg-color">tag1</span>
-                                </a>
-                            
-                                <a href="/tags/tag2/">
-                                    <span class="chip bg-color">tag2</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -659,7 +655,7 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/05/14/atlas-200-dk-obj-local/">
+                <a href="/2021/05/14/atlas-200-hilens-kit-local/">
                     <div class="card-image">
                         
                         
@@ -693,52 +689,35 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/12/hello-world/">
+                <a href="/2021/05/14/atlas-200-dkcam-she-xiang-tou-yolov3-opencv-can-shu-local/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="某一篇博客">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
                         
-                        <span class="card-title">某一篇博客</span>
+                        <span class="card-title"></span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            这是你自定义的文章摘要内容，如果这个属性有值，文章卡片摘要就显示这段文字，否则程序会自动截取文章的部分内容作为摘要
+                            
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-12
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Markdown/" class="post-category">
-                                    Markdown
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            wuyexkx
                             
                         </span>
                     </div>
-                </div>
-
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/tag1/">
-                        <span class="chip bg-color">tag1</span>
-                    </a>
-                    
-                    <a href="/tags/tag2/">
-                        <span class="chip bg-color">tag2</span>
-                    </a>
-                    
                 </div>
                 
             </div>
