@@ -1,0 +1,1358 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="WDS专栏  task_struct mm_struct vm_area_struct 进程 mmap内核栈 系统调用函数 可重入 内核模块Makefile 调度对象 运行队列 优先权数组, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>WDS专栏  task_struct mm_struct vm_area_struct 进程 mmap内核栈 系统调用函数 可重入 内核模块Makefile 调度对象 运行队列 优先权数组 | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">WDS专栏  task_struct mm_struct vm_area_struct 进程 mmap内核栈 系统调用函数 可重入 内核模块Makefile 调度对象 运行队列 优先权数组</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                <span class="chip bg-color">嵌入式Linux</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                嵌入式Linux
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.7k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/kwame211/article/details/77572123">系统调用函数列表</a></p>
+<h1 id="task-struct-–-mm-struct-–-vm-area-struct"><a href="#task-struct-–-mm-struct-–-vm-area-struct" class="headerlink" title="task_struct – mm_struct – vm_area_struct"></a>task_struct – mm_struct – vm_area_struct</h1><p>进程描述符—内存描述符<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6298192">https://www.bilibili.com/read/cv6298192</a><br><img src="/images/2020072620440361.png"><br>解析如下：</p>
+<ol>
+<li><p> 每个APP在内核中都有一个task_struct结构体，它用来描述一个进程；</p>
+</li>
+<li><p>每个APP都要占据内存，在task_struct中用mm_struct来管理进程占用的内存；<br>内存在虚拟地址、物理地址，mm_struct中用mmap来描述虚拟地址，用pgd来描述对应的物理地址。<br>注意：pgd（Page Global Directory），页目录。</p>
+</li>
+<li><p>每个APP都有一系列的VMA：virtual memory<br>比如APP含有<strong>代码段、数据段、BSS段、栈等等，还有共享库</strong>。这些单元会保存在内存里，它们的地址空间不同，权限不同(代码段是只读的可运行的、数据段可读可写)，<strong>内核用一系列的vm_area_struct来描述它们</strong>。<br>一个进程的所有动态库文件.so的加载，都需要通过mmap系统调用映射指定大小的虚拟地址区间，被mmap映射返回的虚拟地址，逻辑上被消耗了，直到用户进程调用unmap，会回收回来。<br>vm_area_struct中的vm_start、vm_end是虚拟地址。</p>
+</li>
+<li><p>vm_area_struct中虚拟地址如何映射到物理地址去？<br>每一个APP的虚拟地址可能相同，物理地址不相同，这些对应关系保存在pgd中。</p>
+</li>
+</ol>
+<p><img src="/images/20210103111933346.png"></p>
+<h1 id="mmap系统调用"><a href="#mmap系统调用" class="headerlink" title="mmap系统调用"></a>mmap系统调用</h1><h2 id="映射"><a href="#映射" class="headerlink" title="映射"></a>映射</h2><p>mmap是系统调用。<br>APP调用mmap系统函数时，内核就帮我们构造了一个vm_area_stuct结构体。里面含有虚拟地址的地址范围、权限。</p>
+<p><strong>映射存储区位于堆和栈之间。</strong></p>
+<p><code>void* mmap ( void * addr , size_t len , int prot , int flags ,int fd , off_t offset )</code><br>内存映射函数mmap, 负责把文件内容映射到进程的虚拟内存空间, 通过对这段内存的读取和修改，来实现对文件的读取和修改,而不需要再调用read，write等操作。</p>
+<pre class="line-numbers language-none"><code class="language-none">1）addr： 指定映射的起始地址, 通常设为NULL, 由系统指定。
+2）length: 映射到内存的文件长度。
+3） prot：   映射区的保护方式, 可以是:
+	PROT_EXEC: 映射区可被执行
+	PROT_READ: 映射区可被读取
+	PROT_WRITE: 映射区可被写入
+对指定映射存储区的保护要求不能超过文件open模式访问权限。
+4）flags: 映射区的特性, 可以是:
+	MAP_SHARED:写入映射区的数据会复制回文件, 且允许其他映射该文件的进程共享。
+	MAP_PRIVATE:对映射区的写入操作会产生一个映射区的复制(copy-on-write)的私有副本, 对此区域所做的修改不会写回原文件。（此标志的一种用途是用于调试程序，它将程序文件的正文部分映射至存储区，但允许用户修改其中指令。）
+5）fd: 由open返回的文件描述符, 代表要映射的文件。
+6）offset: 以文件开始处的偏移量, 必须是分页大小的整数倍, 通常为0, 表示从文件头开始映射。
+	子进程能够通过fork继承存储映射区（因为子进程复制父进程的地址空间，而存储映射区是该地址空间的一部分）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="解除映射"><a href="#解除映射" class="headerlink" title="解除映射"></a>解除映射</h2><p>int munmap(void *start,size_t length)<br>功能：取消参数start所指向的映射内存，参数length表示欲取消的内存大小。<br>返回值：解除成功返回0，否则返回－1，错误原因存于errno中。</p>
+<h1 id="malloc"><a href="#malloc" class="headerlink" title="malloc"></a>malloc</h1><p>malloc是C的库函数，通过brk/mmap等系统调用向内核申请进程的虚拟地址区间，如果堆内部的内存能满足malloc调用，则直接从堆里获取地址块返回。</p>
+<p>malloc向OS获取的内存大小比较小时，将直接通过brk调用获取虚拟地址。<br>malloc向系统获取比较大的内存时，会通过mmap直接映射一块虚拟地址区间。</p>
+<h1 id="内核栈"><a href="#内核栈" class="headerlink" title="内核栈"></a>内核栈</h1><p>进程生命周期中，经常通过系统调用陷入内核，之后在内核中使用的是内核空间的栈，内核栈。<br>每个task的栈分成用户栈和内核栈两部分。</p>
+<p>内核栈的定义，在32位系统是8KB，64位系统里是16KB。：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">union</span> thread_union <span class="token punctuation">&#123;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">thread_info</span> thread_info<span class="token punctuation">;</span>	<span class="token comment">// thread_info在进程的内核栈中</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> stack<span class="token punctuation">[</span>THREAD_SIZE<span class="token operator">/</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>task_struct、thread_info</code>都用来保存进程相关信息 PCB信息。然而不同的体系结构里，进程需要存储的信息不尽相同，linux使用<code>task_struct</code>存储通用的信息，将体系结构相关的部分存储在<code>thread_info</code>中。这也是为什么<code>struct task_struct</code>在include/linux/sched.h中定义，而thread_info 在arch/ 下体系结构相关头文件里。</p>
+<p>进程描述符中的 task_struct.stack指针，是指向栈区域内存基地址，即thread_union.stack 数组基地址，既不是栈顶也不是栈底，栈顶存在寄存器rsp中，栈底是task_struct.stack+THREAD_SIZE<br><img src="/images/20201207154918566.png"></p>
+<h1 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/ExeGzuDC2jVYL143SjQ-jg">https://mp.weixin.qq.com/s/ExeGzuDC2jVYL143SjQ-jg</a></p>
+<p>进程 包括 执行中的程序 以及 相关的资源 (包括cpu状态、打开的文件、挂起的信号、tty、内存地址空间等)。</p>
+<h2 id="最终调用内核函数do-fork"><a href="#最终调用内核函数do-fork" class="headerlink" title="最终调用内核函数do_fork()"></a>最终调用内核函数do_fork()</h2><p>这三个系统<strong>最终都调用了do_fork()函数</strong>，do_fork()是内核函数，它完成与进程创建有关的大部分工作，三者的唯一区别，在最终调用do_fork()函数设置的那些标志不一样，如下表：<br><img src="/images/20210102231033765.png"><br><img src="/images/20210103000312273.png"></p>
+<h2 id="发生系统调用或者进程切换时，内核如何找到-task-struct"><a href="#发生系统调用或者进程切换时，内核如何找到-task-struct" class="headerlink" title="发生系统调用或者进程切换时，内核如何找到 task_struct"></a>发生系统调用或者进程切换时，内核如何找到 task_struct</h2><p>发生系统调用或者进程切换时，内核如何找到 task_struct ，通过内核栈 (kernel mode stack)。<br>当进程从用户态切换到内核态时，所使用的栈会从用户栈切换到内核栈。</p>
+<p>内核通过内核栈的栈指针可以快速地拿到 thread_info，然后通过 thread_info 找到 task_struct，内核里通过 current 宏可以获得当前进程的 task_struct。</p>
+<p>内核是可重入的。</p>
+<h3 id="可重入"><a href="#可重入" class="headerlink" title="可重入"></a>可重入</h3><p>能被打断，再次回来执行时不影响预期结果。</p>
+<h4 id="1-可重入函数"><a href="#1-可重入函数" class="headerlink" title="1 可重入函数"></a>1 可重入函数</h4><p>可重入函数是指一个可以被多个任务调用的函数(过程)，任务在调用时不必担心数据是否会出错。</p>
+<h4 id="2-可重入内核-（为什么需要内核栈）"><a href="#2-可重入内核-（为什么需要内核栈）" class="headerlink" title="2 可重入内核 （为什么需要内核栈）"></a>2 可重入内核 （为什么需要内核栈）</h4><p>一个进程中断后，内核会保存当前进程的相关信息（<strong>因此需要内核栈</strong>），然后执行下一个进程，等完成后再将上个进程从中断的位置重新恢复执行。这种内核被称为“可重入内核”。</p>
+<h4 id="3-可重入函数与可重入内核的联系"><a href="#3-可重入函数与可重入内核的联系" class="headerlink" title="3 可重入函数与可重入内核的联系"></a>3 可重入函数与可重入内核的联系</h4><p>编写可重入函数是实现“可重入内核”的方式之一，<br>由于一些对IO操作的需求，必须要包含“不可重入函数”，那怎么保证数据的安全呢？<br>内核采用了锁机制保证一次只有一个进程执行一个“不可重入函数”。</p>
+<h2 id="内核栈-1"><a href="#内核栈-1" class="headerlink" title="内核栈"></a>内核栈</h2><p>ARM 架构的内核栈和 task_struct 的关系如下：<br><img src="/images/20210103120330609.png"><br>内核栈的长度是 THREAD_SIZE，对于 ARM 架构，一般是 2 个页框的大小，即 8KB。</p>
+<p>内核将一个较小的数据结构 thread_info 放在内核栈的底部，它负责将内核栈和 task_struct 串联起来。<strong>thread_info 是平台相关的</strong>，在 ARM 架构中的定义如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// thread_info.h (arch\arm\include\asm)</span>
+
+<span class="token keyword">struct</span> <span class="token class-name">thread_info</span> <span class="token punctuation">&#123;</span>
+ <span class="token keyword">unsigned</span> <span class="token keyword">long</span> flags<span class="token punctuation">;</span>  <span class="token comment">/* low level flags */</span>
+ <span class="token keyword">int</span> preempt_count<span class="token punctuation">;</span> <span class="token comment">/* 0 => preemptable, &lt;0 => bug */</span>
+ <span class="token class-name">mm_segment_t</span> addr_limit<span class="token punctuation">;</span> <span class="token comment">/* address limit */</span>
+ <span class="token keyword">struct</span> <span class="token class-name">task_struct</span> <span class="token operator">*</span>task<span class="token punctuation">;</span>  <span class="token comment">/* main task structure */</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+ <span class="token keyword">struct</span> <span class="token class-name">cpu_context_save</span> cpu_context<span class="token punctuation">;</span> <span class="token comment">/* cpu context */</span>
+ <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>thread_info 保存了一个进程能被调度执行的最底层信息(low level task data)，例如struct cpu_context_save cpu_context 会在进程切换时用来保存/恢复寄存器上下文。</p>
+<p>内核通过内核栈的栈指针可以快速地拿到 thread_info，<br>然后通过 thread_info 找到 task_struct，<br>内核里通过 current 宏可以获得当前进程的 task_struct。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// thread_info.h (include\linux)</span>
+
+<span class="token keyword">static</span> <span class="token keyword">inline</span> <span class="token keyword">struct</span> <span class="token class-name">thread_info</span> <span class="token operator">*</span><span class="token function">current_thread_info</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// current_stack_pointer 是当前进程内核栈的栈指针</span>
+ <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">thread_info</span> <span class="token operator">*</span><span class="token punctuation">)</span>
+  <span class="token punctuation">(</span>current_stack_pointer <span class="token operator">&amp;</span> <span class="token operator">~</span><span class="token punctuation">(</span>THREAD_SIZE <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// current.h (include\asm-generic)</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">current</span> <span class="token expression"><span class="token punctuation">(</span><span class="token function">current_thread_info</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span>task<span class="token punctuation">)</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="task-struct-的分配和初始化"><a href="#task-struct-的分配和初始化" class="headerlink" title="task_struct 的分配和初始化"></a>task_struct 的分配和初始化</h2><p>当上层应用使用 fork() 创建进程时，内核会新建一个 task_struct。</p>
+<h3 id="do-fork"><a href="#do-fork" class="headerlink" title="do_fork()"></a>do_fork()</h3><p><img src="/images/20210103121245457.png"></p>
+<h3 id="do-fork-内部-dup-task-struct-分配task-struct和内核栈"><a href="#do-fork-内部-dup-task-struct-分配task-struct和内核栈" class="headerlink" title="do_fork()内部 dup_task_struct() 分配task_struct和内核栈"></a>do_fork()内部 dup_task_struct() 分配task_struct和内核栈</h3><p><img src="/images/20210103121331242.png"></p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">task_struct</span> <span class="token operator">*</span><span class="token function">dup_task_struct</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">task_struct</span> <span class="token operator">*</span>orig<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">task_struct</span> <span class="token operator">*</span>tsk<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">thread_info</span> <span class="token operator">*</span>ti<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>stackend<span class="token punctuation">;</span>
+ 
+	<span class="token keyword">int</span> err<span class="token punctuation">;</span>
+ 
+	<span class="token function">prepare_to_copy</span><span class="token punctuation">(</span>orig<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+	tsk <span class="token operator">=</span> <span class="token function">alloc_task_struct</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//创建新的子进程结构体</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tsk<span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+ 
+	ti <span class="token operator">=</span> <span class="token function">alloc_thread_info</span><span class="token punctuation">(</span>tsk<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>ti<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token function">free_task_struct</span><span class="token punctuation">(</span>tsk<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+ 
+ 	err <span class="token operator">=</span> <span class="token function">arch_dup_task_struct</span><span class="token punctuation">(</span>tsk<span class="token punctuation">,</span> orig<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//把orig中的内容完全复制给tsk,相当于*tsk = *orig</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token keyword">goto</span> out<span class="token punctuation">;</span>
+ 
+	tsk<span class="token operator">-></span>stack <span class="token operator">=</span> ti<span class="token punctuation">;</span>
+ 
+	err <span class="token operator">=</span> <span class="token function">prop_local_init_single</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>tsk<span class="token operator">-></span>dirties<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token keyword">goto</span> out<span class="token punctuation">;</span>
+ 
+	<span class="token function">setup_thread_stack</span><span class="token punctuation">(</span>tsk<span class="token punctuation">,</span> orig<span class="token punctuation">)</span><span class="token punctuation">;</span>   
+   <span class="token comment">/*为整个thread_info结构复制，并设置指针指向
+   thread_info里面有一个指向task_struct的指针 ，子进程指向子进程的，父进程指向父进程的，而现在，
+   这两个thread_info中的某个指针，都指向了父进程的task_struct，所以还要使得子进程thread_info的指针指向tsk的task_struct，
+   而不是 父进程的task_struct：task_thread_info(p)->task = p;*/</span>
+ 
+    <span class="token function">clear_user_return_notifier</span><span class="token punctuation">(</span>tsk<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	stackend <span class="token operator">=</span> <span class="token function">end_of_stack</span><span class="token punctuation">(</span>tsk<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token operator">*</span>stackend <span class="token operator">=</span> STACK_END_MAGIC<span class="token punctuation">;</span>	<span class="token comment">/* for overflow detection */</span>
+ 
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_CC_STACKPROTECTOR</span></span>
+	tsk<span class="token operator">-></span>stack_canary <span class="token operator">=</span> <span class="token function">get_random_int</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+ 
+	<span class="token comment">/* One for us, one for whoever does the "release_task()" (usually parent) */</span>
+	<span class="token function">atomic_set</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>tsk<span class="token operator">-></span>usage<span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">atomic_set</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>tsk<span class="token operator">-></span>fs_excl<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_BLK_DEV_IO_TRACE</span></span>
+	tsk<span class="token operator">-></span>btrace_seq <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	tsk<span class="token operator">-></span>splice_pipe <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+ 
+	<span class="token function">account_kernel_stack</span><span class="token punctuation">(</span>ti<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+	<span class="token keyword">return</span> tsk<span class="token punctuation">;</span>
+ 
+out<span class="token operator">:</span>
+	<span class="token function">free_thread_info</span><span class="token punctuation">(</span>ti<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">free_task_struct</span><span class="token punctuation">(</span>tsk<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3><p>在程序里，通过 task_struct 找到 stack，然后通过 stack 找到 thread_info，最后又通过 thread_info-&gt;task 找到 task_struct。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/sched.h></span></span>
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print_task_info</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">task_struct</span> <span class="token operator">*</span>task<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span>KERN_NOTICE <span class="token string">"%10s %5d task_struct (%10p) / stack(%10p~%10p) / thread_info->task (%10p)"</span><span class="token punctuation">,</span>
+        task<span class="token operator">-></span>comm<span class="token punctuation">,</span> 
+        task<span class="token operator">-></span>pid<span class="token punctuation">,</span>
+        task<span class="token punctuation">,</span>
+        task<span class="token operator">-></span>stack<span class="token punctuation">,</span>
+        <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span><span class="token punctuation">)</span>task<span class="token operator">-></span>stack<span class="token punctuation">)</span> <span class="token operator">+</span> THREAD_SIZE<span class="token punctuation">,</span>
+        <span class="token function">task_thread_info</span><span class="token punctuation">(</span>task<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> __init <span class="token function">task_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">task_struct</span> <span class="token operator">*</span>task <span class="token operator">=</span> current<span class="token punctuation">;</span>
+
+    <span class="token function">printk</span><span class="token punctuation">(</span>KERN_INFO <span class="token string">"task module init\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">print_task_info</span><span class="token punctuation">(</span>task<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">do</span> <span class="token punctuation">&#123;</span>
+        task <span class="token operator">=</span> task<span class="token operator">-></span>parent<span class="token punctuation">;</span>
+        <span class="token function">print_task_info</span><span class="token punctuation">(</span>task<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">while</span> <span class="token punctuation">(</span>task<span class="token operator">-></span>pid <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token function">module_init</span><span class="token punctuation">(</span>task_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> __exit <span class="token function">task_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span>KERN_INFO <span class="token string">"task module exit\n "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>task_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// gcc -o main task1.c &amp;&amp; ./main</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>输出结果：<br><img src="/images/20210103142926703.png"></p>
+<h3 id="编译内核模块的步骤"><a href="#编译内核模块的步骤" class="headerlink" title="编译内核模块的步骤"></a>编译内核模块的步骤</h3><p>主要是Makefile：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">obj<span class="token operator">-</span>m <span class="token operator">:</span><span class="token operator">=</span> kernel_module<span class="token punctuation">.</span>o
+CURRENT_PATH <span class="token operator">:</span><span class="token operator">=</span> $<span class="token punctuation">(</span>shell pwd<span class="token punctuation">)</span>
+LINUX_KERNEL <span class="token operator">:</span><span class="token operator">=</span> $<span class="token punctuation">(</span>shell uname <span class="token operator">-</span>r<span class="token punctuation">)</span>
+LINUX_KERNEL_PATH <span class="token operator">:</span><span class="token operator">=</span> <span class="token operator">/</span>usr<span class="token operator">/</span>src<span class="token operator">/</span>linux<span class="token operator">-</span>headers<span class="token operator">-</span>$<span class="token punctuation">(</span>LINUX_KERNEL<span class="token punctuation">)</span>
+
+all<span class="token operator">:</span>
+	make <span class="token operator">-</span>C $<span class="token punctuation">(</span>LINUX_KERNEL_PATH<span class="token punctuation">)</span> M<span class="token operator">=</span>$<span class="token punctuation">(</span>CURRENT_PATH<span class="token punctuation">)</span> modules
+
+clean<span class="token operator">:</span>
+	make <span class="token operator">-</span>C $<span class="token punctuation">(</span>LINUX_KERNEL_PATH<span class="token punctuation">)</span> M<span class="token operator">=</span>$<span class="token punctuation">(</span>CURRENT_PATH<span class="token punctuation">)</span> clean
+
+
+# 插入内核模块
+<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">sudo</span> <span class="token expression">insmod kernel_module<span class="token punctuation">.</span>ko</span></span>
+# 卸载模块
+<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">sudo</span> <span class="token expression">rmmod kernel_module</span></span>
+
+# 查看是否插入成功
+<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">lsmod</span> <span class="token expression"><span class="token operator">|</span> grep kernel_module</span></span>
+
+# 模块使用的函数<span class="token function">printk</span><span class="token punctuation">(</span><span class="token punctuation">)</span>会默认打印系统文件<span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>syslog
+# 老版本在<span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>messages
+<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">cat</span> <span class="token expression"><span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>syslog <span class="token operator">|</span> grep xxx</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<h1 id="调度对象-运行队列-优先权数组"><a href="#调度对象-运行队列-优先权数组" class="headerlink" title="调度对象 运行队列 优先权数组"></a>调度对象 运行队列 优先权数组</h1><p>调度程序的基础知识，调度程序的对象是一个称为运行队列的结构，下图说明了队列中的优先权数组，其定义以及相关分析如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">prio_array</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> nr_active<span class="token punctuation">;</span>　　					<span class="token comment">//计数器，记录优先权数组中的进程数</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> bitmap<span class="token punctuation">[</span>BITMAP_SIZE<span class="token punctuation">]</span><span class="token punctuation">;</span>	<span class="token comment">// bitmap是记录数组中的优先权，实际长度取决于系统无符号长整型的大小</span>
+    <span class="token keyword">struct</span> <span class="token class-name">list_head</span> queue<span class="token punctuation">[</span>MAX_PRIO<span class="token punctuation">]</span><span class="token punctuation">;</span>	<span class="token comment">// queue存储进程链表的数组，且每个链表含有特定优先权的进程</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/images/20210103123548722.png"></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/wds-zhuan-lan-task-mm-vm-area-struct-mmap-nei-he-zhan-xi-tong-diao-yong-ke-chong-ru-makefile-diao-du-dui-xiang-yun-xing-dui-lie-you-xian-quan-shu-zu-local/">https://wuyexkx.github.io/2021/05/14/wds-zhuan-lan-task-mm-vm-area-struct-mmap-nei-he-zhan-xi-tong-diao-yong-ke-chong-ru-makefile-diao-du-dui-xiang-yun-xing-dui-lie-you-xian-quan-shu-zu-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                    <span class="chip bg-color">嵌入式Linux</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/nei-cun-sui-pian-hua-zheng-li-nei-cun-zheng-li-memory-compaction-nei-cun-hui-shou-memory-reclaim-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="内存碎片化整理 内存整理memory compaction 内存回收memory reclaim">
+                        
+                        <span class="card-title">内存碎片化整理 内存整理memory compaction 内存回收memory reclaim</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/linux-nei-cun-guan-li-di-yi-pian-xu-ni-nei-cun-nei-he-kong-jian-jin-cheng-kong-jian-dui-ying-shu-ju-jie-gou-di-er-pian-wu-li-nei-cun-guan-li-buddy-huo-ban-he-slab-fen-ye-ji-zhi-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Linux内存管理 第一篇 虚拟内存 内核空间 进程空间 对应数据结构 第二篇 物理内存管理buddy伙伴和slab 分页机制">
+                        
+                        <span class="card-title">Linux内存管理 第一篇 虚拟内存 内核空间 进程空间 对应数据结构 第二篇 物理内存管理buddy伙伴和slab 分页机制</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
