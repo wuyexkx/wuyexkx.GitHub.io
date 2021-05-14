@@ -561,7 +561,7 @@ Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(31,3)
 <p><img src="/images/20200627101430230.png"></p>
 <h2 id="2-解决办法"><a href="#2-解决办法" class="headerlink" title="2. 解决办法"></a>2. 解决办法</h2><p><strong>内核默认没有yaffs2文件系统格式，需要下载补丁，重新配置内核，再make umage。</strong><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_16933601/article/details/105889600">这篇文章</a>详细介绍了如何打yaffs2的补丁和修改编译的错误。<br>主要步骤：</p>
 <ol>
-<li>下载yaffs源码 git clone <a href="mailto:&#103;&#105;&#116;&#64;&#103;&#x69;&#x74;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#109;">&#103;&#105;&#116;&#64;&#103;&#x69;&#x74;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#109;</a>:lifeyx/yaffs2.git</li>
+<li>下载yaffs源码 git clone <a href="mailto:&#103;&#x69;&#x74;&#64;&#x67;&#x69;&#116;&#x68;&#x75;&#x62;&#46;&#x63;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#64;&#x67;&#x69;&#116;&#x68;&#x75;&#x62;&#46;&#x63;&#x6f;&#x6d;</a>:lifeyx/yaffs2.git</li>
 <li>打补丁到内核 <pre class="line-numbers language-none"><code class="language-none">cd yaffs2&#x2F;
 .&#x2F;patch-ker.sh  c m linux-3.4.2 &#x2F;&#x2F;c 将yffs2文件夹copy到linux-3.4.2&#x2F;fs   m 指定多版本<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 <li>配置内核 <pre class="line-numbers language-none"><code class="language-none">make menuconfig

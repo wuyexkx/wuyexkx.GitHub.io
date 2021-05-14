@@ -1,0 +1,1212 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="0 - docker 入门基础 组成 与 依赖的linux特性（控制组和命名空间） CS框架 数据卷容器 docker网络, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>0 - docker 入门基础 组成 与 依赖的linux特性（控制组和命名空间） CS框架 数据卷容器 docker网络 | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">0 - docker 入门基础 组成 与 依赖的linux特性（控制组和命名空间） CS框架 数据卷容器 docker网络</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/docker/">
+                                <span class="chip bg-color">docker</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/docker/" class="post-category">
+                                docker
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]</p>
+<h1 id="0-容器和虚拟机的区别"><a href="#0-容器和虚拟机的区别" class="headerlink" title="0 容器和虚拟机的区别"></a>0 容器和虚拟机的区别</h1><p>容器是一种虚拟化的方案，<br>虚拟机，通过中间层将多台独立的机器虚拟运行在物理硬件上;<br>容器，是直接运行在操作系统内核之上的用户空间，也称操作系统虚拟化。</p>
+<p>容器只能运行在相似的操作系统上，docker依赖linux内核特性<code>Namespace</code>和<code>Cgroups</code>（Control Group）</p>
+<h2 id="0-1-部署应用时"><a href="#0-1-部署应用时" class="headerlink" title="0.1 部署应用时"></a>0.1 部署应用时</h2><p>虚拟机 包含：app—lib—OS（几十G，模拟硬件行为，磁盘和内存消耗大）<br>容器 包含：app—lib（小，但依赖内核特性 难安装 难管理 不易自动化）<br>因此docker应运而生。。。go语言编写，13年初发布，Apache2.0开源协议<br><img src="/images/20210418201510791.png"></p>
+<h1 id="1-docker基本组成（client–daemon–container–registy）"><a href="#1-docker基本组成（client–daemon–container–registy）" class="headerlink" title="1 docker基本组成（client–daemon–container–registy）"></a>1 docker基本组成（client–daemon–container–registy）</h1><p><strong><font color=red>把应用程序自动部署到容器的开源引擎。</font></strong></p>
+<p>开发人员只需关注app，运维人员只需关注docker管理，开发 测试 生产部署环境一致性。<br>推荐一个docker容器对应一个app，高内聚 低耦合 单一任务</p>
+<p>docker由4部分组成：<br>客户端—守护进程—镜像—容器—仓库<br>client—daemon—image—container—registry</p>
+<p>组成，**<font color=red>通过 客户端 访问守护进程 进而 操作 容器，容器通过镜像创建，镜像保存在仓库中。</font>**<br><img src="/images/20210418210537755.png"></p>
+<h2 id="1-1-守护进程"><a href="#1-1-守护进程" class="headerlink" title="1.1 守护进程"></a>1.1 守护进程</h2><h3 id="1-1-1-C-S框架"><a href="#1-1-1-C-S框架" class="headerlink" title="1.1.1 C/S框架"></a>1.1.1 C/S框架</h3><p>客户端/服务器 框架，对应于docker的 docker客户端/守护进程<br>客户端向服务端发出请求，服务端处理完所有工作并返回结果。<br>支持本地和远程访问。</p>
+<p>docker C/S运行过程：<br><img src="/images/20210418204146934.png"></p>
+<h3 id="1-1-2-C-S运行模式深入"><a href="#1-1-2-C-S运行模式深入" class="headerlink" title="1.1.2 C/S运行模式深入"></a>1.1.2 C/S运行模式深入</h3><p>在shell 或者 bash中用cmd与docker守护进程链接，执行完后守护进程返回结果。这是client与docker通信的主要的方式。<br>之外还提供<strong>Remote API</strong>，便于自己的程序与docker集成。是RESTful风格的API，与一般网络通信接口差不多。</p>
+<blockquote>
+<p>RESTFUL是一种网络应用程序的设计风格和开发方式</p>
+</blockquote>
+<p><img src="/images/20210504170237796.png"><br><img src="/images/20210504170916136.png"><br>客户端与守护进程链接为socket，方式三种，默认unix，<br><img src="/images/20210504172311140.png"><br>在服务端配置docker守护进程的启动选项，实现客户端远程访问docker服务，命令参数<code>-H</code>。<br>也可以在客户端添加环境变量<code>DOCKER_HOST</code>实现，置空即可链接本地docker服务。</p>
+<h2 id="1-2-镜像"><a href="#1-2-镜像" class="headerlink" title="1.2 镜像"></a>1.2 镜像</h2><p>镜像是容器的基石，类似容器的源代码。只读的，通过cop完成新建容器。</p>
+<p>引导文件系统（容器启动后被卸载）—root文件系统（基础镜像）等，联合加载技术同时加载多个文件系统，最后对外只有一个包含了底层所有的文件信息。<br>docker镜像结构：<br><img src="/images/20210418204651387.png"></p>
+<h2 id="1-3-docker容器"><a href="#1-3-docker容器" class="headerlink" title="1.3 docker容器"></a>1.3 docker容器</h2><p>容器通过镜像启动，是docker的执行单元，容器中可以运行多个app，<br>镜像是docker的构建和打包阶段，容器是启动和执行阶段。<br>容器如何启动：第一个容器时，初始读写层为空，底层FS变化时复制到读写层成为副本，隐藏了只读层。（写时复制 COP）；多个容器生成时构成镜像栈，栈顶层为可写层，下面为只读层。</p>
+<p>一个容器的FS结构：<br><img src="/images/20210418205836277.png"></p>
+<h2 id="1-4-注册服务器registry，仓库"><a href="#1-4-注册服务器registry，仓库" class="headerlink" title="1.4 注册服务器registry，仓库"></a>1.4 注册服务器registry，仓库</h2><p>docker用仓库保存用户构建的镜像，公有私有。</p>
+<h1 id="2-docker依赖的linux特性"><a href="#2-docker依赖的linux特性" class="headerlink" title="2 docker依赖的linux特性"></a>2 docker依赖的linux特性</h1><p>命名空间（namespace） 和 控制组（Control group）</p>
+<h2 id="2-1-命名空间"><a href="#2-1-命名空间" class="headerlink" title="2.1 命名空间"></a>2.1 命名空间</h2><p>编程语言中，封装—&gt;代码的隔离<br>操作系统中，系统资源的隔离（进程 FS 网络 。。），目的之一是实现轻量级虚拟化服务。</p>
+<p>同命名空间下进程相互感知，不同命名空间下进程独立/隔离。</p>
+<h3 id="2-1-1-docker提供5种命名空间："><a href="#2-1-1-docker提供5种命名空间：" class="headerlink" title="2.1.1 docker提供5种命名空间："></a>2.1.1 docker提供5种命名空间：</h3><ul>
+<li>PID（process ID）进程</li>
+<li>NET（network）网络</li>
+<li>IPC 管理进程间通信访问</li>
+<li>MNT（mount）管理挂在点</li>
+<li>UTS（Unix Timesharing System）隔离内核和版本标识</li>
+</ul>
+<p>这些隔离的资源通过控制组管理。</p>
+<h2 id="2-2-控制组"><a href="#2-2-控制组" class="headerlink" title="2.2 控制组"></a>2.2 控制组</h2><p>限制 记录 隔离 进程组使用物理资源的机制。<br>来源于google，linux kernel 2.6.24@2007 整合该机制。</p>
+<p>cgroups为容器而生。</p>
+<ul>
+<li>资源限制（内存等）</li>
+<li>优先级设定</li>
+<li>资源计量</li>
+<li>进程控制（挂起 恢复）</li>
+</ul>
+<h1 id="3-docker容器的能力"><a href="#3-docker容器的能力" class="headerlink" title="3 docker容器的能力"></a>3 docker容器的能力</h1><ul>
+<li>文件系统的隔离（每个容器都有自己的root FS）</li>
+<li>进程的隔离（每个容器都在自己的进程环境中）</li>
+<li>网络隔离（容器间虚拟网络接口 和 IP地址分开）</li>
+<li>资源的隔离于分组（Cgroups将cpu 内存等资源独立分配给容器）</li>
+</ul>
+<h1 id="4-docker深入原理"><a href="#4-docker深入原理" class="headerlink" title="4 docker深入原理"></a>4 docker深入原理</h1><h2 id="4-1-构建产生中间层镜像缓存，调试镜像构建"><a href="#4-1-构建产生中间层镜像缓存，调试镜像构建" class="headerlink" title="4.1 构建产生中间层镜像缓存，调试镜像构建"></a>4.1 构建产生中间层镜像缓存，调试镜像构建</h2><p>基于Dockerfile构建镜像的过程：</p>
+<blockquote>
+<p><strong><font color=red>1 从基础镜像运行一个容器<br>2 执行一条指令,对容器做出修改<br>3 执行类似 docker commit的操作,提交一个新的镜像层<br>4 再基于刚提交的镜像运行一个新容器<br>5 执行 Dockerfile中的下一条指令,直至所有指令执行完毕</font></strong><br>不断删除容器保存镜像（中间层镜像，cache中，构建缓存），因此可以跟踪调试镜像的构建过程。可以通过<code>docker build --no-cache</code>不使用缓存，或 dockerfile中添加<code>ENV REFRESH_DATE 2021-05-04</code>，后面命令便会刷新缓存。</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">查看镜像构建过程
+docker histroy IMAGE<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="4-2-docker网络链接"><a href="#4-2-docker网络链接" class="headerlink" title="4.2 docker网络链接"></a>4.2 docker网络链接</h2><h3 id="4-2-1-本地链接"><a href="#4-2-1-本地链接" class="headerlink" title="4.2.1 本地链接"></a>4.2.1 本地链接</h3><p>docker0是linux的虚拟网桥，在宿主机<code>ifconfig</code>可以看到信息。<br><img src="/images/20210504200740718.png"><br>docker0虚拟网桥信息可修改，ip段的等。</p>
+<p>容器间默认可以相互连接，可以拒绝，可以指定。<br>可以通过net而不是ip访问容器，实现与ip变化无直接关系。</p>
+<p><code>ip_forward</code>本身是linux系统的一个变量，决定是否转发流量。<br><code>ip_tables</code>内核集成的包过滤防火墙系统。ip_tables功能如下：每个框框为一个链chain：<br><img src="/images/20210504202604530.png"></p>
+<h3 id="4-2-2-跨主机链接"><a href="#4-2-2-跨主机链接" class="headerlink" title="4.2.2 跨主机链接"></a>4.2.2 跨主机链接</h3><ul>
+<li>使用网桥配置，不方便，不常用<h4 id="使用Open-vSwitch工具（OVS网桥）"><a href="#使用Open-vSwitch工具（OVS网桥）" class="headerlink" title="使用Open vSwitch工具（OVS网桥）"></a>使用Open vSwitch工具（OVS网桥）</h4>Open vswitch是一个高质量的、<strong>多层虚拟交换机</strong>,<br>使用开源 Apache2.0许可协议，由 Nicira Networks:开发，主要实现代码为可移植的<strong>C代码</strong>。<br>它的目的是<strong>让大规模网络自动化可以通过编程扩展</strong>，同时仍然支持标准的管理接口和协议(例如Netflow, sflow, SPAN, RSPAN, CLI, LACP, 802.lag）。<br>内部使用GRE隧道协议接口（点对点再封装技术，通用路由协议接口）：<br><img src="/images/20210505164422830.png"><h4 id="使用weave工具（weave：编织）"><a href="#使用weave工具（weave：编织）" class="headerlink" title="使用weave工具（weave：编织）"></a>使用weave工具（weave：编织）</h4>是github的开源工具。<br><img src="/images/2021050516471559.png"></li>
+</ul>
+<h2 id="4-3-数据卷"><a href="#4-3-数据卷" class="headerlink" title="4.3 数据卷"></a>4.3 数据卷</h2><h3 id="4-3-1-什么是数据卷-Data-volume-："><a href="#4-3-1-什么是数据卷-Data-volume-：" class="headerlink" title="4.3.1 什么是数据卷( Data volume)："></a>4.3.1 什么是数据卷( Data volume)：</h3><ul>
+<li>数据卷是经过特殊设计的目录,可以绕过联合文件系统(UFS),为一个或多个容器提供访问数据卷设计的目的,</li>
+<li>在于<strong>数据的永久化</strong>,它<strong>完全独立与容器的生存周期</strong>,因此,Docker不会在容器删除时删除其挂载的数据卷,也不会存在类似的垃圾收集机制,对容器引用的数据卷进行处理。</li>
+</ul>
+<p>向镜像中添加卷，一个卷可以存在于一个或多个容器的特定目录，绕过联合文件系统，提供共享数据 数据持久化功能。<strong>独立于容器的生命周期</strong>，存在于宿主机中。</p>
+<h3 id="4-3-2-数据卷-Data-Volume-的特点"><a href="#4-3-2-数据卷-Data-Volume-的特点" class="headerlink" title="4.3.2 数据卷( Data Volume)的特点"></a>4.3.2 数据卷( Data Volume)的特点</h3><ul>
+<li>数据卷在容器启动时初始化,如果容器使用的镜像在挂载点包含了数据,这些数据会拷贝到新初始化的数据卷中</li>
+<li>数据卷可以在容器之间共享和重用</li>
+<li>可以对数据卷里的内容直接进行修改</li>
+<li>数据卷的变化不会影响镜像的更新</li>
+<li>卷会一直存在,即使挂载数据卷的容器已经被删除</li>
+</ul>
+<h1 id="Docker使用结构关系"><a href="#Docker使用结构关系" class="headerlink" title="Docker使用结构关系"></a>Docker使用结构关系</h1><p>运行机制如下图：视频讲解前2：30介绍：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1R4411F7t9?from=search&seid=8503321410546768516">https://www.bilibili.com/video/BV1R4411F7t9?from=search&amp;seid=8503321410546768516</a><br><img src="/images/20210428203300609.png"></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/0-docker-ru-men-ji-chu-zu-cheng-yu-yi-lai-de-linux-te-xing-kong-zhi-zu-he-ming-ming-kong-jian-cs-kuang-jia-shu-ju-juan-rong-qi-docker-wang-luo-local/">https://wuyexkx.github.io/2021/05/14/0-docker-ru-men-ji-chu-zu-cheng-yu-yi-lai-de-linux-te-xing-kong-zhi-zu-he-ming-ming-kong-jian-cs-kuang-jia-shu-ju-juan-rong-qi-docker-wang-luo-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/docker/">
+                                    <span class="chip bg-color">docker</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/1-docker-an-zhuang-sheng-cheng-jing-xiang-chang-yong-ming-ling-socket-dockerfile-gou-jian-zhong-jian-ceng-huan-cun-wang-luo-lian-jie-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="1 - docker 安装 - 生成镜像 - 常用命令 socket Dockerfile构建 中间层缓存 网络连接">
+                        
+                        <span class="card-title">1 - docker 安装 - 生成镜像 - 常用命令 socket Dockerfile构建 中间层缓存 网络连接</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/docker/" class="post-category">
+                                    docker
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/docker/">
+                        <span class="chip bg-color">docker</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/ji-suan-ji-wang-luo-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="计算机网络">
+                        
+                        <span class="card-title">计算机网络</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="post-category">
+                                    计算机网络
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+                        <span class="chip bg-color">计算机网络</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
