@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Linux内存管理 第一篇 虚拟内存 内核空间 进程空间 对应数据结构 第二篇 物理内存管理buddy伙伴和slab 分页机制, miemieda">
+    <meta name="keywords" content="侯捷老师 P8堆栈内存管理 stack(栈) and heap(堆) 生命期 的简单理解（c++）内存区域text--data--bss--堆--栈, miemieda">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Linux内存管理 第一篇 虚拟内存 内核空间 进程空间 对应数据结构 第二篇 物理内存管理buddy伙伴和slab 分页机制 | miemieda</title>
+    <title>侯捷老师 P8堆栈内存管理 stack(栈) and heap(堆) 生命期 的简单理解（c++）内存区域text--data--bss--堆--栈 | miemieda</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -230,7 +230,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Linux内存管理 第一篇 虚拟内存 内核空间 进程空间 对应数据结构 第二篇 物理内存管理buddy伙伴和slab 分页机制</h1>
+                    <h1 class="description center-align post-title">侯捷老师 P8堆栈内存管理 stack(栈) and heap(堆) 生命期 的简单理解（c++）内存区域text--data--bss--堆--栈</h1>
                 </div>
             </div>
         </div>
@@ -346,8 +346,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                                <span class="chip bg-color">嵌入式Linux</span>
+                            <a href="/tags/C-C/">
+                                <span class="chip bg-color">C-C++</span>
                             </a>
                         
                     </div>
@@ -358,8 +358,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                嵌入式Linux
+                            <a href="/categories/C-C/" class="post-category">
+                                C-C++
                             </a>
                         
                     </div>
@@ -380,7 +380,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.7k
+                    1.9k
                 </div>
                 
 
@@ -400,67 +400,138 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>@[toc]<br>先读 <strong>Linux内核设计与实现12章 内存管理</strong><br><a target="_blank" rel="noopener" href="https://editor.csdn.net/md/?articleId=104417124#Pages_2">https://editor.csdn.net/md/?articleId=104417124#Pages_2</a></p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkwOTE2OTY1Nw==&mid=2247486893&idx=1&sn=8295c8a87137ccc7fa5eebcbca350b81&source=41#wechat_redirect">公众号大佬文章 第一篇</a><br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkwOTE2OTY1Nw==&mid=2247486891&idx=1&sn=9ed04854bb3c1033ee80a696e9e576b9&source=41#wechat_redirect">公众号大佬文章 第二篇</a></p>
-<h1 id="1-第一篇"><a href="#1-第一篇" class="headerlink" title="1 第一篇"></a>1 第一篇</h1><p><img src="/images/20200514110452466.png"><br>为了充分利用和管理系统内存资源，Linux采用虚拟内存管理技术，利用虚拟内存技术让每个进程都有4GB 互不干涉的虚拟地址空间。</p>
-<p>进程初始化分配和操作的都是基于这个 <strong>「虚拟地址」</strong>，只有当进程需要实际访问内存资源的时候才会建立虚拟地址和物理地址的映射，调入物理内存页。</p>
-<p>不管是用户空间还是内核空间，使用的地址都是虚拟地址，当需进程要实际访问内存的时候，会由内核的 <strong>「请求分页机制」</strong> 产生 <strong>「缺页异常」</strong> 调入物理内存页。</p>
-<h2 id="1-1-虚拟地址的好处"><a href="#1-1-虚拟地址的好处" class="headerlink" title="1.1 虚拟地址的好处"></a>1.1 虚拟地址的好处</h2><ul>
-<li>避免用户直接访问物理内存地址，防止一些破坏性操作，保护操作系统</li>
-<li>每个进程都被分配了4GB的虚拟内存，用户程序可使用比实际物理内存更大的地址空间</li>
-</ul>
-<p>4GB 的进程虚拟地址空间被分成两部分：「用户空间」和「内核空间」，<br><img src="/images/20200514103929341.png"></p>
-<h2 id="1-2-段页式内存管理地址转换"><a href="#1-2-段页式内存管理地址转换" class="headerlink" title="1.2 段页式内存管理地址转换"></a>1.2 段页式内存管理地址转换</h2><p>把虚拟地址转换成内存的物理地址，这中间涉及利用MMU 内存管理单元（Memory Management Unit ) 对虚拟地址分段和分页（段页式）地址转换，<br><img src="/images/20200514103958678.png"></p>
-<h2 id="1-3-Linux-内核会将物理内存分为3个管理区，分别是："><a href="#1-3-Linux-内核会将物理内存分为3个管理区，分别是：" class="headerlink" title="1.3 Linux 内核会将物理内存分为3个管理区，分别是："></a>1.3 Linux 内核会将物理内存分为3个管理区，分别是：</h2><p>（区的划分没有任何物理意义，这只是内核为管理物理页而进行的逻辑分组。）<br><img src="/images/20200514105335601.png"></p>
-<p><img src="/images/20200819151016753.png"></p>
-<h3 id="1-3-1-ZONE-DMA"><a href="#1-3-1-ZONE-DMA" class="headerlink" title="1.3.1 ZONE_DMA"></a>1.3.1 ZONE_DMA</h3><p>DMA内存区域。包含0MB~16MB之间的内存页框，可以由老式基于ISA的设备通过DMA使用，直接映射到内核的地址空间。</p>
-<h3 id="1-3-1-ZONE-NORMAL"><a href="#1-3-1-ZONE-NORMAL" class="headerlink" title="1.3.1 ZONE_NORMAL"></a>1.3.1 ZONE_NORMAL</h3><p>普通内存区域。包含16MB~896MB之间的内存页框，常规页框，直接映射到内核的地址空间。</p>
-<h3 id="1-3-1-ZONE-HIGHMEM"><a href="#1-3-1-ZONE-HIGHMEM" class="headerlink" title="1.3.1 ZONE_HIGHMEM"></a>1.3.1 ZONE_HIGHMEM</h3><p>高端内存区域。包含896MB以上的内存页框，不进行直接映射，可以通过永久映射和临时映射进行这部分内存页框的访问。</p>
-<h2 id="1-4-用户空间"><a href="#1-4-用户空间" class="headerlink" title="1.4 用户空间"></a>1.4 用户空间</h2><p>用户进程能访问的是「用户空间」，每个进程都有自己独立的用户空间，虚拟地址范围从从 <code>0x00000000</code> 至 <code>0xBFFFFFFF</code> 总容量3G 。</p>
-<p>用户进程通常只能访问用户空间的虚拟地址，只有在执行<strong>内陷操作或系统调用</strong>时才能访问内核空间。</p>
-<h3 id="1-4-1-进程与内存"><a href="#1-4-1-进程与内存" class="headerlink" title="1.4.1 进程与内存"></a>1.4.1 进程与内存</h3><p>进程（执行的程序）占用的用户空间按照 <strong>「 访问属性一致的地址空间存放在一起 」</strong> 的原则，划分成 5个不同的内存区域。访问属性指的是 可读、可写、可执行等 。<br><img src="/images/20200514105708852.png"></p>
-<h4 id="代码段text"><a href="#代码段text" class="headerlink" title="代码段text"></a>代码段text</h4><p>代码段是用来存放可执行文件的操作指令，<strong>可执行程序在内存中的镜像</strong>。代码段需要防止在运行时被非法修改，所以只准许读取操作，它是不可写的。</p>
-<h4 id="数据段data"><a href="#数据段data" class="headerlink" title="数据段data"></a>数据段data</h4><p>数据段用来存放可执行文件中<strong>已初始化全局变量</strong>，换句话说就是存放程序静态分配的变量和全局变量。</p>
-<h4 id="BSS段"><a href="#BSS段" class="headerlink" title="BSS段"></a>BSS段</h4><p>BSS段包含了程序中<strong>未初始化的全局变量</strong>，在内存中 bss 段全部置零。</p>
-<h4 id="堆-heap"><a href="#堆-heap" class="headerlink" title="堆 heap"></a>堆 heap</h4><p>堆是用于存放进程运行中被动态分配的内存段，它的大小并不固定，可动态扩张或缩减。当进程调用malloc等函数分配内存时，新分配的内存就被动态添加到堆上（堆被扩张）；当利用free等函数释放内存时，被释放的内存从堆中被剔除（堆被缩减）</p>
-<h4 id="栈-stack"><a href="#栈-stack" class="headerlink" title="栈 stack"></a>栈 stack</h4><p>栈是用户存放程序临时创建的局部变量，也就是函数中定义的变量（但不包括 static 声明的变量，static意味着在数据段中存放变量）。除此以外，在函数被调用时，其参数也会被压入发起调用的进程栈中，并且待到调用结束后，函数的返回值也会被存放回栈中。由于栈的先进先出特点，所以栈特别方便用来保存/恢复调用现场。从这个意义上讲，我们可以把堆栈看成一个寄存、交换临时数据的内存区。</p>
-<p>上述几种内存区域中数据段、BSS 段、堆通常是被连续存储在内存中，在位置上是连续的，而代码段和栈往往会被独立存放。堆和栈两个区域在 i386 体系结构中栈向下扩展、堆向上扩展，相对而生。<br><img src="/images/2020051410584141.png"></p>
-<h3 id="1-4-2-用户空间内存数据结构"><a href="#1-4-2-用户空间内存数据结构" class="headerlink" title="1.4.2 用户空间内存数据结构"></a>1.4.2 用户空间内存数据结构</h3><p>Linux进程可以划分为 5 个不同的内存区域，分别是：代码段、数据段、BSS、堆、栈，内核管理这些区域的方式是，将这些内存区域抽象成vm_area_struct的内存管理对象。</p>
-<p>vm_area_struct是描述进程地址空间的基本管理单元，一个进程往往需要多个vm_area_struct来描述它的用户空间虚拟地址，需要使用「链表」和「红黑树」来组织各个vm__struct。</p>
-<p>链表用于需要遍历全部节点的时候用，而红黑树适用于在地址空间中定位特定内存区域。内核为了内存区域上的各种不同操作都能获得高性能，所以同时使用了这两种数据结构。<br><img src="/images/20200514113205744.png"></p>
-<h2 id="1-5-内核空间"><a href="#1-5-内核空间" class="headerlink" title="1.5 内核空间"></a>1.5 内核空间</h2><p>在 x86 32 位系统里，Linux 内核地址空间是指虚拟地址从 <code>0xC0000000</code> 开始到 <code>0xFFFFFFFF</code> 为止的高端内存地址空间，总计 1G 的容量， 包括了内核镜像、物理页面表、驱动程序等运行在内核空间 。<br><img src="/images/20200514110320346.png"></p>
-<h3 id="1-5-1-内核空间到物理内存空间的映射"><a href="#1-5-1-内核空间到物理内存空间的映射" class="headerlink" title="1.5.1 内核空间到物理内存空间的映射"></a>1.5.1 内核空间到物理内存空间的映射</h3><p><img src="/images/20200514112838889.png"></p>
-<h3 id="1-5-2-内核空间动态分配内存数据结构"><a href="#1-5-2-内核空间动态分配内存数据结构" class="headerlink" title="1.5.2 内核空间动态分配内存数据结构"></a>1.5.2 内核空间动态分配内存数据结构</h3><p>在内核空间的「动态内存映射区」，该区域由内核函数vmalloc来分配，特点是：线性空间连续，但是对应的物理地址空间不一定连续。vmalloc 分配的线性地址所对应的物理页可能处于低端内存，也可能处于高端内存。<br>vmalloc 分配的地址则限于vmalloc_start与vmalloc_end之间。每一块vmalloc分配的内核虚拟内存都对应一个vm_struct结构体，不同的内核空间虚拟地址之间有4k大小的防越界空闲区间隔区。</p>
-<p>与用户空间的虚拟地址特性一样，这些虚拟地址与物理内存没有简单的映射关系，必须通过内核页表才可转换为物理地址或物理页，它们有可能尚未被映射，当发生缺页时才真正分配物理页面。<br><img src="/images/20200514113542993.png"></p>
-<h1 id="2-第二篇"><a href="#2-第二篇" class="headerlink" title="2 第二篇"></a>2 第二篇</h1><h2 id="2-1-对物理内存的管理-Buddy（伙伴）分配算法-和-slab"><a href="#2-1-对物理内存的管理-Buddy（伙伴）分配算法-和-slab" class="headerlink" title="2.1 对物理内存的管理  Buddy（伙伴）分配算法 和 slab"></a>2.1 对物理内存的管理  Buddy（伙伴）分配算法 和 slab</h2><h3 id="2-1-1-直接使用页框分配内存会产生碎片问题"><a href="#2-1-1-直接使用页框分配内存会产生碎片问题" class="headerlink" title="2.1.1 直接使用页框分配内存会产生碎片问题"></a>2.1.1 直接使用页框分配内存会产生碎片问题</h3><p>在Linux系统中通过分段和分页机制，把物理内存划分 4K 大小的<strong>内存页 Page（也称作页框Page Frame）</strong>，物理内存的分配和回收都是基于内存页进行，把物理内存分页管理的好处大大的。</p>
-<p>但是如果就直接这样把内存分页使用，不再加额外的管理还是存在一些问题，外部碎片和内部碎片问题。<strong>一个页框内的内存碎片是内部碎片，多个页框间的碎片是外部碎片。</strong></p>
-<p>引入了<strong>页面管理算法</strong>来解决碎片问题。</p>
-<h3 id="2-1-2-管理内存页的算法"><a href="#2-1-2-管理内存页的算法" class="headerlink" title="2.1.2 管理内存页的算法"></a>2.1.2 管理内存页的算法</h3><h4 id="2-1-2-1-Buddy（伙伴）分配算法（减少外部碎片）"><a href="#2-1-2-1-Buddy（伙伴）分配算法（减少外部碎片）" class="headerlink" title="2.1.2.1 Buddy（伙伴）分配算法（减少外部碎片）"></a>2.1.2.1 Buddy（伙伴）分配算法（减少外部碎片）</h4><p>就是<font color=red><strong>把相同大小的页框块用链表串起</strong></font>来，页框块就像手拉手的好伙伴，也是这个算法名字的由来。</p>
-<p>具体的，所有的空闲页框分组为11个块链表，每个块链表分别包含大小为1，2，4，8，16，32，64，128，256，512和1024个连续页框的页框块。最大可以申请1024个连续页框，对应4MB大小的连续内存。<br>因为 <strong>任何正整数都可以由  2<sup>n </sup>的和组成</strong> ，所以总能找到合适大小的内存块分配出去，减少了外部碎片产生 。<br><img src="/images/20200514115859150.png"></p>
-<h4 id="2-1-2-2-slab分配器-slab层-（小对象-内存池）"><a href="#2-1-2-2-slab分配器-slab层-（小对象-内存池）" class="headerlink" title="2.1.2.2 slab分配器 slab层 （小对象 内存池）"></a>2.1.2.2 slab分配器 slab层 （小对象 内存池）</h4><p>伙伴系统和slab不是二选一的关系，slab 内存分配器是对伙伴分配算法的补充。</p>
-<p>内核对象的生命周期是这样的：分配内存-初始化-释放内存，内核中有大量的小对象，比如文件描述结构对象、任务描述结构对象，如果按照伙伴系统按页分配和释放内存，对小对象频繁的执行「分配内存-初始化-释放内存」会非常消耗性能。</p>
-<p>伙伴系统分配出去的内存还是以页框为单位，而对于内核的很多场景都是分配小片内存，远用不到一页内存大小的空间。slab分配器，<strong>「通过将内存按使用对象不同再划分成不同大小的空间」</strong>，应用于内核对象的缓存。</p>
-<h5 id="slab分配器-slab层-大白话说原理"><a href="#slab分配器-slab层-大白话说原理" class="headerlink" title="slab分配器 slab层 大白话说原理"></a>slab分配器 slab层 大白话说原理</h5><p>对于每个内核中的相同类型的对象，如：<code>task_struct</code>、<code>file_struct</code> 等需要重复使用的小型内核数据对象，都会有个 slab 缓存池，缓存住大量常用的「已经初始化」的对象，每当要申请这种类型的对象时，就从<code>缓存池</code>的slab 列表中分配一个出去；而当要释放时，将其重新保存在该列表中，而不是直接返回给伙伴系统，从而避免内部碎片，同时也大大提高了内存分配性能。</p>
-<h5 id="slab分配器-优点"><a href="#slab分配器-优点" class="headerlink" title="slab分配器 优点"></a>slab分配器 优点</h5><ul>
-<li>slab 内存管理基于内核小对象，不用每次都分配一页内存，充分利用内存空间，避免内部碎片。</li>
-<li>slab 对内核中频繁创建和释放的小对象做缓存，重复利用一些相同的对象，减少内存分配次数。<h5 id="对应数据结构"><a href="#对应数据结构" class="headerlink" title="对应数据结构"></a>对应数据结构</h5><img src="/images/20200514121807286.png"><h2 id="2-2-虚拟内存的分配"><a href="#2-2-虚拟内存的分配" class="headerlink" title="2.2 虚拟内存的分配"></a>2.2 虚拟内存的分配</h2>Linux 通过虚拟内存管理，欺骗了用户程序假装每个程序都有 4G 的虚拟内存寻址空间。</li>
-</ul>
-<p><strong>注意，分配的虚拟内存还没有映射到物理内存，只有当访问申请的虚拟内存时，才会发生缺页异常，再通过上面介绍的伙伴系统和 slab 分配器申请物理内存。</strong></p>
-<p>虚拟内存的分配，这里包括用户空间虚拟内存和内核空间虚拟内存。</p>
-<h3 id="2-2-1-用户空间内存分配"><a href="#2-2-1-用户空间内存分配" class="headerlink" title="2.2.1 用户空间内存分配"></a>2.2.1 用户空间内存分配</h3><p><code>malloc</code>采用的是内存池的实现方式，先申请一大块内存，然后将内存分成不同大小的内存块，然后用户申请内存时，直接从内存池中选择一块相近的内存块分配出去。<br><img src="/images/20200514122426370.png"></p>
-<h3 id="2-2-2-内核空间内存分配"><a href="#2-2-2-内核空间内存分配" class="headerlink" title="2.2.2 内核空间内存分配"></a>2.2.2 内核空间内存分配</h3><p><img src="/images/20200514110320346.png"><br><img src="/images/20200514123038296.png"></p>
-<h4 id="2-2-2-1-kmalloc-内核空间的直接映射区（基于slab分配器）"><a href="#2-2-2-1-kmalloc-内核空间的直接映射区（基于slab分配器）" class="headerlink" title="2.2.2.1 kmalloc 内核空间的直接映射区（基于slab分配器）"></a>2.2.2.1 kmalloc 内核空间的直接映射区（基于slab分配器）</h4><p><code>kmalloc</code> 和 <code>vmalloc</code> 分别用于分配不同映射区的虚拟内存。<br><code>kmalloc()</code> 分配的虚拟地址范围在内核空间的「直接内存映射区」。按<strong>字节为单位</strong>虚拟内存，一般用于<strong>分配小块内存</strong>，可以分配连续的物理内存。函数原型在 <code>&lt;linux/kmalloc.h&gt;</code> 中声明，一般情况下在<strong>驱动程序</strong>中都是调用 <code>kmalloc()</code> 来给数据结构分配内存 。<br><strong>kmalloc</strong> 是基于<strong>slab</strong> 分配器的。</p>
-<h4 id="2-2-2-2-vmalloc-内核动态内存映射区"><a href="#2-2-2-2-vmalloc-内核动态内存映射区" class="headerlink" title="2.2.2.2 vmalloc 内核动态内存映射区"></a>2.2.2.2 vmalloc 内核动态内存映射区</h4><p>vmalloc 分配的虚拟地址区间，位于 vmalloc_start 与vmalloc_end 之间的「动态内存映射区」。<br>一般用<strong>分配大块内存</strong>，分配的<strong>虚拟内存地址连续，物理地址上不一定连续</strong>。函数原型在 <code>&lt;linux/vmalloc.h&gt;</code> 中声明。一般用在为活动的交换区分配数据结构，为某些 I/O 驱动程序分配缓冲区，或为内核模块分配空间。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h2><p>假设32位系统（虚拟地址空间为32位 4G），页大小为4K，每条页表项占4Byte。<br>则进程需要<code>1M = 4G / 4K </code>个页表项才能管理全部的页，也就说需要占用<code>4M = 1M x 4B</code>的空间来存储页表项。</p>
-<h3 id="为什么用多级页表"><a href="#为什么用多级页表" class="headerlink" title="为什么用多级页表?"></a>为什么用多级页表?</h3><h4 id="1-解释现象"><a href="#1-解释现象" class="headerlink" title="1 解释现象"></a>1 解释现象</h4><p>假设1级页表的每项映射4M空间，2级页表每项映射4KB空间（必须），<br>则需要<code>1K = 4G / 4M</code>个一级页表，<br>则需要<code>1M = 4G / 4K</code>个二级页表，<br>总的页表项占用空间为<code>4.004MB = 4B x (1K + 1M)</code>）。</p>
-<p>就算有n级 最后一级也必须保证所有4G空间被映射到，这样看来，分级反而导致 总的页表项个数增加，页表项所占空间也增加。<br>这不就违背了初衷吗？显然不是。</p>
-<p><img src="/images/20200805095727522.png"></p>
-<h4 id="2-解释本质"><a href="#2-解释本质" class="headerlink" title="2 解释本质"></a>2 解释本质</h4><p>计算机局部性原理，程序在执行时呈现局部性规律。<br><strong>即在一段时间内</strong>，整个程序的执行仅限于程序中的某一部分；相应地，执行所访问的存储空间也局限于某个内存区域。</p>
-<p><strong>时间局部性</strong>：被引用过一次的存储器位置在未来会被多次引用（通常在循环中）。<br><strong>空间局部性</strong>：如果一个存储器的位置被引用，那么将来他附近的位置也会被引用。</p>
-<p>每个进程都有4G的虚拟地址空间，但是很少有程序能够占满空间，假设只占用了25%的内存就是1G，则只需要<code>1.004MB = 4B x 0.251M = 4B x (1K + 1M x 25%)</code>存储页表项。节省了不少。</p>
-<h3 id="不分级的页表为什么不能节省页表项的存储空间？"><a href="#不分级的页表为什么不能节省页表项的存储空间？" class="headerlink" title="不分级的页表为什么不能节省页表项的存储空间？"></a>不分级的页表为什么不能节省页表项的存储空间？</h3><p>页表的任务是将虚拟地址转换成物理地址；假如虚拟地址在页表中找不到对应的页表项，系统将无法工作。</p>
-<p>因此页表一定要覆盖全部虚拟地址空间，<br>不分级的页表就需要有1M个页表项来映射，而二级页表则最少只需要1K个页表项（此时一级页表覆盖到了全部虚拟地址空间，二级页表在需要时创建）。</p>
-<p>多级页表就是典型的时间换空间的例子。充分利用程序局部性原理。</p>
+                <p>@[toc]</p>
+<p>侯捷老师 P8堆栈内存管理 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av19038490/?p=8">https://www.bilibili.com/video/av19038490/?p=8</a></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+
+<span class="token comment">/* stack(栈) and heap(堆) and 生命期
+--Stack: 是存在于某作用域(scope)的一块内存空间(memory space)。
+    例如当你调用函数，函数本身即会形成一个stack用来放置它所接收的参数，以及返回地址。
+    在函数体内声明的变量，其所使用的内存块都取自上述stack。
+    作用域内的对象，称为stack object or auto object, 会被自动清理
+    &#123;
+        ...
+    &#125;
+
+--Heap: 是指操作系统提供的一块global内存空间，程序可以动态分配从中获得若干区块。
+
+
+---static local objects的生命期
+   ex：
+    &#123;
+        static complex c2(1, 2);
+    &#125;
+    c2为static obj，其生命在作用域结束之后仍然存在，直到整个程序结束。但只有local可见。
+
+
+---global object的生命期
+    作用域之外的对象为全局对象。如c2
+    可以视为一种static obj，其作用域是整个程序。其生命在整个程序结束后才结束。
+   ex:
+    complex c2(1,3);
+    int main()
+    &#123;
+        ...
+    &#125;
+
+
+---heap object的生命期
+    p1和p2所指的都是heap obj，p1所指空间生命在delete时结束；
+    p2在作用域完时结束，但p2所指heap obj仍然存在。作用域之外再也不见p2，再也无法delete p2。内存泄漏。
+   ex1：                              ex2:
+    &#123;                                  &#123;+
+        complex* p1 = new complex;         complex* p2 = complex;
+        ...                            &#125;
+        delete p1; 
+    &#125;
+    内存泄漏：申请的内存空间，在经过某些时间或作用域之后，对其失去控制，以至于无法归还给操作系统。
+
+ */</span>
+
+
+<span class="token comment">// class的static类型</span>
+<span class="token comment">// static数据，</span>
+<span class="token comment">//      不属于对象私有。创建多个对象但static只创建一次。对象可以修改它。</span>
+<span class="token comment">//      由Account创建的所有对象共用static数据，一改全改</span>
+<span class="token comment">//      ex：银行账户，可以创建多个客户，但利率都一样的，利率可以设计成static类型。</span>
+<span class="token comment">// </span>
+<span class="token comment">// static函数，</span>
+<span class="token comment">// 没有隐形参数 this指针。所以只能处理static的数据。而成员函数默认包含this,调用数据时没写this编译器会自动加上。</span>
+<span class="token comment">// static属于类和成员，可以通过两种方法调用：</span>
+<span class="token comment">//                  1.通过类名调用 Account::set_rate(); </span>
+<span class="token comment">//                  2.通过对象调用 Account a; a.set_rate(); </span>
+
+<span class="token keyword">class</span> <span class="token class-name">Account</span>
+<span class="token punctuation">&#123;</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">static</span> <span class="token keyword">double</span> m_rate<span class="token punctuation">;</span> <span class="token comment">// 声明类里有一个变量m_rate为static类型, 脱离对象，只在对象中声明</span>
+    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">set_rate</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">double</span><span class="token operator">&amp;</span> x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> m_rate <span class="token operator">=</span> x<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">void</span> <span class="token function">show_rate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Account rate: "</span> <span class="token operator">&lt;&lt;</span> m_rate <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span><span class="token punctuation">&#125;</span>
+<span class="token keyword">private</span><span class="token operator">:</span>
+    <span class="token keyword">int</span> balance<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token comment">//  static数据脱离对象存在，只在对象中声明静态数据。所以需要在类外加上定义，可以不赋初值。</span>
+<span class="token comment">// 定义，使变量获得内存的操作叫定义</span>
+<span class="token comment">// static数据不属于对象</span>
+<span class="token keyword">double</span> Account<span class="token operator">::</span>m_rate <span class="token operator">=</span> <span class="token number">8.0</span><span class="token punctuation">;</span> 
+
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token class-name">Account</span><span class="token operator">::</span><span class="token function">set_rate</span><span class="token punctuation">(</span><span class="token number">5.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// className::staticFunction</span>
+    Account<span class="token operator">::</span>m_rate <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>    <span class="token comment">// objName::staticData</span>
+    cout <span class="token operator">&lt;&lt;</span> Account<span class="token operator">::</span>m_rate <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+    Account a<span class="token punctuation">;</span>
+    a<span class="token punctuation">.</span><span class="token function">show_rate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// objName.staticFunction</span>
+    a<span class="token punctuation">.</span>m_rate <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// objName.staticData</span>
+    a<span class="token punctuation">.</span><span class="token function">show_rate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Account aa<span class="token punctuation">;</span>
+    aa<span class="token punctuation">.</span><span class="token function">show_rate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="1-程序中的段bss-data-text"><a href="#1-程序中的段bss-data-text" class="headerlink" title="1. 程序中的段bss data text"></a>1. 程序中的段bss data text</h1><p><img src="/images/20200704171107507.png"></p>
+<h2 id="1-0-为什么内存要分段："><a href="#1-0-为什么内存要分段：" class="headerlink" title="1.0 为什么内存要分段："></a>1.0 为什么内存要分段：</h2><ol>
+<li>进程在运行过程中，<strong>代码</strong>是根据逻辑依次执行的，<strong>有的只需要访问一次</strong>，跳转和递归<strong>有可能使代码执行多次</strong>，而<strong>数据一般都需要访问多次</strong>，因此单独开辟空间以方便访问和节约空间。</li>
+<li><strong>临时数据</strong>及需要再次使用的代码在运行时放入栈区中，<strong>生命周期短</strong>。</li>
+<li><strong>全局数据和静态数据</strong>有可能在<strong>整个程序执行过程中都可能需要访问</strong>，因此单独存储管理。</li>
+<li><strong>堆区由用户自由分配，以便管理</strong>。</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67936075">https://zhuanlan.zhihu.com/p/67936075</a><br>一个程序本质上都是由 bss段、data段、text段三个段组成。<br>总体来说，程序源代码被编译以后主要分成两种段：程序指令和程序数据。代码段属于程序指令，而数据段和.bss段属于程序数据。<br><img src="/images/20200324211745983.png"><br><img src="/images/20200324211919552.png"></p>
+<h2 id="1-1-bss段（Block-Started-by-Symbol-segment）"><a href="#1-1-bss段（Block-Started-by-Symbol-segment）" class="headerlink" title="1.1 bss段（Block Started by Symbol segment）"></a>1.1 bss段（Block Started by Symbol segment）</h2><p>存放程序中未初始化的全局变量的一块内存区域，一般在初始化时bss 段由系统清零（bss段属于静态内存分配，即程序一开始就将其清零了，逻裸机程序不行）。可执行文件较小。<br><strong>（未手动初始化的数据）并不给该段的数据分配空间，只是记录数据所需空间的大小。</strong></p>
+<h2 id="1-2-data段"><a href="#1-2-data段" class="headerlink" title="1.2 data段"></a>1.2 data段</h2><p>用于存放在编译阶段(而非运行时)就能确定的数据，可读可写。<br>也是通常所说的静态存储区，赋了初值的全局变量、常量和静态变量都存放在这个域。可执行文件很大。<br><strong>（已手动初始化的数据）为数据分配空间，数据保存在目标文件中。</strong></p>
+<h2 id="1-3-text段"><a href="#1-3-text段" class="headerlink" title="1.3 text段"></a>1.3 text段</h2><p>用于存放程序代码的区域， 编译时确定， 只读。</p>
+<h1 id="一些补充："><a href="#一些补充：" class="headerlink" title="一些补充："></a>一些补充：</h1><ol>
+<li><strong>代码区（textsegment）</strong>。代码区指令根据程序设计流程依次执行，对于顺序指令，则只会执行一次（每个进程），如果反复，则需要使用跳转指令，如果进行递归，则需要借助栈来实现。<br>代码区的指令中包括操作码和要操作的对象（或对象地址引用）。如果是立即数（即具体的数值），将直接包含在代码中；如果是局部数据，将在栈区分配空间，然后引用该数据地址；如果是BSS区和数据区，在代码中同样将引用该数据地址。</li>
+<li><strong>全局初始化数据区/静态数据区（Data Segment）</strong>。只初始化一次。</li>
+<li><strong>未初始化数据区（BSS）</strong>。在运行时改变其值。</li>
+<li><strong>栈区（stack）</strong>。由编译器自动分配释放，存放函数的参数值、局部变量的值等。其操作方式类似于数据结构中的栈。每当一个函数被调用，该函数返回地址和一些关于调用的信息，比如某些寄存器的内容，被存储到栈区。然后这个被调用的函数再为它的自动变量和临时变量在栈区上分配空间，这就是C实现函数递归调用的方法。每执行一次递归函数调用，一个新的栈框架就会被使用，这样这个新实例栈里的变量就不会和该函数的另一个实例栈里面的变量混淆。</li>
+<li><strong>堆区（heap）</strong>。用于动态内存分配。堆在内存中位于bss区和栈区之间。一般由程序员分配和释放，若程序员不释放，程序结束时有可能由OS回收。</li>
+</ol>
+<p>C++中：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// new int 在堆区放了4个字节的int型空间，</span>
+<span class="token comment">// int* i 栈区i指向堆区的这块空间</span>
+<span class="token keyword">int</span><span class="token operator">*</span> i <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">int</span><span class="token punctuation">;</span> <span class="token comment">// i在栈上</span>
+<span class="token comment">// 手动告诉系统：那块堆区你可以回收了。</span>
+<span class="token keyword">delete</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>copy的 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/92fa46c5841a">https://www.jianshu.com/p/92fa46c5841a</a></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">例子：   
+  <span class="token comment">//main.cpp    </span>
+  <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 全局初始化区    </span>
+  <span class="token keyword">char</span> <span class="token operator">*</span>p1<span class="token punctuation">;</span>   <span class="token comment">// 全局未初始化区    </span>
+  <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>    
+  <span class="token punctuation">&#123;</span>    
+	  <span class="token keyword">int</span> b<span class="token punctuation">;</span> <span class="token comment">// 栈  </span>
+	  <span class="token keyword">char</span> s<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"abc"</span><span class="token punctuation">;</span> <span class="token comment">// 栈    </span>
+	  <span class="token keyword">char</span> <span class="token operator">*</span>p2<span class="token punctuation">;</span>   <span class="token comment">// 栈   </span>
+	  <span class="token keyword">char</span> <span class="token operator">*</span>p3   <span class="token operator">=</span>   <span class="token string">"123456"</span><span class="token punctuation">;</span> <span class="token comment">// 123456\0在常量区，p3在栈上。    </span>
+	  <span class="token keyword">static</span>   <span class="token keyword">int</span>   c <span class="token operator">=</span> <span class="token number">0</span>；<span class="token comment">// 全局（静态）初始化区    </span>
+	  p1 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    
+	  p2 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    
+	  <span class="token comment">// 分配得来得10和20字节的区域就在堆区。    </span>
+	  <span class="token function">strcpy</span><span class="token punctuation">(</span>p1<span class="token punctuation">,</span>   <span class="token string">"123456"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//123456\0放在常量区，编译器可能会将它与p3所指向的"123456"优化成一个地方。    </span>
+  <span class="token punctuation">&#125;</span>   <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="读取虚拟地址"><a href="#读取虚拟地址" class="headerlink" title="读取虚拟地址"></a>读取虚拟地址</h1><p>全局变量的虚拟地址，对于某个进程每次读取都一样，不变。<br>局部变量，每次读取都会变，安全考虑，像C/C++这样的语言容易产生缓冲区溢出式漏洞（数组越界等），直接在栈中受到攻击，如果每次的栈空间都在变化一定程度可以避免攻击。</p>
 
                 
             </div>
@@ -487,7 +558,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wuyexkx.github.io/2021/05/14/linux-nei-cun-guan-li-di-yi-pian-xu-ni-nei-cun-nei-he-kong-jian-jin-cheng-kong-jian-dui-ying-shu-ju-jie-gou-di-er-pian-wu-li-nei-cun-guan-li-buddy-huo-ban-he-slab-fen-ye-ji-zhi-local/">https://wuyexkx.github.io/2021/05/14/linux-nei-cun-guan-li-di-yi-pian-xu-ni-nei-cun-nei-he-kong-jian-jin-cheng-kong-jian-dui-ying-shu-ju-jie-gou-di-er-pian-wu-li-nei-cun-guan-li-buddy-huo-ban-he-slab-fen-ye-ji-zhi-local/</a>
+                    <a href="https://wuyexkx.github.io/2021/05/14/hou-jie-lao-shi-p8-dui-zhan-nei-cun-guan-li-stack-zhan-and-heap-dui-sheng-ming-qi-nei-cun-qu-yu-text-data-bss-dui-zhan-local/">https://wuyexkx.github.io/2021/05/14/hou-jie-lao-shi-p8-dui-zhan-nei-cun-guan-li-stack-zhan-and-heap-dui-sheng-ming-qi-nei-cun-qu-yu-text-data-bss-dui-zhan-local/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -525,8 +596,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                                    <span class="chip bg-color">嵌入式Linux</span>
+                                <a href="/tags/C-C/">
+                                    <span class="chip bg-color">C-C++</span>
                                 </a>
                             
                         </div>
@@ -699,13 +770,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/05/14/wds-zhuan-lan-task-mm-vm-area-struct-mmap-nei-he-zhan-xi-tong-diao-yong-ke-chong-ru-makefile-diao-du-dui-xiang-yun-xing-dui-lie-you-xian-quan-shu-zu-local/">
+                <a href="/2021/05/14/yu-dao-de-c-zhi-shi-local/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="WDS专栏  task_struct mm_struct vm_area_struct 进程 mmap内核栈 系统调用函数 可重入 内核模块Makefile 调度对象 运行队列 优先权数组">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="遇到的 C++知识">
                         
-                        <span class="card-title">WDS专栏  task_struct mm_struct vm_area_struct 进程 mmap内核栈 系统调用函数 可重入 内核模块Makefile 调度对象 运行队列 优先权数组</span>
+                        <span class="card-title">遇到的 C++知识</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -722,8 +793,8 @@
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                            <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                             
                             
@@ -733,8 +804,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                        <span class="chip bg-color">嵌入式Linux</span>
+                    <a href="/tags/C-C/">
+                        <span class="chip bg-color">C-C++</span>
                     </a>
                     
                 </div>
@@ -748,13 +819,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/14/linux-cha-zhao-ming-ling-find-wen-jian-grep-wen-jian-nei-rong-inode-suo-yin-jie-dian-ying-lian-jie-ruan-lian-jie-inode-he-mu-lu-stat-cha-kan-wen-jian-inode-shu-ju-local/">
+                <a href="/2021/05/14/ba-c-huo-zhe-cpp-yu-yan-dang-zuo-shell-jiao-ben-wen-jian-yun-xing-de-sao-cao-zuo-local/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Linux 查找命令 find文件  grep文件内容 inode索引节点硬链接软连接 inode和目录 stat查看文件inode数据">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="把c或者cpp语言当作shell脚本文件运行的骚操作">
                         
-                        <span class="card-title">Linux 查找命令 find文件  grep文件内容 inode索引节点硬链接软连接 inode和目录 stat查看文件inode数据</span>
+                        <span class="card-title">把c或者cpp语言当作shell脚本文件运行的骚操作</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -771,8 +842,8 @@
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                            <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                             
                             
@@ -782,8 +853,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                        <span class="chip bg-color">嵌入式Linux</span>
+                    <a href="/tags/C-C/">
+                        <span class="chip bg-color">C-C++</span>
                     </a>
                     
                 </div>

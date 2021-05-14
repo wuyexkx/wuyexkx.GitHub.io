@@ -1,0 +1,1865 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="WDS2期第15课 2 3 4 LCD驱动程序之硬件操作 固定 可变参数 配置LCD控制器  LCD液晶时序和s3c的LCD时序，划内存做显存 调色板 输入子系统按键和LCD测试, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>WDS2期第15课 2 3 4 LCD驱动程序之硬件操作 固定 可变参数 配置LCD控制器  LCD液晶时序和s3c的LCD时序，划内存做显存 调色板 输入子系统按键和LCD测试 | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">WDS2期第15课 2 3 4 LCD驱动程序之硬件操作 固定 可变参数 配置LCD控制器  LCD液晶时序和s3c的LCD时序，划内存做显存 调色板 输入子系统按键和LCD测试</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                <span class="chip bg-color">嵌入式Linux</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                嵌入式Linux
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.3k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]<br><img src="/images/202004161534349.png"><br><img src="/images/20200416152730659.png"><br>LCD引脚相关作用：<br><strong>VCLK</strong>：发出lcd时钟信号，每来一个时钟，就会在屏幕上显示一个像素<br><strong>VD[3]~VD[7]</strong>  ：lcd数据总线<br><strong>VD[10]~VD[15]</strong> ：lcd数据总线<br><strong>VD[19]~VD[23]</strong> ：lcd数据总线<br>**VLINE(HSYNC)**：发出lcd行扫描信号<br>**VFRAME(VSYNC)**：发出lcd桢（垂直）扫描信号<br>**VM(VDEN)**：有效时才会在屏幕上显示像素，video enable<br><strong>LCD_PWREN</strong>：发出lcd面板电源使能控制信号</p>
+<p>硬件相关设置步骤：</p>
+<ol>
+<li>配置引脚用于LCD</li>
+<li>根据LCD手册，设置LCD控制器</li>
+<li>分配显存，并把地址告诉LCD控制器</li>
+</ol>
+<p>参考内核的<code>drivers\video\s3c2410fb.c</code>，</p>
+<p><img src="/images/20200416155342297.png"></p>
+<h1 id="第一个程序，不能用，只有步骤注释"><a href="#第一个程序，不能用，只有步骤注释" class="headerlink" title="第一个程序，不能用，只有步骤注释"></a>第一个程序，不能用，只有步骤注释</h1><p>需要做的事情，流程如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/errno.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mm.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/slab.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/delay.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/fb.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/dma-mapping.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/interrupt.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/workqueue.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/wait.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/platform_device.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/clk.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/io.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/uaccess.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/div64.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/mach/map.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-lcd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-gpio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/fb.h></span></span>
+
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>s3c_lcd_fbinfo<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">lcd_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 1. 分配一个fb_info</span>
+    <span class="token comment">//   内核结构分配小技巧，可以多分配些空间，</span>
+    <span class="token comment">//   结构内部有指针指向这段空间，私有空间，</span>
+    <span class="token comment">// |====|=|。 这里不需要额外空间所以0</span>
+    s3c_lcd_fbinfo <span class="token operator">=</span> <span class="token function">framebuffer_alloc</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 2. 设置 分配的结构体</span>
+    <span class="token comment">// 2.1设置固定的参数</span>
+    <span class="token comment">// 2.2设置可变的参数</span>
+    <span class="token comment">// 2.3设置fb_ops</span>
+    <span class="token comment">// 其他设置</span>
+
+    <span class="token comment">// 3. 硬件相关操作</span>
+    <span class="token comment">// 3.1配置GPIO用于LCD</span>
+    <span class="token comment">// 3.2根据LCD手册设置LCD控制器，VCLK的频率等</span>
+    <span class="token comment">// 3.3分配显存(framebuffer),把地址告诉LCD控制器</span>
+    <span class="token comment">//      从内存中划出，这里没有实际显存</span>
+
+    <span class="token comment">// 4. 注册</span>
+    <span class="token function">register_framebuffer</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">lcd_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+
+<span class="token punctuation">&#125;</span>
+<span class="token function">module_init</span><span class="token punctuation">(</span>lcd_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>lcd_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>固定参数，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">fb_fix_screeninfo</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">char</span> id<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>			<span class="token comment">/* identification string eg "TT Builtin" */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> smem_start<span class="token punctuation">;</span>	<span class="token comment">/* Start of frame buffer mem */</span>
+					<span class="token comment">/* (physical address) */</span>
+	__u32 smem_len<span class="token punctuation">;</span>			<span class="token comment">/* Length of frame buffer mem */</span>
+	__u32 type<span class="token punctuation">;</span>			<span class="token comment">/* see FB_TYPE_*		*/</span>
+	__u32 type_aux<span class="token punctuation">;</span>			<span class="token comment">/* Interleave for interleaved Planes */</span>
+	__u32 visual<span class="token punctuation">;</span>			<span class="token comment">/* see FB_VISUAL_*		*/</span> 
+	__u16 xpanstep<span class="token punctuation">;</span>			<span class="token comment">/* zero if no hardware panning  */</span>
+	__u16 ypanstep<span class="token punctuation">;</span>			<span class="token comment">/* zero if no hardware panning  */</span>
+	__u16 ywrapstep<span class="token punctuation">;</span>		<span class="token comment">/* zero if no hardware ywrap    */</span>
+	__u32 line_length<span class="token punctuation">;</span>		<span class="token comment">/* length of a line in bytes    */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> mmio_start<span class="token punctuation">;</span>	<span class="token comment">/* Start of Memory Mapped I/O   */</span>
+					<span class="token comment">/* (physical address) */</span>
+	__u32 mmio_len<span class="token punctuation">;</span>			<span class="token comment">/* Length of Memory Mapped I/O  */</span>
+	__u32 accel<span class="token punctuation">;</span>			<span class="token comment">/* Indicate to driver which	*/</span>
+					<span class="token comment">/*  specific chip/card we have	*/</span>
+	__u16 reserved<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>		<span class="token comment">/* Reserved for future compatibility */</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可变参数，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">fb_var_screeninfo</span> <span class="token punctuation">&#123;</span>
+	__u32 xres<span class="token punctuation">;</span>			<span class="token comment">/* visible resolution		*/</span>
+	__u32 yres<span class="token punctuation">;</span>
+	__u32 xres_virtual<span class="token punctuation">;</span>		<span class="token comment">/* virtual resolution		*/</span>
+	__u32 yres_virtual<span class="token punctuation">;</span>
+	__u32 xoffset<span class="token punctuation">;</span>			<span class="token comment">/* offset from virtual to visible */</span>
+	__u32 yoffset<span class="token punctuation">;</span>			<span class="token comment">/* resolution			*/</span>
+
+	__u32 bits_per_pixel<span class="token punctuation">;</span>		<span class="token comment">/* guess what			*/</span>
+	__u32 grayscale<span class="token punctuation">;</span>		<span class="token comment">/* != 0 Graylevels instead of colors */</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">fb_bitfield</span> red<span class="token punctuation">;</span>		<span class="token comment">/* bitfield in fb mem if true color, */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fb_bitfield</span> green<span class="token punctuation">;</span>	<span class="token comment">/* else only length is significant */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fb_bitfield</span> blue<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fb_bitfield</span> transp<span class="token punctuation">;</span>	<span class="token comment">/* transparency			*/</span>	
+
+	__u32 nonstd<span class="token punctuation">;</span>			<span class="token comment">/* != 0 Non standard pixel format */</span>
+
+	__u32 activate<span class="token punctuation">;</span>			<span class="token comment">/* see FB_ACTIVATE_*		*/</span>
+
+	__u32 height<span class="token punctuation">;</span>			<span class="token comment">/* height of picture in mm    */</span>
+	__u32 width<span class="token punctuation">;</span>			<span class="token comment">/* width of picture in mm     */</span>
+
+	__u32 accel_flags<span class="token punctuation">;</span>		<span class="token comment">/* (OBSOLETE) see fb_info.flags */</span>
+
+	<span class="token comment">/* Timing: All values in pixclocks, except pixclock (of course) */</span>
+	__u32 pixclock<span class="token punctuation">;</span>			<span class="token comment">/* pixel clock in ps (pico seconds) */</span>
+	__u32 left_margin<span class="token punctuation">;</span>		<span class="token comment">/* time from sync to picture	*/</span>
+	__u32 right_margin<span class="token punctuation">;</span>		<span class="token comment">/* time from picture to sync	*/</span>
+	__u32 upper_margin<span class="token punctuation">;</span>		<span class="token comment">/* time from sync to picture	*/</span>
+	__u32 lower_margin<span class="token punctuation">;</span>
+	__u32 hsync_len<span class="token punctuation">;</span>		<span class="token comment">/* length of horizontal sync	*/</span>
+	__u32 vsync_len<span class="token punctuation">;</span>		<span class="token comment">/* length of vertical sync	*/</span>
+	__u32 sync<span class="token punctuation">;</span>			<span class="token comment">/* see FB_SYNC_*		*/</span>
+	__u32 vmode<span class="token punctuation">;</span>			<span class="token comment">/* see FB_VMODE_*		*/</span>
+	__u32 rotate<span class="token punctuation">;</span>			<span class="token comment">/* angle we rotate counter clockwise */</span>
+	__u32 reserved<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">;</span>		<span class="token comment">/* Reserved for future compatibility */</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>RGB位范围设置，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">fb_bitfield</span> <span class="token punctuation">&#123;</span>
+	__u32 offset<span class="token punctuation">;</span>			<span class="token comment">/* beginning of bitfield	*/</span>
+	__u32 length<span class="token punctuation">;</span>			<span class="token comment">/* length of bitfield		*/</span>
+	__u32 msb_right<span class="token punctuation">;</span>		<span class="token comment">/* != 0 : Most significant bit is */</span>  <span class="token comment">// 最重要的位在左边所以设置0默认就是</span>
+					<span class="token comment">/* right */</span> 
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>显示屏硬件相关资料：<br><img src="/images/20200416161534917.png"></p>
+<h1 id="第二个程序，不能用，完成了一些步骤"><a href="#第二个程序，不能用，完成了一些步骤" class="headerlink" title="第二个程序，不能用，完成了一些步骤"></a>第二个程序，不能用，完成了一些步骤</h1><p>配置可变参数和不可变参数，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/errno.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mm.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/slab.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/delay.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/fb.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/dma-mapping.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/interrupt.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/workqueue.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/wait.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/platform_device.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/clk.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/io.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/uaccess.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/div64.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/mach/map.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-lcd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-gpio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/fb.h></span></span>
+
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>s3c_lcd_fbinfo<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">fb_ops</span> s3c_lcdfb_ops <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span>owner		<span class="token operator">=</span> THIS_MODULE<span class="token punctuation">,</span>
+	<span class="token comment">// .fb_setcolreg	= atmel_lcdfb_setcolreg,</span>
+	<span class="token punctuation">.</span>fb_fillrect	<span class="token operator">=</span> cfb_fillrect<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>fb_copyarea	<span class="token operator">=</span> cfb_copyarea<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>fb_imageblit	<span class="token operator">=</span> cfb_imageblit<span class="token punctuation">,</span>    
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">lcd_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 1. 分配一个fb_info</span>
+    <span class="token comment">//   内核结构分配小技巧，可以多分配些空间，</span>
+    <span class="token comment">//   结构内部有指针指向这段空间，私有空间，</span>
+    <span class="token comment">// |====|=|。 这里不需要额外空间所以0</span>
+    s3c_lcd_fbinfo <span class="token operator">=</span> <span class="token function">framebuffer_alloc</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 2. 设置 分配的结构体，</span>
+    <span class="token comment">// 2.1设置固定的参数 未设置的分配之后都是0</span>
+    <span class="token function">strcpy</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>id<span class="token punctuation">,</span> <span class="token string">"mylcd"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// id name</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_len    <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">320</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">8</span><span class="token punctuation">;</span><span class="token comment">// 显存的长度 16=5+6+5</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>type        <span class="token operator">=</span> FB_TYPE_PACKED_PIXELS<span class="token punctuation">;</span><span class="token comment">// see FB_TYPE_*</span>
+        <span class="token comment">// s3c_lcd_fbinfo->fix.type_aux = 平板会用到</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>visual      <span class="token operator">=</span> FB_VISUAL_TRUECOLOR<span class="token punctuation">;</span> <span class="token comment">// TFT屏幕是真彩 MONO单色</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>line_length <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token comment">// 一个像素由16位表示就是2Bytes，length of a line in bytes</span>
+    <span class="token comment">// 2.2设置可变的参数</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>xres         <span class="token operator">=</span> <span class="token number">240</span><span class="token punctuation">;</span> <span class="token comment">// 实际分辨率</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>yres         <span class="token operator">=</span> <span class="token number">320</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>xres_virtual <span class="token operator">=</span> <span class="token number">240</span><span class="token punctuation">;</span> <span class="token comment">// 可调整的分辨率</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>yres_virtual <span class="token operator">=</span> <span class="token number">320</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>bits_per_pixel <span class="token operator">=</span> <span class="token number">16</span><span class="token punctuation">;</span><span class="token comment">// 2440不支持18位，丢弃2位</span>
+        <span class="token comment">// RGB 565 R:11 G:5 B:0</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>red<span class="token punctuation">.</span>offset   <span class="token operator">=</span>  <span class="token number">11</span><span class="token punctuation">;</span><span class="token comment">// red对应位的区域</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>red<span class="token punctuation">.</span>length   <span class="token operator">=</span>  <span class="token number">5</span><span class="token punctuation">;</span> <span class="token comment">// red长度</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>green<span class="token punctuation">.</span>offset <span class="token operator">=</span>  <span class="token number">5</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>green<span class="token punctuation">.</span>length <span class="token operator">=</span>  <span class="token number">6</span><span class="token punctuation">;</span> 
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>blue<span class="token punctuation">.</span>offset  <span class="token operator">=</span>  <span class="token number">0</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>blue<span class="token punctuation">.</span>length  <span class="token operator">=</span>  <span class="token number">5</span><span class="token punctuation">;</span> 
+
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>activate     <span class="token operator">=</span>  FB_ACTIVATE_NOW<span class="token punctuation">;</span>   
+    <span class="token comment">// 2.3设置fb_ops. 参考drivers\video\atmel_lcdfb.c</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fbops <span class="token operator">=</span> <span class="token operator">&amp;</span>s3c_lcdfb_ops<span class="token punctuation">;</span>
+    <span class="token comment">// 其他设置</span>
+    <span class="token comment">// s3c_lcd_fbinfo->pseudo_palette  = ; // 假调色板16种颜色 Fake palette of 16 colors </span>
+    <span class="token comment">// s3c_lcd_fbinfo->screen_base     = ; // 显存的虚拟地址 如果没提供write就用到screen_base</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>screen_size     <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">320</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token comment">// Amount of ioremapped VRAM or 0</span>
+    <span class="token comment">// 3. 硬件相关操作</span>
+    <span class="token comment">// 3.1配置GPIO用于LCD</span>
+    <span class="token comment">// 3.2根据LCD手册设置LCD控制器，VCLK的频率等</span>
+    <span class="token comment">// 3.3分配显存(framebuffer),把地址告诉LCD控制器</span>
+    <span class="token comment">//      从内存中划出，这里没有实际显存</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_start <span class="token operator">=</span> <span class="token punctuation">;</span> <span class="token comment">// 显存的物理地址</span>
+
+    <span class="token comment">// 4. 注册</span>
+    <span class="token function">register_framebuffer</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">lcd_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+
+<span class="token punctuation">&#125;</span>
+<span class="token function">module_init</span><span class="token punctuation">(</span>lcd_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>lcd_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="配置硬件相关"><a href="#配置硬件相关" class="headerlink" title="配置硬件相关"></a>配置硬件相关</h1><p>GPB0控制背光，配置为输出引脚，不太对，根据具体板子说吧<br><img src="/images/20200416173921996.png"><br><img src="/images/20200416181204127.png"><br>在LCD手册的P14页，看到最小LCD刷新的时钟为<code>100ns(10MHz)</code><br><img src="/images/20200416214755734.png"></p>
+<h2 id="设置LCDCON1："><a href="#设置LCDCON1：" class="headerlink" title="设置LCDCON1："></a>设置LCDCON1：</h2><p><img src="/images/2020041622023574.png"><br>查看Linux内核时钟频率<code>dmesg</code>：<br><img src="/images/20200416220725253.png"></p>
+<h2 id="设置LCDCON2："><a href="#设置LCDCON2：" class="headerlink" title="设置LCDCON2："></a>设置LCDCON2：</h2><p><img src="/images/20200417174002623.png"><br>液晶屏垂直（frame）方向时序，<br><img src="/images/20200417173341600.png"><br>s3c2440 TFT液晶时序，<br><img src="/images/20200417173638544.png"><br>VSPW：0 = 1 - 1<br>LINEVAL：319 = 320 - 1<br>VFPD：1 = T2-T5 - 1 = 2 - 1<br>VBPD：3 = 327 - 322 - 1 - 1</p>
+<h2 id="设置LCDCON3-4："><a href="#设置LCDCON3-4：" class="headerlink" title="设置LCDCON3/4："></a>设置LCDCON3/4：</h2><p>LCD水平时序，<br><img src="/images/20200417180152737.png"></p>
+<h2 id="设置-LCDCON3，4"><a href="#设置-LCDCON3，4" class="headerlink" title="设置 LCDCON3，4"></a>设置 LCDCON3，4</h2><p><img src="/images/20200417180322374.png"><br><img src="/images/20200417180647884.png"></p>
+<h2 id="设置-LCDCON5"><a href="#设置-LCDCON5" class="headerlink" title="设置 LCDCON5"></a>设置 LCDCON5</h2><p><img src="/images/20200417182510991.png"><br>BSWP HWSWP，字节顺序交换<br><img src="/images/20200417184509313.png"><br>设置好LCD控制器后，LCD控制器就会自动从显存中周期性的取出每个像素数据</p>
+<h1 id="分配显存-用SDRAM代替"><a href="#分配显存-用SDRAM代替" class="headerlink" title="分配显存 用SDRAM代替"></a>分配显存 用SDRAM代替</h1><p>LCD控制器需要SDRAM内存连续才行，查看内核自带的驱动怎么分配这块连续内存的，参考drivers\video\s3c2410fb.c，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">int</span> __init <span class="token function">s3c2410fb_map_video_memory</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">s3c2410fb_info</span> <span class="token operator">*</span>fbi<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token function">dprintk</span><span class="token punctuation">(</span><span class="token string">"map_video_memory(fbi=%p)\n"</span><span class="token punctuation">,</span> fbi<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	fbi<span class="token operator">-></span>map_size <span class="token operator">=</span> <span class="token function">PAGE_ALIGN</span><span class="token punctuation">(</span>fbi<span class="token operator">-></span>fb<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_len <span class="token operator">+</span> PAGE_SIZE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	fbi<span class="token operator">-></span>map_cpu  <span class="token operator">=</span> <span class="token function">dma_alloc_writecombine</span><span class="token punctuation">(</span>fbi<span class="token operator">-></span>dev<span class="token punctuation">,</span> fbi<span class="token operator">-></span>map_size<span class="token punctuation">,</span>
+					       <span class="token operator">&amp;</span>fbi<span class="token operator">-></span>map_dma<span class="token punctuation">,</span> GFP_KERNEL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	fbi<span class="token operator">-></span>map_size <span class="token operator">=</span> fbi<span class="token operator">-></span>fb<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_len<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>将申请到的连续内存空间的虚拟告知显存，<br><img src="/images/20200417201703740.png"><br><img src="/images/20200417201651604.png"><br><img src="/images/20200417203447560.png"></p>
+<h1 id="第三个程序，调色板没有设置"><a href="#第三个程序，调色板没有设置" class="headerlink" title="第三个程序，调色板没有设置"></a>第三个程序，调色板没有设置</h1><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/errno.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mm.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/slab.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/delay.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/fb.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/dma-mapping.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/interrupt.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/workqueue.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/wait.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/platform_device.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/clk.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/io.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/uaccess.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/div64.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/mach/map.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-lcd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-gpio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/fb.h></span></span>
+
+<span class="token comment">// s3c的LCD寄存器</span>
+<span class="token keyword">struct</span> <span class="token class-name">s3c_lcd_regs</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdcon1<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdcon2<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdcon3<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdcon4<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdcon5<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdsaddr1<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdsaddr2<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdsaddr3<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> redlut<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> greenlut<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> bluelut<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> reserved<span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// 连续的4字节，这里不连续，空出来</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> dithmode<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> tpal<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdintpnd<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdsrcpnd<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdintmsk<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> tconsel<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token comment">// s3c的LCD引脚设置</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>gpbcon<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>gpbdat<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>gpccon<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>gpdcon<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>gpgcon<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">struct</span> <span class="token class-name">s3c_lcd_regs</span> <span class="token operator">*</span>lcd_regs<span class="token punctuation">;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>s3c_lcd_fbinfo<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">fb_ops</span> s3c_lcdfb_ops <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span>owner		<span class="token operator">=</span> THIS_MODULE<span class="token punctuation">,</span>
+	<span class="token comment">// .fb_setcolreg	= atmel_lcdfb_setcolreg,</span>
+	<span class="token punctuation">.</span>fb_fillrect	<span class="token operator">=</span> cfb_fillrect<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>fb_copyarea	<span class="token operator">=</span> cfb_copyarea<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>fb_imageblit	<span class="token operator">=</span> cfb_imageblit<span class="token punctuation">,</span>    
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">lcd_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 1. 分配一个fb_info</span>
+    <span class="token comment">//   内核结构分配小技巧，可以多分配些空间，</span>
+    <span class="token comment">//   结构内部有指针指向这段空间，私有空间，</span>
+    <span class="token comment">// |====|=|。 这里不需要额外空间所以0</span>
+    s3c_lcd_fbinfo <span class="token operator">=</span> <span class="token function">framebuffer_alloc</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 2. 设置 分配的结构体，</span>
+    <span class="token comment">// 2.1设置固定的参数 未设置的分配之后都是0</span>
+    <span class="token function">strcpy</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>id<span class="token punctuation">,</span> <span class="token string">"mylcd"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// id name</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_len    <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">320</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">8</span><span class="token punctuation">;</span><span class="token comment">// 显存的长度 16=5+6+5</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>type        <span class="token operator">=</span> FB_TYPE_PACKED_PIXELS<span class="token punctuation">;</span><span class="token comment">// see FB_TYPE_*</span>
+        <span class="token comment">// s3c_lcd_fbinfo->fix.type_aux = 平板会用到</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>visual      <span class="token operator">=</span> FB_VISUAL_TRUECOLOR<span class="token punctuation">;</span> <span class="token comment">// TFT屏幕是真彩 MONO单色</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>line_length <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token comment">// 一个像素由16位表示就是2Bytes，length of a line in bytes</span>
+    <span class="token comment">// 2.2设置可变的参数</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>xres         <span class="token operator">=</span> <span class="token number">240</span><span class="token punctuation">;</span> <span class="token comment">// 实际分辨率</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>yres         <span class="token operator">=</span> <span class="token number">320</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>xres_virtual <span class="token operator">=</span> <span class="token number">240</span><span class="token punctuation">;</span> <span class="token comment">// 可调整的分辨率</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>yres_virtual <span class="token operator">=</span> <span class="token number">320</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>bits_per_pixel <span class="token operator">=</span> <span class="token number">16</span><span class="token punctuation">;</span><span class="token comment">// 2440不支持18位，丢弃2位</span>
+        <span class="token comment">// RGB 565 R:11 G:5 B:0</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>red<span class="token punctuation">.</span>offset   <span class="token operator">=</span>  <span class="token number">11</span><span class="token punctuation">;</span><span class="token comment">// red对应位的区域</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>red<span class="token punctuation">.</span>length   <span class="token operator">=</span>  <span class="token number">5</span><span class="token punctuation">;</span> <span class="token comment">// red长度</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>green<span class="token punctuation">.</span>offset <span class="token operator">=</span>  <span class="token number">5</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>green<span class="token punctuation">.</span>length <span class="token operator">=</span>  <span class="token number">6</span><span class="token punctuation">;</span> 
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>blue<span class="token punctuation">.</span>offset  <span class="token operator">=</span>  <span class="token number">0</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>blue<span class="token punctuation">.</span>length  <span class="token operator">=</span>  <span class="token number">5</span><span class="token punctuation">;</span> 
+
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>activate     <span class="token operator">=</span>  FB_ACTIVATE_NOW<span class="token punctuation">;</span>   
+    <span class="token comment">// 2.3设置fb_ops. 参考drivers\video\atmel_lcdfb.c</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fbops <span class="token operator">=</span> <span class="token operator">&amp;</span>s3c_lcdfb_ops<span class="token punctuation">;</span>
+    <span class="token comment">// 2.4其他设置</span>
+    <span class="token comment">// s3c_lcd_fbinfo->pseudo_palette  = ; // 假调色板16种颜色 Fake palette of 16 colors </span>
+    <span class="token comment">// s3c_lcd_fbinfo->screen_base     = ; // 显存的虚拟地址 如果没提供write就用到screen_base</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>screen_size     <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">320</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token comment">// Amount of ioremapped VRAM or 0</span>
+    <span class="token comment">// 3. 硬件相关操作</span>
+    <span class="token comment">// 3.1配置GPIO用于LCD</span>
+    gpbcon <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x56000010</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 一页一页的映射 1024字节</span>
+    gpbdat <span class="token operator">=</span> gpbcon <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    gpccon <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x56000020</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 4和8一样 一页一页的映射 1024字节</span>
+    gpdcon <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x56000030</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    gpgcon <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x56000060</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token operator">*</span>gpccon <span class="token operator">=</span> <span class="token number">0xaaaaaaaa</span><span class="token punctuation">;</span> <span class="token comment">// GPIO管脚用于VD[7:0] LCDVF[2:0] VM VFRAME VLINE LEND</span>
+    <span class="token operator">*</span>gpdcon <span class="token operator">=</span> <span class="token number">0xaaaaaaaa</span><span class="token punctuation">;</span> <span class="token comment">// GPIO管脚用于VD[23:8]</span>
+
+    <span class="token operator">*</span>gpbcon <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">// 设置GPB0为输出引脚 背光</span>
+    <span class="token operator">*</span>gpbcon <span class="token operator">|=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span>gpbdat <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token number">1</span><span class="token punctuation">;</span>        <span class="token comment">// 输出低电平</span>
+
+    <span class="token operator">*</span>gpgcon <span class="token operator">|=</span> <span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">&lt;&lt;</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// GPG4用作LCD_PWREN LCD电源使能引脚</span>
+    <span class="token comment">// 3.2根据LCD手册设置LCD控制器，VCLK的频率等</span>
+    lcd_regs <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x4d000000</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>lcd_regs<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 寄存器组映射</span>
+        <span class="token comment">// bit[17:8]: TFT: VCLK = HCLK / [(CLKVAL+1) x 2] (CLKVAL‡ 0)</span>
+        <span class="token comment">//                  VCLK(扫描时钟)&lt;=10MHz  HCLK(内核时钟频率) 100MHz</span>
+        <span class="token comment">//                  10MHz(100ns)=100MHz/[(CLKVAL+1)x2]-->CLKVAL=4</span>
+        <span class="token comment">// bit[6:5] : 11 = TFT LCD panel</span>
+        <span class="token comment">// bit[4:1] : 1100 = 16 bpp for TFT. BPP (Bits Per Pixel) mode.</span>
+        <span class="token comment">// bit[0]   : 0 = Disable the video output and the LCD control signal.</span>
+    lcd_regs<span class="token operator">-></span>lcdcon1 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">4</span><span class="token operator">&lt;&lt;</span><span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">&lt;&lt;</span><span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">0x0C</span><span class="token operator">&lt;&lt;</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 垂直方向的时间参数</span>
+        <span class="token comment">// bit[31:24]: VBPD VSYNC过多长时间后才能发出第一行数据</span>
+        <span class="token comment">//                  LCD手册上T0-T2-T1=4 所以VBPD = 3</span>
+        <span class="token comment">// bit[23:14]: LINEVAL 多少行，320 所以LINEVAL = 319</span>
+        <span class="token comment">// bit[13:6] : VFPD 发出最后一行数据后过多久才发出VSYNC信号</span>
+        <span class="token comment">//                  LCD手册T2-T5=322-320=2， 所以=1</span>
+        <span class="token comment">// bit[5:0]  : VSYNC VSYNC信号脉冲宽度，LCD手册T1=1 所以=0</span>
+    lcd_regs<span class="token operator">-></span>lcdcon2 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">&lt;&lt;</span><span class="token number">24</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">319</span><span class="token operator">&lt;&lt;</span><span class="token number">14</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 水平方向的时间参数</span>
+        <span class="token comment">// bit[25:19]: HBPD HSYNC过多长时间后才能发出第一个像素数据</span>
+        <span class="token comment">//                  LCD手册 T6-T7-T8=17 所以16</span>
+        <span class="token comment">// bit[18:8] : HOZVAL 多少列 240 所以239</span>
+        <span class="token comment">// bit[7:0]  : HFPD 发出最后一行最后一个像素后过多久才发出HSYNC信号</span>
+        <span class="token comment">//                  LCD手册 T8-T11=11 所以10</span>
+    lcd_regs<span class="token operator">-></span>lcdcon3 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">16</span><span class="token operator">&lt;&lt;</span><span class="token number">19</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">239</span><span class="token operator">&lt;&lt;</span><span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">10</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// bit[7:0]  : HSPW HSYNC的脉冲宽度 LCD手册T7=5 所以4 </span>
+    lcd_regs<span class="token operator">-></span>lcdcon4 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">4</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 信号的极性</span>
+        <span class="token comment">// bit[11]: 1=565 Format</span>
+        <span class="token comment">// bit[10]: 0 = The video data is fetched at VCLK falling edge</span>
+        <span class="token comment">// bit[9] : 1 反转HSYNC 低电平有效</span>
+        <span class="token comment">// bit[8] : 1 反转VSYNC 低电平有效</span>
+        <span class="token comment">// bit[6] : 0 VDEN不用反转</span>
+        <span class="token comment">// bit[3] : 0 PWREN输出0</span>
+        <span class="token comment">// bit[1] : 0 BSWP</span>
+        <span class="token comment">// bit[0] : 1 HWSWP 2440手册P413</span>
+    lcd_regs<span class="token operator">-></span>lcdcon5 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">9</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 3.3分配显存(framebuffer),把地址告诉LCD控制器</span>
+    <span class="token comment">//      从内存中划出，这里没有实际显存,需要连续内存</span>
+    <span class="token comment">//      返回虚拟地址</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>screen_base <span class="token operator">=</span> <span class="token function">dma_alloc_writecombine</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> \
+                    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_len<span class="token punctuation">,</span> \
+                    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_start<span class="token punctuation">,</span> GFP_KERNEL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 告诉lcd控制器 显存的起始地址</span>
+    lcd_regs<span class="token operator">-></span>lcdsaddr1 <span class="token operator">=</span> <span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_start<span class="token operator">>></span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">&lt;&lt;</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 0~29bit 30 31清0</span>
+        <span class="token comment">// 告诉lcd控制器显存的结束地址</span>
+    lcd_regs<span class="token operator">-></span>lcdsaddr2 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_start<span class="token operator">+</span>s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_len<span class="token punctuation">)</span><span class="token operator">>></span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> \
+                        <span class="token number">0x1fffff</span><span class="token punctuation">;</span> <span class="token comment">// 0~20bit</span>
+        <span class="token comment">// 一行显示的长度（单位：半字）</span>
+    lcd_regs<span class="token operator">-></span>lcdsaddr3 <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">16</span><span class="token punctuation">;</span>
+    <span class="token comment">// s3c_lcd_fbinfo->fix.smem_start = ; // 显存的物理地址</span>
+    <span class="token comment">// 启动LCD </span>
+    lcd_regs<span class="token operator">-></span>lcdcon1 <span class="token operator">|=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 使能LCD</span>
+    <span class="token operator">*</span>gpbdat <span class="token operator">|=</span> <span class="token number">1</span><span class="token punctuation">;</span>                <span class="token comment">// 打开背光</span>
+        
+    <span class="token comment">// 4. 注册</span>
+    <span class="token function">register_framebuffer</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">lcd_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+
+<span class="token punctuation">&#125;</span>
+<span class="token function">module_init</span><span class="token punctuation">(</span>lcd_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>lcd_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="调色板"><a href="#调色板" class="headerlink" title="调色板"></a>调色板</h2><p>每个像素所占数据为16bit，假如想节省内存，只用一个8bit的数据转换后去代替LCD硬件所需16bit，中间加入调色板，调色板存放真正的16bit数据，8bit数据作为索引在调色板上找到16bit正真的颜色数据，然后给LCD。<br>为了兼容一些程序，需要提供假的调色板<br><img src="/images/20200417205417183.png"><br>参考内核代码，自己写一个假的调色板，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">drivers\video\s3c2410fb<span class="token punctuation">.</span>c
+<span class="token keyword">static</span> <span class="token keyword">int</span> __init <span class="token function">s3c2410fb_probe</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">platform_device</span> <span class="token operator">*</span>pdev<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	fbinfo<span class="token operator">-></span>pseudo_palette      <span class="token operator">=</span> <span class="token operator">&amp;</span>info<span class="token operator">-></span>pseudo_pal<span class="token punctuation">;</span>
+
+drivers\video\s3c2410fb<span class="token punctuation">.</span>h
+<span class="token keyword">struct</span> <span class="token class-name">s3c2410fb_info</span> <span class="token punctuation">&#123;</span>
+	u32			palette_buffer<span class="token punctuation">[</span><span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+	u32			pseudo_pal<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="第四个程序，基本完成-添加调色板-但是我找不到s3c-lcd-fbinfo-gt-fix-smem-start显存的物理地址"><a href="#第四个程序，基本完成-添加调色板-但是我找不到s3c-lcd-fbinfo-gt-fix-smem-start显存的物理地址" class="headerlink" title="第四个程序，基本完成 添加调色板 但是我找不到s3c_lcd_fbinfo-&gt;fix.smem_start显存的物理地址"></a>第四个程序，基本完成 添加调色板 但是我找不到s3c_lcd_fbinfo-&gt;fix.smem_start显存的物理地址</h1><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/errno.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mm.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/slab.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/delay.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/fb.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/dma-mapping.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/interrupt.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/workqueue.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/wait.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/platform_device.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/clk.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/io.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/uaccess.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/div64.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/mach/map.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-lcd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-gpio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/fb.h></span></span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">s3c_lcdfb_setcolreg</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> regno<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> red<span class="token punctuation">,</span>
+			     <span class="token keyword">unsigned</span> <span class="token keyword">int</span> green<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> blue<span class="token punctuation">,</span>
+			     <span class="token keyword">unsigned</span> <span class="token keyword">int</span> transp<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>info<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// s3c的LCD寄存器</span>
+<span class="token keyword">struct</span> <span class="token class-name">s3c_lcd_regs</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdcon1<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdcon2<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdcon3<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdcon4<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdcon5<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdsaddr1<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdsaddr2<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdsaddr3<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> redlut<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> greenlut<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> bluelut<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> reserved<span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// 连续的4字节，这里不连续，空出来</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> dithmode<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> tpal<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdintpnd<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdsrcpnd<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> lcdintmsk<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> tconsel<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token comment">// s3c的LCD引脚设置</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>gpbcon<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>gpbdat<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>gpccon<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>gpdcon<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token operator">*</span>gpgcon<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">struct</span> <span class="token class-name">s3c_lcd_regs</span> <span class="token operator">*</span>lcd_regs<span class="token punctuation">;</span>
+u32			pseudo_pal<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// 假的调色板</span>
+
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>s3c_lcd_fbinfo<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">fb_ops</span> s3c_lcdfb_ops <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span>owner		<span class="token operator">=</span> THIS_MODULE<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>fb_setcolreg	<span class="token operator">=</span> s3c_lcdfb_setcolreg<span class="token punctuation">,</span> <span class="token comment">// 设置假的调色板</span>
+	<span class="token punctuation">.</span>fb_fillrect	<span class="token operator">=</span> cfb_fillrect<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>fb_copyarea	<span class="token operator">=</span> cfb_copyarea<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>fb_imageblit	<span class="token operator">=</span> cfb_imageblit<span class="token punctuation">,</span>    
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token comment">// 颜色值转换</span>
+<span class="token keyword">static</span> <span class="token keyword">inline</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> <span class="token function">chan_to_field</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> chan<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">fb_bitfield</span> <span class="token operator">*</span>bf<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	chan <span class="token operator">&amp;=</span> <span class="token number">0xffff</span><span class="token punctuation">;</span>
+	chan <span class="token operator">>>=</span> <span class="token number">16</span> <span class="token operator">-</span> bf<span class="token operator">-></span>length<span class="token punctuation">;</span>
+	<span class="token keyword">return</span> chan <span class="token operator">&lt;&lt;</span> bf<span class="token operator">-></span>offset<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 设置调色板</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">s3c_lcdfb_setcolreg</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> regno<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> red<span class="token punctuation">,</span>
+			     <span class="token keyword">unsigned</span> <span class="token keyword">int</span> green<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> blue<span class="token punctuation">,</span>
+			     <span class="token keyword">unsigned</span> <span class="token keyword">int</span> transp<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>info<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span> val<span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>regno <span class="token operator">></span> <span class="token number">16</span><span class="token punctuation">)</span> 
+        <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token comment">// 用red green blue三原色构造val值</span>
+    val  <span class="token operator">=</span> <span class="token function">chan_to_field</span><span class="token punctuation">(</span>red<span class="token punctuation">,</span> <span class="token operator">&amp;</span>info<span class="token operator">-></span>var<span class="token punctuation">.</span>red<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    val <span class="token operator">|=</span> <span class="token function">chan_to_field</span><span class="token punctuation">(</span>green<span class="token punctuation">,</span> <span class="token operator">&amp;</span>info<span class="token operator">-></span>var<span class="token punctuation">.</span>green<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    val <span class="token operator">|=</span> <span class="token function">chan_to_field</span><span class="token punctuation">(</span>blue<span class="token punctuation">,</span> <span class="token operator">&amp;</span>info<span class="token operator">-></span>var<span class="token punctuation">.</span>blue<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">// 将计算的值付给对应号的调色板</span>
+    <span class="token comment">// ((u32 *)(info->pseudo_palette))[regno] = val;</span>
+    pseudo_pal<span class="token punctuation">[</span>regno<span class="token punctuation">]</span> <span class="token operator">=</span> val<span class="token punctuation">;</span> <span class="token comment">// 本地的假调色板</span>
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">lcd_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 1. 分配一个fb_info</span>
+    <span class="token comment">//   内核结构分配小技巧，可以多分配些空间，</span>
+    <span class="token comment">//   结构内部有指针指向这段空间，私有空间，</span>
+    <span class="token comment">// |====|=|。 这里不需要额外空间所以0</span>
+    s3c_lcd_fbinfo <span class="token operator">=</span> <span class="token function">framebuffer_alloc</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 2. 设置 分配的结构体，</span>
+    <span class="token comment">// 2.1设置固定的参数 未设置的分配之后都是0</span>
+    <span class="token function">strcpy</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>id<span class="token punctuation">,</span> <span class="token string">"mylcd"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// id name</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_len    <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">320</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">8</span><span class="token punctuation">;</span><span class="token comment">// 显存的长度 16=5+6+5</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>type        <span class="token operator">=</span> FB_TYPE_PACKED_PIXELS<span class="token punctuation">;</span><span class="token comment">// see FB_TYPE_*</span>
+        <span class="token comment">// s3c_lcd_fbinfo->fix.type_aux = 平板会用到</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>visual      <span class="token operator">=</span> FB_VISUAL_TRUECOLOR<span class="token punctuation">;</span> <span class="token comment">// TFT屏幕是真彩 MONO单色</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>line_length <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token comment">// 一个像素由16位表示就是2Bytes，length of a line in bytes</span>
+    <span class="token comment">// 2.2设置可变的参数</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>xres         <span class="token operator">=</span> <span class="token number">240</span><span class="token punctuation">;</span> <span class="token comment">// 实际分辨率</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>yres         <span class="token operator">=</span> <span class="token number">320</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>xres_virtual <span class="token operator">=</span> <span class="token number">240</span><span class="token punctuation">;</span> <span class="token comment">// 可调整的分辨率</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>yres_virtual <span class="token operator">=</span> <span class="token number">320</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>bits_per_pixel <span class="token operator">=</span> <span class="token number">16</span><span class="token punctuation">;</span><span class="token comment">// 2440不支持18位，丢弃2位</span>
+        <span class="token comment">// RGB 565 R:11 G:5 B:0</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>red<span class="token punctuation">.</span>offset   <span class="token operator">=</span>  <span class="token number">11</span><span class="token punctuation">;</span><span class="token comment">// red对应位的区域</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>red<span class="token punctuation">.</span>length   <span class="token operator">=</span>  <span class="token number">5</span><span class="token punctuation">;</span> <span class="token comment">// red长度</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>green<span class="token punctuation">.</span>offset <span class="token operator">=</span>  <span class="token number">5</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>green<span class="token punctuation">.</span>length <span class="token operator">=</span>  <span class="token number">6</span><span class="token punctuation">;</span> 
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>blue<span class="token punctuation">.</span>offset  <span class="token operator">=</span>  <span class="token number">0</span><span class="token punctuation">;</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>blue<span class="token punctuation">.</span>length  <span class="token operator">=</span>  <span class="token number">5</span><span class="token punctuation">;</span> 
+
+    s3c_lcd_fbinfo<span class="token operator">-></span>var<span class="token punctuation">.</span>activate     <span class="token operator">=</span>  FB_ACTIVATE_NOW<span class="token punctuation">;</span>   
+    <span class="token comment">// 2.3设置fb_ops. 参考drivers\video\atmel_lcdfb.c</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>fbops <span class="token operator">=</span> <span class="token operator">&amp;</span>s3c_lcdfb_ops<span class="token punctuation">;</span>
+    <span class="token comment">// 2.4其他设置</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>pseudo_palette  <span class="token operator">=</span> pseudo_pal<span class="token punctuation">;</span> <span class="token comment">// 假调色板16种颜色 Fake palette of 16 colors </span>
+    <span class="token comment">// s3c_lcd_fbinfo->screen_base     = ; // 显存的虚拟地址 如果没提供write就用到screen_base</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>screen_size     <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">320</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token comment">// Amount of ioremapped VRAM or 0</span>
+    <span class="token comment">// 3. 硬件相关操作 </span>
+    <span class="token comment">// 3.1配置GPIO用于LCD</span>
+    gpbcon <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x56000010</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 一页一页的映射 1024字节</span>
+    gpbdat <span class="token operator">=</span> gpbcon <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    gpccon <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x56000020</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 4和8一样 一页一页的映射 1024字节</span>
+    gpdcon <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x56000030</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    gpgcon <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x56000060</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token operator">*</span>gpccon <span class="token operator">=</span> <span class="token number">0xaaaaaaaa</span><span class="token punctuation">;</span> <span class="token comment">// GPIO管脚用于VD[7:0] LCDVF[2:0] VM VFRAME VLINE LEND</span>
+    <span class="token operator">*</span>gpdcon <span class="token operator">=</span> <span class="token number">0xaaaaaaaa</span><span class="token punctuation">;</span> <span class="token comment">// GPIO管脚用于VD[23:8]</span>
+
+    <span class="token operator">*</span>gpbcon <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">// 设置GPB0为输出引脚 背光</span>
+    <span class="token operator">*</span>gpbcon <span class="token operator">|=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span>gpbdat <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token number">1</span><span class="token punctuation">;</span>        <span class="token comment">// 输出低电平</span>
+
+    <span class="token operator">*</span>gpgcon <span class="token operator">|=</span> <span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">&lt;&lt;</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// GPG4用作LCD_PWREN LCD电源使能引脚</span>
+    <span class="token comment">// 3.2根据LCD手册设置LCD控制器，VCLK的频率等</span>
+    lcd_regs <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x4d000000</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>lcd_regs<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 寄存器组映射</span>
+        <span class="token comment">// bit[17:8]: TFT: VCLK = HCLK / [(CLKVAL+1) x 2] (CLKVAL‡ 0)</span>
+        <span class="token comment">//                  VCLK(扫描时钟)&lt;=10MHz  HCLK(内核时钟频率) 100MHz</span>
+        <span class="token comment">//                  10MHz(100ns)=100MHz/[(CLKVAL+1)x2]-->CLKVAL=4</span>
+        <span class="token comment">// bit[6:5] : 11 = TFT LCD panel</span>
+        <span class="token comment">// bit[4:1] : 1100 = 16 bpp for TFT. BPP (Bits Per Pixel) mode.</span>
+        <span class="token comment">// bit[0]   : 0 = Disable the video output and the LCD control signal.</span>
+    lcd_regs<span class="token operator">-></span>lcdcon1 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">4</span><span class="token operator">&lt;&lt;</span><span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">&lt;&lt;</span><span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">0x0C</span><span class="token operator">&lt;&lt;</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 垂直方向的时间参数</span>
+        <span class="token comment">// bit[31:24]: VBPD VSYNC过多长时间后才能发出第一行数据</span>
+        <span class="token comment">//                  LCD手册上T0-T2-T1=4 所以VBPD = 3</span>
+        <span class="token comment">// bit[23:14]: LINEVAL 多少行，320 所以LINEVAL = 319</span>
+        <span class="token comment">// bit[13:6] : VFPD 发出最后一行数据后过多久才发出VSYNC信号</span>
+        <span class="token comment">//                  LCD手册T2-T5=322-320=2， 所以=1</span>
+        <span class="token comment">// bit[5:0]  : VSYNC VSYNC信号脉冲宽度，LCD手册T1=1 所以=0</span>
+    lcd_regs<span class="token operator">-></span>lcdcon2 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">&lt;&lt;</span><span class="token number">24</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">319</span><span class="token operator">&lt;&lt;</span><span class="token number">14</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 水平方向的时间参数</span>
+        <span class="token comment">// bit[25:19]: HBPD HSYNC过多长时间后才能发出第一个像素数据</span>
+        <span class="token comment">//                  LCD手册 T6-T7-T8=17 所以16</span>
+        <span class="token comment">// bit[18:8] : HOZVAL 多少列 240 所以239</span>
+        <span class="token comment">// bit[7:0]  : HFPD 发出最后一行最后一个像素后过多久才发出HSYNC信号</span>
+        <span class="token comment">//                  LCD手册 T8-T11=11 所以10</span>
+    lcd_regs<span class="token operator">-></span>lcdcon3 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">16</span><span class="token operator">&lt;&lt;</span><span class="token number">19</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">239</span><span class="token operator">&lt;&lt;</span><span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">10</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// bit[7:0]  : HSPW HSYNC的脉冲宽度 LCD手册T7=5 所以4 </span>
+    lcd_regs<span class="token operator">-></span>lcdcon4 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">4</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 信号的极性</span>
+        <span class="token comment">// bit[11]: 1=565 Format</span>
+        <span class="token comment">// bit[10]: 0 = The video data is fetched at VCLK falling edge</span>
+        <span class="token comment">// bit[9] : 1 反转HSYNC 低电平有效</span>
+        <span class="token comment">// bit[8] : 1 反转VSYNC 低电平有效</span>
+        <span class="token comment">// bit[6] : 0 VDEN不用反转</span>
+        <span class="token comment">// bit[3] : 0 PWREN输出0</span>
+        <span class="token comment">// bit[1] : 0 BSWP</span>
+        <span class="token comment">// bit[0] : 1 HWSWP 2440手册P413</span>
+    lcd_regs<span class="token operator">-></span>lcdcon5 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">9</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 3.3分配显存(framebuffer),把地址告诉LCD控制器</span>
+    <span class="token comment">//      从内存中划出，这里没有实际显存,需要连续内存</span>
+    <span class="token comment">//      返回虚拟地址</span>
+    s3c_lcd_fbinfo<span class="token operator">-></span>screen_base <span class="token operator">=</span> <span class="token function">dma_alloc_writecombine</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> \
+                    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_len<span class="token punctuation">,</span> \
+                    s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_start<span class="token punctuation">,</span> GFP_KERNEL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 告诉lcd控制器 显存的起始地址</span>
+    lcd_regs<span class="token operator">-></span>lcdsaddr1 <span class="token operator">=</span> <span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_start<span class="token operator">>></span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">&lt;&lt;</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 0~29bit 30 31清0</span>
+        <span class="token comment">// 告诉lcd控制器显存的结束地址</span>
+    lcd_regs<span class="token operator">-></span>lcdsaddr2 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_start<span class="token operator">+</span>s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_len<span class="token punctuation">)</span><span class="token operator">>></span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> \
+                        <span class="token number">0x1fffff</span><span class="token punctuation">;</span> <span class="token comment">// 0~20bit</span>
+        <span class="token comment">// 一行显示的长度（单位：半字）</span>
+    lcd_regs<span class="token operator">-></span>lcdsaddr3 <span class="token operator">=</span> <span class="token number">240</span><span class="token operator">*</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">16</span><span class="token punctuation">;</span>
+    <span class="token comment">// s3c_lcd_fbinfo->fix.smem_start = ; // 显存的物理地址</span>
+    <span class="token comment">// 启动LCD </span>
+    lcd_regs<span class="token operator">-></span>lcdcon1 <span class="token operator">|=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 使能LCD控制器</span>
+    lcd_regs<span class="token operator">-></span>lcdcon5 <span class="token operator">|=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 使能LCD</span>
+    <span class="token operator">*</span>gpbdat <span class="token operator">|=</span> <span class="token number">1</span><span class="token punctuation">;</span>                <span class="token comment">// 打开背光</span>
+        
+    <span class="token comment">// 4. 注册</span>
+    <span class="token function">register_framebuffer</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">lcd_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">unregister_framebuffer</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">dma_free_writecombine</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> \
+        s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_len<span class="token punctuation">,</span>\
+        s3c_lcd_fbinfo<span class="token operator">-></span>screen_base<span class="token punctuation">,</span> \
+        s3c_lcd_fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>smem_start<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>lcd_regs<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>gpgcon<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>gpdcon<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>gpccon<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token function">framebuffer_release</span><span class="token punctuation">(</span>s3c_lcd_fbinfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token function">module_init</span><span class="token punctuation">(</span>lcd_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>lcd_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><h2 id="1-make-menuconfig-在内核镜像中手动去掉原来的LCD驱动程序"><a href="#1-make-menuconfig-在内核镜像中手动去掉原来的LCD驱动程序" class="headerlink" title="1. make menuconfig 在内核镜像中手动去掉原来的LCD驱动程序"></a>1. make menuconfig 在内核镜像中手动去掉原来的LCD驱动程序</h2><p><img src="/images/20200417221358768.png"><br>设备驱动程序—图形支持—s3c2410 LCD改成<code>M</code>，因为还有三个文件没有写暂时先用这里的先编译成模块，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">这三个函数没有写
+	<span class="token punctuation">.</span>fb_fillrect	<span class="token operator">=</span> cfb_fillrect<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>fb_copyarea	<span class="token operator">=</span> cfb_copyarea<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>fb_imageblit	<span class="token operator">=</span> cfb_imageblit<span class="token punctuation">,</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/images/20200417221743484.png"><br><img src="/images/20200417221956223.png"></p>
+<h2 id="2-make-uImage-，-make-modules"><a href="#2-make-uImage-，-make-modules" class="headerlink" title="2. make uImage ， make modules"></a>2. make uImage ， make modules</h2><p><img src="/images/20200417222147453.png"><br><img src="/images/20200417222300170.png"></p>
+<h2 id="3-使用新的uImage启动"><a href="#3-使用新的uImage启动" class="headerlink" title="3. 使用新的uImage启动"></a>3. 使用新的uImage启动</h2><h2 id="4-编译我们写的驱动代码-make"><a href="#4-编译我们写的驱动代码-make" class="headerlink" title="4. 编译我们写的驱动代码 make"></a>4. 编译我们写的驱动代码 make</h2><p><img src="/images/20200417222420260.png"></p>
+<h2 id="5-插入那三个模块，然后插入lcd驱动模块"><a href="#5-插入那三个模块，然后插入lcd驱动模块" class="headerlink" title="5. 插入那三个模块，然后插入lcd驱动模块"></a>5. 插入那三个模块，然后插入lcd驱动模块</h2><p>拷贝三个.ko到网络文件系统，<code>cp drivers/video/cfb*.ko nfsxxx</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">insmod cfb_copyarea.ko
+insmod cfb_fillrect.ko
+insmod cfb_imageblit.ko
+
+insmod lcd.ko<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>装载完毕可以看到设备，<code>ls /dev/fb0</code>，屏幕背光亮起来了。<br><code>echo hello &gt; /dev/tty1</code> 可以看到屏幕显示hello，<br><code>cat lcd.ko &gt; /dev/fb0</code> 可以看到花屏。</p>
+<h2 id="6-将前面的输入子系统按键驱动模块加进来，和LCD一起测试"><a href="#6-将前面的输入子系统按键驱动模块加进来，和LCD一起测试" class="headerlink" title="6. 将前面的输入子系统按键驱动模块加进来，和LCD一起测试"></a>6. 将前面的输入子系统按键驱动模块加进来，和LCD一起测试</h2><ol>
+<li>修改<code>/etc/inittab</code>，之前是启动一个shell程序，把输入输出到串口0，<br>现在加一行，启动另一个shell程序，tty1输入对应键盘输出对应lcd。<br><img src="/images/20200417224634505.png"></li>
+<li>重启</li>
+<li>插入那三个缺失的模块，和lcd模块</li>
+<li>插入<code>buttons</code>模块</li>
+<li>按键 <code>l s enter</code>，可以看到lcd上显示</li>
+<li>查看刚新启动的shell进程对应的设备<code>ls l /proc/768/fd</code>，标准输入输出都对应到了tty1，tty1对应<code>buttons.ko</code><br><img src="/images/20200417230304275.png"></li>
+</ol>
+<p><strong>tty1用到的驱动程序是<code>drivers\video\console\fbcon.c</code>，一定会用到那个数组然后获得<code>struct fb_info</code>进而获得显存，然后操作显存即可在lcd中显示，</strong></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">fbcon_rotate</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>info<span class="token punctuation">,</span> u32 rotate<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fbcon_ops</span> <span class="token operator">*</span>ops<span class="token operator">=</span> info<span class="token operator">-></span>fbcon_par<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>fb_info<span class="token punctuation">;</span>
+
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>ops <span class="token operator">||</span> ops<span class="token operator">-></span>currcon <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span><span class="token punctuation">;</span>
+
+	fb_info <span class="token operator">=</span> registered_fb<span class="token punctuation">[</span>con2fb_map<span class="token punctuation">[</span>ops<span class="token operator">-></span>currcon<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="内核自带的lcd驱动程序"><a href="#内核自带的lcd驱动程序" class="headerlink" title="内核自带的lcd驱动程序"></a>内核自带的lcd驱动程序</h1><p>内核自带的lcd驱动程序分为两部分，稳定的代码在<code>drivers\video\s3c2410fb.c</code>，硬件相关的代码在<code>arch\arm\plat-s3c24xx\devs.c，</code></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">platform_device</span> s3c_device_lcd <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 平台设备</span>
+	<span class="token punctuation">.</span>name		  <span class="token operator">=</span> <span class="token string">"s3c2410-lcd"</span><span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>id		  <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>num_resources	  <span class="token operator">=</span> <span class="token function">ARRAY_SIZE</span><span class="token punctuation">(</span>s3c_lcd_resource<span class="token punctuation">)</span><span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>resource	  <span class="token operator">=</span> s3c_lcd_resource<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>dev              <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+		<span class="token punctuation">.</span>dma_mask		<span class="token operator">=</span> <span class="token operator">&amp;</span>s3c_device_lcd_dmamask<span class="token punctuation">,</span>
+		<span class="token punctuation">.</span>coherent_dma_mask	<span class="token operator">=</span> <span class="token number">0xffffffffUL</span>
+	<span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> __init <span class="token function">s3c24xx_fb_set_platdata</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">s3c2410fb_mach_info</span> <span class="token operator">*</span>pd<span class="token punctuation">)</span> <span class="token comment">// 设置私有数据</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">s3c2410fb_mach_info</span> <span class="token operator">*</span>npd<span class="token punctuation">;</span>
+
+	npd <span class="token operator">=</span> <span class="token function">kmalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token operator">*</span>npd<span class="token punctuation">)</span><span class="token punctuation">,</span> GFP_KERNEL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>npd<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token function">memcpy</span><span class="token punctuation">(</span>npd<span class="token punctuation">,</span> pd<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token operator">*</span>npd<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		s3c_device_lcd<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>platform_data <span class="token operator">=</span> npd<span class="token punctuation">;</span> 
+	<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>针对每种平台都有对应的硬件设置，<img src="/images/20200417231542438.png"><br>如果使用内核提供的驱动代码，在这个结构体中这里修改寄存器就可以了，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">arch\arm\mach<span class="token operator">-</span>s3c2410\mach<span class="token operator">-</span>qt2410<span class="token punctuation">.</span>c
+<span class="token comment">/* Configuration for 640x480 SHARP LQ080V3DG01 */</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">s3c2410fb_mach_info</span> qt2410_biglcd_cfg __initdata <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span>regs	<span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+
+		<span class="token punctuation">.</span>lcdcon1	<span class="token operator">=</span> S3C2410_LCDCON1_TFT16BPP <span class="token operator">|</span>
+				  S3C2410_LCDCON1_TFT <span class="token operator">|</span>
+				  <span class="token function">S3C2410_LCDCON1_CLKVAL</span><span class="token punctuation">(</span><span class="token number">0x01</span><span class="token punctuation">)</span><span class="token punctuation">,</span>	<span class="token comment">/* HCLK/4 */</span>
+
+		<span class="token punctuation">.</span>lcdcon2	<span class="token operator">=</span> <span class="token function">S3C2410_LCDCON2_VBPD</span><span class="token punctuation">(</span><span class="token number">18</span><span class="token punctuation">)</span> <span class="token operator">|</span>	<span class="token comment">/* 19 */</span>
+				  <span class="token function">S3C2410_LCDCON2_LINEVAL</span><span class="token punctuation">(</span><span class="token number">479</span><span class="token punctuation">)</span> <span class="token operator">|</span>
+				  <span class="token function">S3C2410_LCDCON2_VFPD</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token operator">|</span>	<span class="token comment">/* 11 */</span>
+				  <span class="token function">S3C2410_LCDCON2_VSPW</span><span class="token punctuation">(</span><span class="token number">14</span><span class="token punctuation">)</span><span class="token punctuation">,</span>	<span class="token comment">/* 15 */</span>
+
+		<span class="token punctuation">.</span>lcdcon3	<span class="token operator">=</span> <span class="token function">S3C2410_LCDCON3_HBPD</span><span class="token punctuation">(</span><span class="token number">43</span><span class="token punctuation">)</span> <span class="token operator">|</span>	<span class="token comment">/* 44 */</span>
+				  <span class="token function">S3C2410_LCDCON3_HOZVAL</span><span class="token punctuation">(</span><span class="token number">639</span><span class="token punctuation">)</span> <span class="token operator">|</span>	<span class="token comment">/* 640 */</span>
+				  <span class="token function">S3C2410_LCDCON3_HFPD</span><span class="token punctuation">(</span><span class="token number">115</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/wds2-qi-di-15-ke-2-3-4-lcd-qu-dong-cheng-xu-zhi-ying-jian-cao-zuo-gu-ding-ke-bian-can-shu-pei-zhi-lcd-kong-zhi-qi-local/">https://wuyexkx.github.io/2021/05/14/wds2-qi-di-15-ke-2-3-4-lcd-qu-dong-cheng-xu-zhi-ying-jian-cao-zuo-gu-ding-ke-bian-can-shu-pei-zhi-lcd-kong-zhi-qi-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                    <span class="chip bg-color">嵌入式Linux</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/wds2-qi-di-16-ke-1-2-3-hong-mo-ping-ts-kai-adc-shi-zhong-she-adc-ji-cun-qi-cai-dian-ya-chu-li-yi-chang-zhi-filter-bao-shi-jian-lcd-he-ts-dui-ying-xu-tslib-ku-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="WDS2期第16课 1 2 3 触摸屏 TS 打开ADC时钟 设置ADC的寄存器 采集电压 处理异常值 filter 上报事件 LCD和触摸对应 需要tslib库 校准触摸屏">
+                        
+                        <span class="card-title">WDS2期第16课 1 2 3 触摸屏 TS 打开ADC时钟 设置ADC的寄存器 采集电压 处理异常值 filter 上报事件 LCD和触摸对应 需要tslib库 校准触摸屏</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/wds2-qi-di-15-ke-1-nei-he-lcd-qu-dong-ceng-ci-fen-xi-fbmem.c-register-framebuffer-ying-jian-chou-xiang-chu-lai-de-fbmem.c-di-ceng-shu-zu-registered-fb-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="WDS2期第15课 1 内核LCD驱动层次分析 fbmem.c -- register_framebuffer -- 硬件 抽象出来的fbmem.c依赖底层硬件相关的数组registered_fb">
+                        
+                        <span class="card-title">WDS2期第15课 1 内核LCD驱动层次分析 fbmem.c -- register_framebuffer -- 硬件 抽象出来的fbmem.c依赖底层硬件相关的数组registered_fb</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

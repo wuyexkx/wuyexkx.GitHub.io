@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="千峰视频  操作系统的5大功能 设备控制、进程管理、内存管理、文件系统、网络 用户空间--内核空间--硬件, miemieda">
+    <meta name="keywords" content="WDS1期第12课 字符设备驱动 6 key poll机制，只睡眠固定时间不影响后续程序执行。等待期间将进程休眠，利用事件驱动来唤醒进程, miemieda">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>千峰视频  操作系统的5大功能 设备控制、进程管理、内存管理、文件系统、网络 用户空间--内核空间--硬件 | miemieda</title>
+    <title>WDS1期第12课 字符设备驱动 6 key poll机制，只睡眠固定时间不影响后续程序执行。等待期间将进程休眠，利用事件驱动来唤醒进程 | miemieda</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -225,12 +225,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">千峰视频  操作系统的5大功能 设备控制、进程管理、内存管理、文件系统、网络 用户空间--内核空间--硬件</h1>
+                    <h1 class="description center-align post-title">WDS1期第12课 字符设备驱动 6 key poll机制，只睡眠固定时间不影响后续程序执行。等待期间将进程休眠，利用事件驱动来唤醒进程</h1>
                 </div>
             </div>
         </div>
@@ -380,7 +380,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    175
+                    1.4k
                 </div>
                 
 
@@ -400,15 +400,99 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/images/20191215213023142.png"><br>操作系统的5大功能：</p>
-<ol>
-<li>设备控制</li>
-<li>进程管理</li>
-<li>内存管理</li>
-<li>文件系统</li>
-<li>网络<br><img src="/images/20191215212222274.png"><br>open write函数是在C库里的函数，属于应用层程序，（User space），<br>在这类函数中，肯定包含<code>swi</code>指令去触发某个异常val进入内核空间（Kernel space），<br>在内核空间的异常处理函数中会根据val这个异常值去调用sys_open，sys_write，<br>这些函数根据打开的不同文件，文件的属性(磁盘，LED等)去找到底层的不同驱动程序，驱动程序也是属于内核的部分。<br><img src="/images/20191214213724975.png"></li>
-</ol>
-<p><strong>通过 <code>C库 到 底层驱动程序</code> 这个对应关系 在 ==驱动程序框架== 中体现。</strong></p>
+                <h1 id="poll情景描述"><a href="#poll情景描述" class="headerlink" title="poll情景描述"></a>poll情景描述</h1><p>poll就是 休眠 +超时。   </p>
+<pre><code>  以按键驱动为例进行说明，用阻塞的方式打开按键驱动文件/dev/buttons，应用程序使用read()函数来读取按键的键值。这样做的效果是：如果有按键按下了，调用该read()函数的进程，就成功读取到数据，应用程序得到继续执行；倘若没有按键按下，则要一直处于休眠状态，等待这有按键按下这样的事件发生。
+  这种功能在一些场合是适用的，但是并不能满足我们所有的需要，有时我们需要一个时间节点。倘若没有按键按下，那么超过多少时间之后，也要返回超时错误信息，进程能够继续得到执行，而不是没有按键按下，就永远休眠。这种例子其实还有很多，比方说两人相亲，男方等待女方给个确定相处的信，男方不可能因为女方不给信，就永远等待下去，双方需要一个时间节点。这个时间节点，就是说超过这个时间之后，不能再等了，程序还要继续运行，需要采取其他的行动来解决问题。
+</code></pre>
+<h1 id="Linux的做法-poll"><a href="#Linux的做法-poll" class="headerlink" title="Linux的做法 poll"></a>Linux的做法 poll</h1><p>对于类似的场景，linux系统使用poll功能来解决这样的问题。而且，与上述单片机等待方式不同，linux系统再调用poll()函数时候，如果没有发生需要的事件，那么进程进入休眠。如果在限定的时间内得到需要的事件，那么成功返回，如果没有则返回超时错误信息。<br>可见，<strong>等待期间将进程休眠，利用事件驱动来唤醒进程</strong>，将更能提高CPU的效率。</p>
+<p>poll：轮寻<br>上个代码在用户程序中是一直在读取，然后没有中断就睡眠。<br>这里要实现 有中断时，中断函数处理完后就立即返回；没中断时 休眠固定时长后返回。<br>用户代码有open read poll等等，对应于驱动代码open read poll</p>
+<hr>
+<blockquote>
+<p><strong>在Linux内核设计与实现 第11章 定时器和时间管理 中有讲：<a target="_blank" rel="noopener" href="https://editor.csdn.net/md/?articleId=104405308">https://editor.csdn.net/md/?articleId=104405308</a><br>某些依赖定时值的系统调用以更高精度运行，如poll(), select()</strong><br>jiffies与秒的转换，常用是把秒转化成jiffies，</p>
+</blockquote>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 将jiffies化成秒，用于内核和用户空间交互</span>
+jiffies<span class="token operator">/</span>HZ
+<span class="token comment">// 将秒化成jiffies，</span>
+seconds <span class="token operator">*</span> HZ
+
+<span class="token comment">// 常用把秒转化成jiffies举例</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> time_stamp <span class="token operator">=</span> jiffies<span class="token punctuation">;</span> 		<span class="token comment">/* 现在*/</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> next_tick <span class="token operator">=</span> jiffies <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>  	<span class="token comment">/* 从现在开始一个节拍 */</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> later <span class="token operator">=</span> jiffies <span class="token operator">+</span> <span class="token number">5</span><span class="token operator">*</span>HZ<span class="token punctuation">;</span>   	<span class="token comment">/* 从现在开始5秒 */</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> fraction <span class="token operator">=</span> jiffies <span class="token operator">+</span> HZ <span class="token operator">/</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token comment">/* 从现在开始1/10秒 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>在32体系结构中jiffies是32位的，在时钟频率为100HZ时，497天溢出，1000HZ时49.7天溢出。<br>在64位上完全忽略溢出。<br><br><strong>定时器</strong><br>也称为动态定时器或内核定时器，是管理内核流逝时间的基础。<br><strong>内核经常需要推后执行一些代码，而推后的本意是不在当前时间执行就行，实现需要借助定时器。</strong><br>定时器使用简单，初始化操作、设置超时时间、指定超时后执行的函数、激活定时器就ok了。定时器不周期运行，超时后自行撤销，所以也叫动态定时器。</p>
+</blockquote>
+<hr>
+<h3 id="修改的部分驱动文件"><a href="#修改的部分驱动文件" class="headerlink" title="修改的部分驱动文件"></a>修改的部分驱动文件</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">unsigned</span> <span class="token function">keys_poll</span> <span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>filp<span class="token punctuation">,</span> poll_table <span class="token operator">*</span>wait<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> mask <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment">// 将进程挂接到button_waitq等待队列下, 前面定义的button_waitq</span>
+    <span class="token function">poll_wait</span><span class="token punctuation">(</span>filp<span class="token punctuation">,</span> <span class="token operator">&amp;</span>button_waitq<span class="token punctuation">,</span> wait<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 根据实际情况，标记事件类型 </span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ev_press<span class="token punctuation">)</span>
+        mask <span class="token operator">|=</span> POLLIN <span class="token operator">|</span> POLLRDNORM<span class="token punctuation">;</span>
+    <span class="token comment">// 如果mask为0，则没有请求事件发生；如果非零说明有事件发生</span>
+    <span class="token keyword">return</span> mask<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">file_operations</span> fops <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">.</span>owner   <span class="token operator">=</span> THIS_MODULE<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>open    <span class="token operator">=</span> keys_open<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>read    <span class="token operator">=</span> keys_read<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>release <span class="token operator">=</span> keys_close<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>poll    <span class="token operator">=</span> keys_poll<span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="修改用户代码"><a href="#修改用户代码" class="headerlink" title="修改用户代码"></a>修改用户代码</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fcntl.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;poll.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> fd<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> cnt <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">char</span> key_val<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">pollfd</span> fds<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// 同时查询多个文件（驱动程序）</span>
+    <span class="token keyword">int</span> ret<span class="token punctuation">;</span>
+    
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>argc <span class="token operator">!=</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"No args required.\n\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token string">"/dev/k_poll_node"</span><span class="token punctuation">,</span> O_RDWR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>fd <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"can't open '/dev/k_poll_node'.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Waiting press the keys, will print xxxx.\n\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    fds<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>fd     <span class="token operator">=</span> fd<span class="token punctuation">;</span>     <span class="token comment">// 查询打开的文件</span>
+    fds<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>events <span class="token operator">=</span> POLLIN<span class="token punctuation">;</span> <span class="token comment">// 有数据等待读取</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>   
+        <span class="token comment">// 查询一个文件，超时时间</span>
+        <span class="token comment">//  在应用程序中用select和poll最终都是在内核中调用poll，效果一样</span>
+        ret <span class="token operator">=</span> <span class="token function">poll</span><span class="token punctuation">(</span>fds<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>ret <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment">// 超时而未发生中断</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"timeout 2000ms\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span>          <span class="token comment">// 在等待期间有中断 </span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">// read之后进入内核态的驱动程序里，如果没有按键中断，休眠2000ms退出，有中断则poll返回非0</span>
+            <span class="token comment">//  有按键中断，进入ISR得到按键值，在read中继续执行，将按键值传递到用户空间</span>
+            <span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token operator">&amp;</span>key_val<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"key_val: 0x%x\n"</span><span class="token punctuation">,</span> key_val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 输出16进制</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="linux内核poll机制实现"><a href="#linux内核poll机制实现" class="headerlink" title="linux内核poll机制实现"></a>linux内核poll机制实现</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/amanlikethis/p/6915485.html">https://www.cnblogs.com/amanlikethis/p/6915485.html</a><br>自己的写的keys_poll是系统sys_poll的一个调用，调用的目的是 <strong>将进程挂接到等待队列下</strong> 和 <strong>返回事件类型mask</strong>。<br>当已经发生了请求事件，那么通过标记mask非0，if (do_pollfd(pfd, pt))判断为真，令count++，从而可以直接令poll()函数成功返回。如果还没有发生请求的事件，那么mask被标记为0，进程将通过函数poll_schedule_timeout()陷入休眠状态。一旦发生了请求的事件，因为之前已经将进程挂接到等待队列下，所以进程将被唤醒，重新执行drivers_poll()，而显然此时能够成功返回。<br><img src="/images/20191225154403232.png"></p>
 
                 
             </div>
@@ -435,7 +519,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wuyexkx.github.io/2021/05/14/qian-feng-shi-pin-cao-zuo-xi-tong-de-5-da-gong-neng-she-bei-kong-zhi-jin-cheng-guan-li-nei-cun-guan-li-wen-jian-xi-tong-wang-luo-yong-hu-kong-jian-nei-he-kong-jian-ying-jian-local/">https://wuyexkx.github.io/2021/05/14/qian-feng-shi-pin-cao-zuo-xi-tong-de-5-da-gong-neng-she-bei-kong-zhi-jin-cheng-guan-li-nei-cun-guan-li-wen-jian-xi-tong-wang-luo-yong-hu-kong-jian-nei-he-kong-jian-ying-jian-local/</a>
+                    <a href="https://wuyexkx.github.io/2021/05/14/wds1-qi-di-12-ke-zi-fu-she-bei-qu-dong-6-key-poll-ji-zhi-zhi-shui-mian-gu-ding-shi-jian-deng-dai-qi-jian-jiang-jin-cheng-xiu-mian-yong-shi-jian-qu-dong-huan-xing-jin-cheng-local/">https://wuyexkx.github.io/2021/05/14/wds1-qi-di-12-ke-zi-fu-she-bei-qu-dong-6-key-poll-ji-zhi-zhi-shui-mian-gu-ding-shi-jian-deng-dai-qi-jian-jiang-jin-cheng-xiu-mian-yong-shi-jian-qu-dong-huan-xing-jin-cheng-local/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -647,13 +731,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/05/14/qian-feng-shi-pin-nei-he-mo-kuai-bian-xie-liu-cheng-module-init-module-exit-module-license-zui-jian-dan-de-nei-he-mo-kuai-bian-xie-local/">
+                <a href="/2021/05/14/wds1-qi-di-12-ke-zi-fu-she-bei-qu-dong-5-key-zhong-duan-exec-zai-irq-zhong-du-qu-yin-jiao-xiu-mian-declare-wait-queue-head-wake-up-wait-event-interrupti-local/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="千峰视频 内核模块编写流程module_init，module_exit，MODULE_LICENSE 最简单的内核模块编写">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="WDS1期第12课 字符设备驱动 5 key 中断 exec 在irq中读取引脚 休眠 DECLARE_WAIT_QUEUE_HEAD wake_up_ wait_event_interrupti">
                         
-                        <span class="card-title">千峰视频 内核模块编写流程module_init，module_exit，MODULE_LICENSE 最简单的内核模块编写</span>
+                        <span class="card-title">WDS1期第12课 字符设备驱动 5 key 中断 exec 在irq中读取引脚 休眠 DECLARE_WAIT_QUEUE_HEAD wake_up_ wait_event_interrupti</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -696,13 +780,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/14/windows-ubuntu-vmware-board-qian-ru-shi-kai-fa-ban-yu-pc-de-wang-luo-lian-jie-fang-fa-local/">
+                <a href="/2021/05/14/wds1-qi-di-12-ke-zi-fu-she-bei-qu-dong-4-cha-xun-fang-fa-du-an-jian-keys-query-xxx-hou-tai-yun-xing-top-zi-yuan-zhan-yong-qing-kuang-local/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="windows ubuntu VMware board 嵌入式开发板与pc的网络连接方法">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="WDS1期第12课 字符设备驱动 4 查询方法读按键 keys_query xxx &amp;后台运行 top资源占用情况">
                         
-                        <span class="card-title">windows ubuntu VMware board 嵌入式开发板与pc的网络连接方法</span>
+                        <span class="card-title">WDS1期第12课 字符设备驱动 4 查询方法读按键 keys_query xxx &amp;后台运行 top资源占用情况</span>
                     </div>
                 </a>
                 <div class="card-content article-content">

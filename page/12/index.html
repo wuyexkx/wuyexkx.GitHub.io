@@ -635,22 +635,21 @@ Linux内核中的链表 比较特殊Linux内核中的链表实现与众不同，
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-12-zhang-nei-cun-guan-li-local/">
+                    <a href="/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-3-zhang-jin-cheng-guan-li-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Linux内核设计与实现 第12章 内存管理">
+                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Linux内核设计与实现 第3章 进程管理">
                             
-                            <span class="card-title">Linux内核设计与实现 第12章 内存管理</span>
+                            <span class="card-title">Linux内核设计与实现 第3章 进程管理</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]内核空间和用户空间不同。
-页（Pages）内核把物理页作为内存管理的基本单位。内存管理单元MMU通常以页为单位进行处理，以页大小为单位管理系统中的页表，从虚拟内存的角度看页就是最小单位。
-体系结构不同，支持也大小不尽相同。通常3
+                                @[toc]
+进程描述符及任务结构内核把进程的列表存放在任务队列task list中，是双向循环链表，链表的每一项是task_struct结构，称为进程描述符。task_struct在32位机器上越占1.7KB。访问进程描述符是一个重要且频
                             
                         </div>
                         <div class="publish-info">
@@ -686,21 +685,22 @@ Linux内核中的链表 比较特殊Linux内核中的链表实现与众不同，
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-3-zhang-jin-cheng-guan-li-local/">
+                    <a href="/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-12-zhang-nei-cun-guan-li-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Linux内核设计与实现 第3章 进程管理">
+                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Linux内核设计与实现 第12章 内存管理">
                             
-                            <span class="card-title">Linux内核设计与实现 第3章 进程管理</span>
+                            <span class="card-title">Linux内核设计与实现 第12章 内存管理</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]
-进程描述符及任务结构内核把进程的列表存放在任务队列task list中，是双向循环链表，链表的每一项是task_struct结构，称为进程描述符。task_struct在32位机器上越占1.7KB。访问进程描述符是一个重要且频
+                                @[toc]内核空间和用户空间不同。
+页（Pages）内核把物理页作为内存管理的基本单位。内存管理单元MMU通常以页为单位进行处理，以页大小为单位管理系统中的页表，从虚拟内存的角度看页就是最小单位。
+体系结构不同，支持也大小不尽相同。通常3
                             
                         </div>
                         <div class="publish-info">

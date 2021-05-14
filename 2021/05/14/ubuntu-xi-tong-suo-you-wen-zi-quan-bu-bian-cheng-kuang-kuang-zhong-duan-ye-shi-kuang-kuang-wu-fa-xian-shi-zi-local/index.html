@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="侯捷老师 P8堆栈内存管理 stack(栈) and heap(堆) 生命期 的简单理解（c++）内存区域text--data--bss--堆--栈, miemieda">
+    <meta name="keywords" content="Ubuntu系统所有文字全部变成框框 终端也是框框 无法显示字 （一般是安装WPS等需要特殊字体的软件时破坏了系统默认字体）mmp其他答案故意误导人, miemieda">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>侯捷老师 P8堆栈内存管理 stack(栈) and heap(堆) 生命期 的简单理解（c++）内存区域text--data--bss--堆--栈 | miemieda</title>
+    <title>Ubuntu系统所有文字全部变成框框 终端也是框框 无法显示字 （一般是安装WPS等需要特殊字体的软件时破坏了系统默认字体）mmp其他答案故意误导人 | miemieda</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -225,12 +225,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">侯捷老师 P8堆栈内存管理 stack(栈) and heap(堆) 生命期 的简单理解（c++）内存区域text--data--bss--堆--栈</h1>
+                    <h1 class="description center-align post-title">Ubuntu系统所有文字全部变成框框 终端也是框框 无法显示字 （一般是安装WPS等需要特殊字体的软件时破坏了系统默认字体）mmp其他答案故意误导人</h1>
                 </div>
             </div>
         </div>
@@ -346,8 +346,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/C-C/">
-                                <span class="chip bg-color">C-C++</span>
+                            <a href="/tags/Ubuntu/">
+                                <span class="chip bg-color">Ubuntu</span>
                             </a>
                         
                     </div>
@@ -358,8 +358,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/C-C/" class="post-category">
-                                C-C++
+                            <a href="/categories/Ubuntu/" class="post-category">
+                                Ubuntu
                             </a>
                         
                     </div>
@@ -380,7 +380,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.9k
+                    274
                 </div>
                 
 
@@ -401,137 +401,22 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>@[toc]</p>
-<p>侯捷老师 P8堆栈内存管理 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av19038490/?p=8">https://www.bilibili.com/video/av19038490/?p=8</a></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<h1 id="乱码无法查看命令的情况-盲输"><a href="#乱码无法查看命令的情况-盲输" class="headerlink" title="乱码无法查看命令的情况 盲输"></a>乱码无法查看命令的情况 盲输</h1><p>*<em>劳资terminal都看不到文字了，mmp，很多答案完全是误导乱搞，故意不说权限问题（因为反正你也看不到输出信息。。。）让永远弄不好还浪费宝贵的时间，我简直要</em>***，！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！</p>
+<h2 id="1-前面抒情，这里是具体方法"><a href="#1-前面抒情，这里是具体方法" class="headerlink" title="1. 前面抒情，这里是具体方法"></a>1. 前面抒情，这里是具体方法</h2><p>先用Ubuntu启动盘（ubuntu试用系统）查看<code>/usr/share/fonts/</code>下有哪些字体文件夹（已经安装好的），记住几个，这里<code>xxx</code>表示，不懂就一个个试。<br>然后重新进入乱码的ubuntu，因为看不见文字只能要盲输小心咯，</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /usr/share/fonts/xxx					 <span class="token comment"># 进入到这个路径</span>
+<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">777</span> ./*    					 <span class="token comment"># 给那几个内容权限，记得输密码</span>
+<span class="token function">sudo</span> mkfontscale						 <span class="token comment"># 一定要加sudo，一定！！！！！！  </span>
+<span class="token function">sudo</span> mkfontdir							 <span class="token comment"># 一定要加sudo，一定！！！！！！</span>
+<span class="token function">sudo</span> fc-cache -fv					     <span class="token comment"># 一定要加sudo，一定！！！！！！</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="自己安装字体"><a href="#自己安装字体" class="headerlink" title="自己安装字体"></a>自己安装字体</h1><p>网上下载自己需要的<code>xxx.ttf</code>，</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mkdir</span> /usr/share/fonts/xxx
+<span class="token function">sudo</span> <span class="token function">cp</span> 存放字体的目录/xxx.ttf  /usr/share/fonts/xxx
+<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">777</span> /usr/share/fonts/xxx/*
+<span class="token builtin class-name">cd</span> /usr/share/fonts/xxx
+<span class="token function">sudo</span> mkfontscale
+<span class="token function">sudo</span> mkfontdir
+<span class="token function">sudo</span> fc-cache -fv<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<span class="token comment">/* stack(栈) and heap(堆) and 生命期
---Stack: 是存在于某作用域(scope)的一块内存空间(memory space)。
-    例如当你调用函数，函数本身即会形成一个stack用来放置它所接收的参数，以及返回地址。
-    在函数体内声明的变量，其所使用的内存块都取自上述stack。
-    作用域内的对象，称为stack object or auto object, 会被自动清理
-    &#123;
-        ...
-    &#125;
-
---Heap: 是指操作系统提供的一块global内存空间，程序可以动态分配从中获得若干区块。
-
-
----static local objects的生命期
-   ex：
-    &#123;
-        static complex c2(1, 2);
-    &#125;
-    c2为static obj，其生命在作用域结束之后仍然存在，直到整个程序结束。但只有local可见。
-
-
----global object的生命期
-    作用域之外的对象为全局对象。如c2
-    可以视为一种static obj，其作用域是整个程序。其生命在整个程序结束后才结束。
-   ex:
-    complex c2(1,3);
-    int main()
-    &#123;
-        ...
-    &#125;
-
-
----heap object的生命期
-    p1和p2所指的都是heap obj，p1所指空间生命在delete时结束；
-    p2在作用域完时结束，但p2所指heap obj仍然存在。作用域之外再也不见p2，再也无法delete p2。内存泄漏。
-   ex1：                              ex2:
-    &#123;                                  &#123;+
-        complex* p1 = new complex;         complex* p2 = complex;
-        ...                            &#125;
-        delete p1; 
-    &#125;
-    内存泄漏：申请的内存空间，在经过某些时间或作用域之后，对其失去控制，以至于无法归还给操作系统。
-
- */</span>
-
-
-<span class="token comment">// class的static类型</span>
-<span class="token comment">// static数据，</span>
-<span class="token comment">//      不属于对象私有。创建多个对象但static只创建一次。对象可以修改它。</span>
-<span class="token comment">//      由Account创建的所有对象共用static数据，一改全改</span>
-<span class="token comment">//      ex：银行账户，可以创建多个客户，但利率都一样的，利率可以设计成static类型。</span>
-<span class="token comment">// </span>
-<span class="token comment">// static函数，</span>
-<span class="token comment">// 没有隐形参数 this指针。所以只能处理static的数据。而成员函数默认包含this,调用数据时没写this编译器会自动加上。</span>
-<span class="token comment">// static属于类和成员，可以通过两种方法调用：</span>
-<span class="token comment">//                  1.通过类名调用 Account::set_rate(); </span>
-<span class="token comment">//                  2.通过对象调用 Account a; a.set_rate(); </span>
-
-<span class="token keyword">class</span> <span class="token class-name">Account</span>
-<span class="token punctuation">&#123;</span>
-<span class="token keyword">public</span><span class="token operator">:</span>
-    <span class="token keyword">static</span> <span class="token keyword">double</span> m_rate<span class="token punctuation">;</span> <span class="token comment">// 声明类里有一个变量m_rate为static类型, 脱离对象，只在对象中声明</span>
-    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">set_rate</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">double</span><span class="token operator">&amp;</span> x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> m_rate <span class="token operator">=</span> x<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
-    <span class="token keyword">void</span> <span class="token function">show_rate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Account rate: "</span> <span class="token operator">&lt;&lt;</span> m_rate <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span><span class="token punctuation">&#125;</span>
-<span class="token keyword">private</span><span class="token operator">:</span>
-    <span class="token keyword">int</span> balance<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span class="token comment">//  static数据脱离对象存在，只在对象中声明静态数据。所以需要在类外加上定义，可以不赋初值。</span>
-<span class="token comment">// 定义，使变量获得内存的操作叫定义</span>
-<span class="token comment">// static数据不属于对象</span>
-<span class="token keyword">double</span> Account<span class="token operator">::</span>m_rate <span class="token operator">=</span> <span class="token number">8.0</span><span class="token punctuation">;</span> 
-
-
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token class-name">Account</span><span class="token operator">::</span><span class="token function">set_rate</span><span class="token punctuation">(</span><span class="token number">5.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// className::staticFunction</span>
-    Account<span class="token operator">::</span>m_rate <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>    <span class="token comment">// objName::staticData</span>
-    cout <span class="token operator">&lt;&lt;</span> Account<span class="token operator">::</span>m_rate <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
-    Account a<span class="token punctuation">;</span>
-    a<span class="token punctuation">.</span><span class="token function">show_rate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// objName.staticFunction</span>
-    a<span class="token punctuation">.</span>m_rate <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// objName.staticData</span>
-    a<span class="token punctuation">.</span><span class="token function">show_rate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    Account aa<span class="token punctuation">;</span>
-    aa<span class="token punctuation">.</span><span class="token function">show_rate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h1 id="1-程序中的段bss-data-text"><a href="#1-程序中的段bss-data-text" class="headerlink" title="1. 程序中的段bss data text"></a>1. 程序中的段bss data text</h1><p><img src="/images/20200704171107507.png"></p>
-<h2 id="1-0-为什么内存要分段："><a href="#1-0-为什么内存要分段：" class="headerlink" title="1.0 为什么内存要分段："></a>1.0 为什么内存要分段：</h2><ol>
-<li>进程在运行过程中，<strong>代码</strong>是根据逻辑依次执行的，<strong>有的只需要访问一次</strong>，跳转和递归<strong>有可能使代码执行多次</strong>，而<strong>数据一般都需要访问多次</strong>，因此单独开辟空间以方便访问和节约空间。</li>
-<li><strong>临时数据</strong>及需要再次使用的代码在运行时放入栈区中，<strong>生命周期短</strong>。</li>
-<li><strong>全局数据和静态数据</strong>有可能在<strong>整个程序执行过程中都可能需要访问</strong>，因此单独存储管理。</li>
-<li><strong>堆区由用户自由分配，以便管理</strong>。</li>
-</ol>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67936075">https://zhuanlan.zhihu.com/p/67936075</a><br>一个程序本质上都是由 bss段、data段、text段三个段组成。<br>总体来说，程序源代码被编译以后主要分成两种段：程序指令和程序数据。代码段属于程序指令，而数据段和.bss段属于程序数据。<br><img src="/images/20200324211745983.png"><br><img src="/images/20200324211919552.png"></p>
-<h2 id="1-1-bss段（Block-Started-by-Symbol-segment）"><a href="#1-1-bss段（Block-Started-by-Symbol-segment）" class="headerlink" title="1.1 bss段（Block Started by Symbol segment）"></a>1.1 bss段（Block Started by Symbol segment）</h2><p>存放程序中未初始化的全局变量的一块内存区域，一般在初始化时bss 段由系统清零（bss段属于静态内存分配，即程序一开始就将其清零了，逻裸机程序不行）。可执行文件较小。<br><strong>（未手动初始化的数据）并不给该段的数据分配空间，只是记录数据所需空间的大小。</strong></p>
-<h2 id="1-2-data段"><a href="#1-2-data段" class="headerlink" title="1.2 data段"></a>1.2 data段</h2><p>用于存放在编译阶段(而非运行时)就能确定的数据，可读可写。<br>也是通常所说的静态存储区，赋了初值的全局变量、常量和静态变量都存放在这个域。可执行文件很大。<br><strong>（已手动初始化的数据）为数据分配空间，数据保存在目标文件中。</strong></p>
-<h2 id="1-3-text段"><a href="#1-3-text段" class="headerlink" title="1.3 text段"></a>1.3 text段</h2><p>用于存放程序代码的区域， 编译时确定， 只读。</p>
-<h1 id="一些补充："><a href="#一些补充：" class="headerlink" title="一些补充："></a>一些补充：</h1><ol>
-<li><strong>代码区（textsegment）</strong>。代码区指令根据程序设计流程依次执行，对于顺序指令，则只会执行一次（每个进程），如果反复，则需要使用跳转指令，如果进行递归，则需要借助栈来实现。<br>代码区的指令中包括操作码和要操作的对象（或对象地址引用）。如果是立即数（即具体的数值），将直接包含在代码中；如果是局部数据，将在栈区分配空间，然后引用该数据地址；如果是BSS区和数据区，在代码中同样将引用该数据地址。</li>
-<li><strong>全局初始化数据区/静态数据区（Data Segment）</strong>。只初始化一次。</li>
-<li><strong>未初始化数据区（BSS）</strong>。在运行时改变其值。</li>
-<li><strong>栈区（stack）</strong>。由编译器自动分配释放，存放函数的参数值、局部变量的值等。其操作方式类似于数据结构中的栈。每当一个函数被调用，该函数返回地址和一些关于调用的信息，比如某些寄存器的内容，被存储到栈区。然后这个被调用的函数再为它的自动变量和临时变量在栈区上分配空间，这就是C实现函数递归调用的方法。每执行一次递归函数调用，一个新的栈框架就会被使用，这样这个新实例栈里的变量就不会和该函数的另一个实例栈里面的变量混淆。</li>
-<li><strong>堆区（heap）</strong>。用于动态内存分配。堆在内存中位于bss区和栈区之间。一般由程序员分配和释放，若程序员不释放，程序结束时有可能由OS回收。</li>
-</ol>
-<p>C++中：</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// new int 在堆区放了4个字节的int型空间，</span>
-<span class="token comment">// int* i 栈区i指向堆区的这块空间</span>
-<span class="token keyword">int</span><span class="token operator">*</span> i <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">int</span><span class="token punctuation">;</span> <span class="token comment">// i在栈上</span>
-<span class="token comment">// 手动告诉系统：那块堆区你可以回收了。</span>
-<span class="token keyword">delete</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>copy的 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/92fa46c5841a">https://www.jianshu.com/p/92fa46c5841a</a></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">例子：   
-  <span class="token comment">//main.cpp    </span>
-  <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 全局初始化区    </span>
-  <span class="token keyword">char</span> <span class="token operator">*</span>p1<span class="token punctuation">;</span>   <span class="token comment">// 全局未初始化区    </span>
-  <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>    
-  <span class="token punctuation">&#123;</span>    
-	  <span class="token keyword">int</span> b<span class="token punctuation">;</span> <span class="token comment">// 栈  </span>
-	  <span class="token keyword">char</span> s<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"abc"</span><span class="token punctuation">;</span> <span class="token comment">// 栈    </span>
-	  <span class="token keyword">char</span> <span class="token operator">*</span>p2<span class="token punctuation">;</span>   <span class="token comment">// 栈   </span>
-	  <span class="token keyword">char</span> <span class="token operator">*</span>p3   <span class="token operator">=</span>   <span class="token string">"123456"</span><span class="token punctuation">;</span> <span class="token comment">// 123456\0在常量区，p3在栈上。    </span>
-	  <span class="token keyword">static</span>   <span class="token keyword">int</span>   c <span class="token operator">=</span> <span class="token number">0</span>；<span class="token comment">// 全局（静态）初始化区    </span>
-	  p1 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    
-	  p2 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    
-	  <span class="token comment">// 分配得来得10和20字节的区域就在堆区。    </span>
-	  <span class="token function">strcpy</span><span class="token punctuation">(</span>p1<span class="token punctuation">,</span>   <span class="token string">"123456"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//123456\0放在常量区，编译器可能会将它与p3所指向的"123456"优化成一个地方。    </span>
-  <span class="token punctuation">&#125;</span>   <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h1 id="读取虚拟地址"><a href="#读取虚拟地址" class="headerlink" title="读取虚拟地址"></a>读取虚拟地址</h1><p>全局变量的虚拟地址，对于某个进程每次读取都一样，不变。<br>局部变量，每次读取都会变，安全考虑，像C/C++这样的语言容易产生缓冲区溢出式漏洞（数组越界等），直接在栈中受到攻击，如果每次的栈空间都在变化一定程度可以避免攻击。</p>
 
                 
             </div>
@@ -558,7 +443,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wuyexkx.github.io/2021/05/14/hou-jie-lao-shi-p8-dui-zhan-nei-cun-guan-li-stack-zhan-and-heap-dui-sheng-ming-qi-de-jian-dan-li-jie-c-nei-cun-qu-yu-text-data-bss-dui-zhan-local/">https://wuyexkx.github.io/2021/05/14/hou-jie-lao-shi-p8-dui-zhan-nei-cun-guan-li-stack-zhan-and-heap-dui-sheng-ming-qi-de-jian-dan-li-jie-c-nei-cun-qu-yu-text-data-bss-dui-zhan-local/</a>
+                    <a href="https://wuyexkx.github.io/2021/05/14/ubuntu-xi-tong-suo-you-wen-zi-quan-bu-bian-cheng-kuang-kuang-zhong-duan-ye-shi-kuang-kuang-wu-fa-xian-shi-zi-local/">https://wuyexkx.github.io/2021/05/14/ubuntu-xi-tong-suo-you-wen-zi-quan-bu-bian-cheng-kuang-kuang-zhong-duan-ye-shi-kuang-kuang-wu-fa-xian-shi-zi-local/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -596,8 +481,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/C-C/">
-                                    <span class="chip bg-color">C-C++</span>
+                                <a href="/tags/Ubuntu/">
+                                    <span class="chip bg-color">Ubuntu</span>
                                 </a>
                             
                         </div>
@@ -770,13 +655,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/05/14/yu-dao-de-c-zhi-shi-local/">
+                <a href="/2021/05/14/linux-cha-zhao-ming-ling-find-wen-jian-grep-wen-jian-nei-rong-inode-suo-yin-jie-dian-ying-lian-jie-ruan-lian-jie-inode-he-mu-lu-stat-cha-kan-wen-jian-inode-shu-ju-local/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="遇到的 C++知识">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Linux 查找命令 find文件  grep文件内容 inode索引节点硬链接软连接 inode和目录 stat查看文件inode数据">
                         
-                        <span class="card-title">遇到的 C++知识</span>
+                        <span class="card-title">Linux 查找命令 find文件  grep文件内容 inode索引节点硬链接软连接 inode和目录 stat查看文件inode数据</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -793,8 +678,8 @@
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/C-C/" class="post-category">
-                                    C-C++
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
                                 </a>
                             
                             
@@ -804,8 +689,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/C-C/">
-                        <span class="chip bg-color">C-C++</span>
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
                     </a>
                     
                 </div>
@@ -819,13 +704,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/14/ba-c-huo-zhe-cpp-yu-yan-dang-zuo-shell-jiao-ben-wen-jian-yun-xing-de-sao-cao-zuo-local/">
+                <a href="/2021/05/14/ubuntu-chang-yong-ming-ling-geng-xin-shan-chu-ruan-jian-geng-gai-quan-xian-zhong-wen-shu-ru-fa-sunpinyin-jing-xiang-yuan-an-zhuang-gcc-firefox-an-zhuang-flash-local/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="把c或者cpp语言当作shell脚本文件运行的骚操作">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="ubuntu常用命令 更新 删除软件 更改权限 中文输入法SunPinYin 镜像源 安装gcc firefox安装flash">
                         
-                        <span class="card-title">把c或者cpp语言当作shell脚本文件运行的骚操作</span>
+                        <span class="card-title">ubuntu常用命令 更新 删除软件 更改权限 中文输入法SunPinYin 镜像源 安装gcc firefox安装flash</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -842,8 +727,8 @@
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/C-C/" class="post-category">
-                                    C-C++
+                            <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
                                 </a>
                             
                             
@@ -853,8 +738,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/C-C/">
-                        <span class="chip bg-color">C-C++</span>
+                    <a href="/tags/Ubuntu/">
+                        <span class="chip bg-color">Ubuntu</span>
                     </a>
                     
                 </div>
