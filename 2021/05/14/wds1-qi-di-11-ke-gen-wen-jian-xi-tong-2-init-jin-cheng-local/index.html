@@ -1,0 +1,1469 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="WDS1期第11课  根文件系统 2 init进程, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>WDS1期第11课  根文件系统 2 init进程 | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">WDS1期第11课  根文件系统 2 init进程</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                <span class="chip bg-color">嵌入式Linux</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                嵌入式Linux
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.3k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>linux系统的各种命令如ls，ps，cp等都是由一个程序提供busybox，<br>跟busybox ls，busybox ps使用一样。<br>在init/main.c中的<code>run_init_process(&quot;/sbin/init&quot;);</code>，<br>/sbin/init进程也是busybox的链接：<br><img src="/images/20191208143531589.png">想要弄清楚init进程就要=要分析busybox的源码。解压，<br>cp命令相关的源文件coreutils/cp.c，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">cp_main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>init相关源码，init/init.c，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">init_main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>内核启动了第一个进程init，但内核目的是为了启动用户的应用程序，所以首先应该有个配置，然后解析配置，再根据配置文件去执行用户程序。</p>
+<p><strong>此文大致讲了以下程序调用过程：</strong></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">busybox<span class="token operator">--</span><span class="token operator">></span>init_main运行流程
+	parse_inittab
+		<span class="token function">fopen</span><span class="token punctuation">(</span>INITTAB<span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span> <span class="token comment">// 创建一个init_action结构，填充</span>
+		new_init_action		<span class="token comment">// 把这个结构放入init_action_list链表</span>
+	<span class="token function">run_actions</span><span class="token punctuation">(</span>SYSINIT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">waitfor</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>		<span class="token comment">// 执行应用程序，等待它执行完毕</span>
+			<span class="token function">run</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>  				     <span class="token comment">// 创建子进程</span>
+			<span class="token function">waitpid</span><span class="token punctuation">(</span>runpid<span class="token punctuation">,</span> <span class="token operator">&amp;</span>status<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 等待执行完毕</span>
+		<span class="token function">delete_init_action</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 在init_action_list中删除；</span>
+	<span class="token function">run_actions</span><span class="token punctuation">(</span>WAIT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">waitfor</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>		<span class="token comment">// 执行应用程序，等待它执行完毕</span>
+			<span class="token function">run</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>  				     <span class="token comment">// 创建子进程</span>
+			<span class="token function">waitpid</span><span class="token punctuation">(</span>runpid<span class="token punctuation">,</span> <span class="token operator">&amp;</span>status<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 等待执行完毕</span>
+		<span class="token function">delete_init_action</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 在init_action_list中删除；</span>
+	<span class="token function">run_actions</span><span class="token punctuation">(</span>ONCE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">run</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>				<span class="token comment">// 创建子进程</span>
+		<span class="token function">delete_init_action</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 在init_action_list中删除；</span>
+	<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token function">run_actions</span><span class="token punctuation">(</span>RESPAWN<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token operator">-></span>pid <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+				a<span class="token operator">-></span>pid <span class="token operator">=</span> <span class="token function">run</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span>
+		<span class="token function">run_actions</span><span class="token punctuation">(</span>ASKFIRST<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token operator">-></span>pid <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+				a<span class="token operator">-></span>pid <span class="token operator">=</span> <span class="token function">run</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+					打印：<span class="token string">"\nPlease press Enter to activate this console. "</span>
+					等待回车
+					创建子进程
+			<span class="token punctuation">&#125;</span>
+		wpid <span class="token operator">=</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 等待子进程退出</span>
+		<span class="token keyword">while</span> <span class="token punctuation">(</span>wpid <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			a<span class="token operator">-></span>pid <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>    <span class="token comment">// 推出后设置pid为0</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="查看init进程的源码"><a href="#查看init进程的源码" class="headerlink" title="查看init进程的源码"></a>查看init进程的源码</h3><p>一些快捷键的处理，然后初始化consle，跟之前的标准输入/输出/错误有关。内核启动引用程序时没有给什么参数，所以argc=1，所以执行<code>parse_inittab();</code>也在init/init.c中，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">init_main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+	<span class="token function">signal</span><span class="token punctuation">(</span>SIGINT<span class="token punctuation">,</span> ctrlaltdel_signal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+	<span class="token function">console_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+	<span class="token comment">/* Check if we are supposed to be in single user mode */</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>argc <span class="token operator">></span> <span class="token number">1</span>
+	 <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">strcmp</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"single"</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token operator">!</span><span class="token function">strcmp</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"-s"</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token function">LONE_CHAR</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'1'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token comment">/* Start a shell on console */</span>
+		<span class="token function">new_init_action</span><span class="token punctuation">(</span>RESPAWN<span class="token punctuation">,</span> bb_default_login_shell<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+		<span class="token comment">/* Not in single user mode -- see what inittab says */</span>
+
+		<span class="token comment">/* NOTE that if CONFIG_FEATURE_USE_INITTAB is NOT defined,
+		 * then parse_inittab() simply adds in some default
+		 * actions(i.e., runs INIT_SCRIPT and then starts a pair
+		 * of "askfirst" shells */</span>
+		<span class="token function">parse_inittab</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">busybox
+	init_main
+		parse_inittab
+			<span class="token function">fopen</span><span class="token punctuation">(</span>INITTAB<span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span>
+			new_init_action
+		<span class="token function">run_actions</span><span class="token punctuation">(</span>SYSINIT<span class="token punctuation">)</span>
+		<span class="token function">run_actions</span><span class="token punctuation">(</span>WAIT<span class="token punctuation">)</span>
+		<span class="token function">run_actions</span><span class="token punctuation">(</span>ONCE<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在parse_inittab中，打开了inittab配置文件，配置文件格式，<br><code># Format for each entry: &lt;id&gt;:&lt;runlevels&gt;:&lt;action&gt;:&lt;process&gt;</code>，配置文件用于配置哪个进程，何时执行。<br>id： –&gt; /dev/id，用作stdin，stdout，stderr；printf，scanf，err等<br>runlevels：可以忽略<br>action：执行时机<br>process：应用程序或脚本<br>如果配置文件为空，执行下面的默认配置，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">	file <span class="token operator">=</span> <span class="token function">fopen</span><span class="token punctuation">(</span>INITTAB<span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>file <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token comment">/* No inittab file -- set up some default behavior */</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token comment">/* Reboot on Ctrl-Alt-Del */</span>
+	<span class="token function">new_init_action</span><span class="token punctuation">(</span>CTRLALTDEL<span class="token punctuation">,</span> <span class="token string">"reboot"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">/* Umount all filesystems on halt/reboot */</span>
+	<span class="token function">new_init_action</span><span class="token punctuation">(</span>SHUTDOWN<span class="token punctuation">,</span> <span class="token string">"umount -a -r"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">/* Swapoff on halt/reboot */</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>ENABLE_SWAPONOFF<span class="token punctuation">)</span> <span class="token function">new_init_action</span><span class="token punctuation">(</span>SHUTDOWN<span class="token punctuation">,</span> <span class="token string">"swapoff -a"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">/* Prepare to restart init when a HUP is received */</span>
+	<span class="token function">new_init_action</span><span class="token punctuation">(</span>RESTART<span class="token punctuation">,</span> <span class="token string">"init"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">/* Askfirst shell on tty1-4 */</span>
+	<span class="token function">new_init_action</span><span class="token punctuation">(</span>ASKFIRST<span class="token punctuation">,</span> bb_default_login_shell<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">new_init_action</span><span class="token punctuation">(</span>ASKFIRST<span class="token punctuation">,</span> bb_default_login_shell<span class="token punctuation">,</span> VC_2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">new_init_action</span><span class="token punctuation">(</span>ASKFIRST<span class="token punctuation">,</span> bb_default_login_shell<span class="token punctuation">,</span> VC_3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">new_init_action</span><span class="token punctuation">(</span>ASKFIRST<span class="token punctuation">,</span> bb_default_login_shell<span class="token punctuation">,</span> VC_4<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">/* sysinit */</span>
+	<span class="token function">new_init_action</span><span class="token punctuation">(</span>SYSINIT<span class="token punctuation">,</span> INIT_SCRIPT<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">return</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>不为空的话就解析配置文件的内容，忽略注释#，对id加上dev前缀，最终根据配置文件调用new_init_action，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* Skip the line if it's a comment */</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">*</span>id <span class="token operator">==</span> <span class="token string">'#'</span> <span class="token operator">||</span> <span class="token operator">*</span>id <span class="token operator">==</span> <span class="token string">'\n'</span><span class="token punctuation">)</span>
+	<span class="token keyword">continue</span><span class="token punctuation">;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>a <span class="token operator">=</span> actions<span class="token punctuation">;</span> a<span class="token operator">-></span>name <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span> a<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>a<span class="token operator">-></span>name<span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">*</span>id <span class="token operator">!=</span> <span class="token string">'\0'</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strncmp</span><span class="token punctuation">(</span>id<span class="token punctuation">,</span> <span class="token string">"/dev/"</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+				id <span class="token operator">+=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+			<span class="token function">strcpy</span><span class="token punctuation">(</span>tmpConsole<span class="token punctuation">,</span> <span class="token string">"/dev/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token function">safe_strncpy</span><span class="token punctuation">(</span>tmpConsole <span class="token operator">+</span> <span class="token number">5</span><span class="token punctuation">,</span> id<span class="token punctuation">,</span>
+				<span class="token keyword">sizeof</span><span class="token punctuation">(</span>tmpConsole<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			id <span class="token operator">=</span> tmpConsole<span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+		<span class="token function">new_init_action</span><span class="token punctuation">(</span>a<span class="token operator">-></span>action<span class="token punctuation">,</span> command<span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">break</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>查看new_init_action怎么执行解析到的内容，init/init.c，<br>以<code>new_init_action(ASKFIRST, bb_default_login_shell, VC_2);</code>为例，依次替换出来，<br><code>new_init_action(0x004, &quot;-/bin/sh&quot;, &quot;/dev/tty2&quot;);</code>，<br>id： –&gt; /dev/id，执行终端(串口)，用作stdin，stdout，stderr；printf，scanf，err等<br>runlevels：可以忽略<br>action：执行时机<br>process：应用程序或脚本<br><code>new_init_action(0x004, &quot;-/bin/sh&quot;, &quot;/dev/tty2&quot;);</code>，<br><code>static void new_init_action(int action, const char *command, const char *cons)</code>，对应上了。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">new_init_action</span><span class="token punctuation">(</span><span class="token keyword">int</span> action<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>command<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>cons<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">init_action</span> <span class="token operator">*</span>new_action<span class="token punctuation">,</span> <span class="token operator">*</span>a<span class="token punctuation">,</span> <span class="token operator">*</span>last<span class="token punctuation">;</span>
+
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>cons<span class="token punctuation">,</span> bb_dev_null<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>action <span class="token operator">&amp;</span> ASKFIRST<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/* Append to the end of the list */</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span>a <span class="token operator">=</span> last <span class="token operator">=</span> init_action_list<span class="token punctuation">;</span> a<span class="token punctuation">;</span> a <span class="token operator">=</span> a<span class="token operator">-></span>next<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token comment">/* don't enter action if it's already in the list,
+		 * but do overwrite existing actions */</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>a<span class="token operator">-></span>command<span class="token punctuation">,</span> command<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+		 <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>a<span class="token operator">-></span>terminal<span class="token punctuation">,</span> cons<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+		<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			a<span class="token operator">-></span>action <span class="token operator">=</span> action<span class="token punctuation">;</span>
+			<span class="token keyword">return</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+		last <span class="token operator">=</span> a<span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+
+	new_action <span class="token operator">=</span> <span class="token function">xzalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">init_action</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>last<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		last<span class="token operator">-></span>next <span class="token operator">=</span> new_action<span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+		init_action_list <span class="token operator">=</span> new_action<span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token function">strcpy</span><span class="token punctuation">(</span>new_action<span class="token operator">-></span>command<span class="token punctuation">,</span> command<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	new_action<span class="token operator">-></span>action <span class="token operator">=</span> action<span class="token punctuation">;</span>
+	<span class="token function">strcpy</span><span class="token punctuation">(</span>new_action<span class="token operator">-></span>terminal<span class="token punctuation">,</span> cons<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">messageD</span><span class="token punctuation">(</span>L_LOG <span class="token operator">|</span> L_CONSOLE<span class="token punctuation">,</span> <span class="token string">"command='%s' action=%d tty='%s'\n"</span><span class="token punctuation">,</span>
+		new_action<span class="token operator">-></span>command<span class="token punctuation">,</span> new_action<span class="token operator">-></span>action<span class="token punctuation">,</span> new_action<span class="token operator">-></span>terminal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>new_init_action做了这些事，</p>
+<ol>
+<li>创建一个init_action，然后根据传入的参数填充</li>
+<li>把这个结构放入init_action_list链表</li>
+</ol>
+<p>以上，找到init_action_list是什么东西，由一个嵌套的结构体init_action定义的指针，<br>找到init_action，<br>执行时机<br>进程号<br>应用程序<br>终端</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* Set up a linked list of init_actions, to be read from inittab */</span>
+<span class="token keyword">struct</span> <span class="token class-name">init_action</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">init_action</span> <span class="token operator">*</span>next<span class="token punctuation">;</span>
+	<span class="token keyword">int</span> action<span class="token punctuation">;</span>
+	<span class="token class-name">pid_t</span> pid<span class="token punctuation">;</span>
+	<span class="token keyword">char</span> command<span class="token punctuation">[</span>INIT_BUFFS_SIZE<span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token keyword">char</span> terminal<span class="token punctuation">[</span>CONSOLE_NAME_SIZE<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>又回到parse_inittab如果没有配置文件，反推出默认配置是什么，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">	<span class="token keyword">if</span> <span class="token punctuation">(</span>file <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token comment">/* No inittab file -- set up some default behavior */</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+		<span class="token comment">/* Reboot on Ctrl-Alt-Del */</span>
+		<span class="token function">new_init_action</span><span class="token punctuation">(</span>CTRLALTDEL<span class="token punctuation">,</span> <span class="token string">"reboot"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">/* Umount all filesystems on halt/reboot */</span>
+		<span class="token function">new_init_action</span><span class="token punctuation">(</span>SHUTDOWN<span class="token punctuation">,</span> <span class="token string">"umount -a -r"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">/* Swapoff on halt/reboot */</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>ENABLE_SWAPONOFF<span class="token punctuation">)</span> <span class="token function">new_init_action</span><span class="token punctuation">(</span>SHUTDOWN<span class="token punctuation">,</span> <span class="token string">"swapoff -a"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">/* Prepare to restart init when a HUP is received */</span>
+		<span class="token function">new_init_action</span><span class="token punctuation">(</span>RESTART<span class="token punctuation">,</span> <span class="token string">"init"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">/* Askfirst shell on tty1-4 */</span>
+		<span class="token function">new_init_action</span><span class="token punctuation">(</span>ASKFIRST<span class="token punctuation">,</span> bb_default_login_shell<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">new_init_action</span><span class="token punctuation">(</span>ASKFIRST<span class="token punctuation">,</span> bb_default_login_shell<span class="token punctuation">,</span> VC_2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">new_init_action</span><span class="token punctuation">(</span>ASKFIRST<span class="token punctuation">,</span> bb_default_login_shell<span class="token punctuation">,</span> VC_3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">new_init_action</span><span class="token punctuation">(</span>ASKFIRST<span class="token punctuation">,</span> bb_default_login_shell<span class="token punctuation">,</span> VC_4<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">/* sysinit */</span>
+		<span class="token function">new_init_action</span><span class="token punctuation">(</span>SYSINIT<span class="token punctuation">,</span> INIT_SCRIPT<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		<span class="token keyword">return</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>inittab的格式：<br><code># Format for each entry: &lt;id&gt;:&lt;runlevels&gt;:&lt;action&gt;:&lt;process&gt;</code>，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">id： <span class="token operator">--</span><span class="token operator">></span> <span class="token operator">/</span>dev<span class="token operator">/</span>id，用作<span class="token constant">stdin</span>，<span class="token constant">stdout</span>，<span class="token constant">stderr</span>；printf，scanf，err等
+runlevels：可以忽略
+action：执行时机
+# <span class="token operator">&lt;</span>action<span class="token operator">></span><span class="token operator">:</span> Valid actions include<span class="token operator">:</span> sysinit<span class="token punctuation">,</span> respawn<span class="token punctuation">,</span> askfirst<span class="token punctuation">,</span> wait<span class="token punctuation">,</span> once<span class="token punctuation">,</span>
+<span class="token macro property"><span class="token directive-hash">#</span>                                  <span class="token directive keyword">restart</span><span class="token expression"><span class="token punctuation">,</span> ctrlaltdel<span class="token punctuation">,</span> and shutdown<span class="token punctuation">.</span></span></span>
+process：应用程序或脚本
+默认配置等价于配置文件中<span class="token punctuation">(</span>id<span class="token operator">:</span>runlevels<span class="token operator">:</span>action<span class="token operator">:</span>process<span class="token punctuation">)</span>：
+<span class="token comment">/*
+::ctrlaltdel:reboot
+::shutdown:umount -a -r
+::restart:init
+::askfirst:-/bin/sh
+tty2::askfirst:-/bin/sh
+tty3::askfirst:-/bin/sh
+tty4::askfirst:-/bin/sh
+::sysinit:/etc/init.d/rcS
+*/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>解析parse_inittab之后得到init_action_list，init_action_list存放<code>id:runlevels:action:process</code>，run_actions(init/init.c)这个函数就是去使用init_action_list的，run_actions就是执行时机，一共有<code>sysinit, respawn, askfirst, wait, once, restart, ctrlaltdel, and shutdown</code>类时机，init_main中run_actions简化如下，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">run_actions</span><span class="token punctuation">(</span>SYSINIT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">run_actions</span><span class="token punctuation">(</span>WAIT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">run_actions</span><span class="token punctuation">(</span>ONCE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token function">run_actions</span><span class="token punctuation">(</span>RESPAWN<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">run_actions</span><span class="token punctuation">(</span>ASKFIRST<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		wpid <span class="token operator">=</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">while</span> <span class="token punctuation">(</span>wpid <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			a<span class="token operator">-></span>pid <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>执行实际究竟是什么，需要去看run_actions，init/init.c，简化后如下，for (a = init_action_list; a; a = tmp) 依次遍历init_action_list取出<code>id:runlevels:action:process</code>；waitfor(a, 0)执行一个程序并等待执行完毕；delete_init_action(a);执行完依次程序后删除；</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">run_actions</span><span class="token punctuation">(</span><span class="token keyword">int</span> action<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">init_action</span> <span class="token operator">*</span>a<span class="token punctuation">,</span> <span class="token operator">*</span>tmp<span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span>a <span class="token operator">=</span> init_action_list<span class="token punctuation">;</span> a<span class="token punctuation">;</span> a <span class="token operator">=</span> tmp<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		tmp <span class="token operator">=</span> a<span class="token operator">-></span>next<span class="token punctuation">;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token operator">-></span>action <span class="token operator">==</span> action<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token comment">/* a->terminal of "" means "init's console" */</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token operator">-></span>terminal<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token function">access</span><span class="token punctuation">(</span>a<span class="token operator">-></span>terminal<span class="token punctuation">,</span> R_OK <span class="token operator">|</span> W_OK<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+				<span class="token function">delete_init_action</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token operator">-></span>action <span class="token operator">&amp;</span> <span class="token punctuation">(</span>SYSINIT <span class="token operator">|</span> WAIT <span class="token operator">|</span> CTRLALTDEL <span class="token operator">|</span> SHUTDOWN <span class="token operator">|</span> RESTART<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+				<span class="token function">waitfor</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token function">delete_init_action</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token operator">-></span>action <span class="token operator">&amp;</span> ONCE<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+				<span class="token function">run</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token function">delete_init_action</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token operator">-></span>action <span class="token operator">&amp;</span> <span class="token punctuation">(</span>RESPAWN <span class="token operator">|</span> ASKFIRST<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+				<span class="token comment">/* Only run stuff with pid==0.  If they have
+				 * a pid, that means it is still running */</span>
+				<span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token operator">-></span>pid <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+					a<span class="token operator">-></span>pid <span class="token operator">=</span> <span class="token function">run</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token punctuation">&#125;</span>
+			<span class="token punctuation">&#125;</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>查看waitfor，也在init/init.c中，run(a);创建process子进程；waitpid(runpid, &amp;status, 0);等待结束。run函数中BB_EXECVP(cmdpath, cmd);是系统调用</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">waitfor</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">init_action</span> <span class="token operator">*</span>a<span class="token punctuation">,</span> <span class="token class-name">pid_t</span> pid<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> runpid<span class="token punctuation">;</span>
+	<span class="token keyword">int</span> status<span class="token punctuation">,</span> wpid<span class="token punctuation">;</span>
+
+	runpid <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token constant">NULL</span> <span class="token operator">==</span> a<span class="token punctuation">)</span><span class="token operator">?</span> pid <span class="token operator">:</span> <span class="token function">run</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		wpid <span class="token operator">=</span> <span class="token function">waitpid</span><span class="token punctuation">(</span>runpid<span class="token punctuation">,</span> <span class="token operator">&amp;</span>status<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>wpid <span class="token operator">==</span> runpid<span class="token punctuation">)</span>
+			<span class="token keyword">break</span><span class="token punctuation">;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>wpid <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">&amp;&amp;</span> errno <span class="token operator">==</span> ECHILD<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token comment">/* we missed its termination */</span>
+			<span class="token keyword">break</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+		<span class="token comment">/* FIXME other errors should maybe trigger an error, but allow
+		 * the program to continue */</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">return</span> wpid<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>SYSINIT | WAIT | CTRLALTDEL | SHUTDOWN | RESTART执行的流程一样的，只是先后顺序不同；ONCE这类程序不用等待执行完毕；RESPAWN | ASKFIRST只在a-&gt;pid == 0时才run(a)，并且RESPAWN | ASKFIRST在while(1)里的，简化那个while(1)，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">run</span><span class="token expression"><span class="token function">_actions</span><span class="token punctuation">(</span>RESPAWN <span class="token operator">|</span> ASKFIRST<span class="token punctuation">)</span><span class="token punctuation">;</span></span></span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>			
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token operator">-></span>pid <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// =0才会run，pid开始等于0</span>
+		a<span class="token operator">-></span>pid <span class="token operator">=</span> <span class="token function">run</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// run了之后不等于0</span>
+	<span class="token punctuation">&#125;</span>
+	wpid <span class="token operator">=</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 等待子进程退出，</span>
+	<span class="token keyword">while</span> <span class="token punctuation">(</span>wpid <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 返回之后又赋值为0</span>
+		a<span class="token operator">-></span>pid <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>   
+	<span class="token punctuation">&#125;</span>
+	<span class="token comment">// 重新运行退出的子进程</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>RESPAWN和ASKFIRST还有小区别，ASKFIRST会打印<code>Please press Enter to activate this console. </code><br>然后等待回车，在run中，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token operator">-></span>action <span class="token operator">&amp;</span> ASKFIRST<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">static</span> <span class="token keyword">const</span> <span class="token keyword">char</span> press_enter<span class="token punctuation">[</span><span class="token punctuation">]</span> ALIGN1 <span class="token operator">=</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CUSTOMIZED_BANNER</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token expression">CUSTOMIZED_BANNER</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+			<span class="token string">"\nPlease press Enter to activate this console. "</span><span class="token punctuation">;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token function">full_write</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> press_enter<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>press_enter<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 第一个1表示标准输出</span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>c<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span> c <span class="token operator">!=</span> <span class="token string">'\n'</span><span class="token punctuation">)</span>             <span class="token comment">// 等待回车，</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token function">BB_EXECVP</span><span class="token punctuation">(</span>cmdpath<span class="token punctuation">,</span> cmd<span class="token punctuation">)</span><span class="token punctuation">;</span>							 <span class="token comment">// 创建进程</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>一共有<code>sysinit, respawn, askfirst, wait, once, restart, ctrlaltdel, and shutdown</code>类时机，还有<code> restart, ctrlaltdel, and shutdown</code>没有出现，这些东西在init/init.c的init_main中，在一开始就设置了相应的信号量，当触发信号量时内核会发给init进程，init进程就去执行对应函数，如ctrlaltdel和shutdown_system时就会去执行该类的程序，shutdown_system先运行配置文件指定的SHUTDOWN，然后才运行系统的关闭，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* Set up sig handlers  -- be sure to
+ * clear all of these in run() */</span>
+<span class="token function">signal</span><span class="token punctuation">(</span>SIGHUP<span class="token punctuation">,</span> exec_signal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">signal</span><span class="token punctuation">(</span>SIGQUIT<span class="token punctuation">,</span> exec_signal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">signal</span><span class="token punctuation">(</span>SIGUSR1<span class="token punctuation">,</span> shutdown_signal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">signal</span><span class="token punctuation">(</span>SIGUSR2<span class="token punctuation">,</span> shutdown_signal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">signal</span><span class="token punctuation">(</span>SIGINT<span class="token punctuation">,</span> ctrlaltdel_signal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">signal</span><span class="token punctuation">(</span>SIGTERM<span class="token punctuation">,</span> shutdown_signal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">signal</span><span class="token punctuation">(</span>SIGCONT<span class="token punctuation">,</span> cont_handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">signal</span><span class="token punctuation">(</span>SIGSTOP<span class="token punctuation">,</span> stop_handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">signal</span><span class="token punctuation">(</span>SIGTSTP<span class="token punctuation">,</span> stop_handler<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">ctrlaltdel_signal</span><span class="token punctuation">(</span><span class="token keyword">int</span> sig ATTRIBUTE_UNUSED<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token function">run_actions</span><span class="token punctuation">(</span>CTRLALTDEL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">shutdown_system</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token class-name">sigset_t</span> block_signals<span class="token punctuation">;</span>
+
+	<span class="token comment">/* run everything to be run at "shutdown".  This is done _prior_
+	 * to killing everything, in case people wish to use scripts to
+	 * shut things down gracefully... */</span>
+	<span class="token function">run_actions</span><span class="token punctuation">(</span>SHUTDOWN<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/* first disable all our signals */</span>
+	<span class="token function">sigemptyset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> SIGHUP<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> SIGQUIT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> SIGCHLD<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> SIGUSR1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> SIGUSR2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> SIGINT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> SIGTERM<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> SIGCONT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> SIGSTOP<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> SIGTSTP<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sigprocmask</span><span class="token punctuation">(</span>SIG_BLOCK<span class="token punctuation">,</span> <span class="token operator">&amp;</span>block_signals<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>/dev/console  // 打开终端<br>/dev/null  // 如果设置id，stdin,stderr等被定位到null中<br>/etc/inittab  // 配置文件<br>配置文件里指定的应用程序或脚本也一定要存在<br>库<br>init本身，就是busybox</p>
+<p><strong>最小根文件系统的项：</strong></p>
+<ol>
+<li>/dev/console </li>
+<li>/dev/null </li>
+<li>init (busybox)</li>
+<li>/etc/inittab</li>
+<li>配置文件里指定的应用程序或脚本</li>
+<li>C库</li>
+</ol>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/wds1-qi-di-11-ke-gen-wen-jian-xi-tong-2-init-jin-cheng-local/">https://wuyexkx.github.io/2021/05/14/wds1-qi-di-11-ke-gen-wen-jian-xi-tong-2-init-jin-cheng-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                    <span class="chip bg-color">嵌入式Linux</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/wds1-qi-di-11-ke-gen-wen-jian-xi-tong-1-dev-console-run-init-process-execute-command-sbin-init-etc-init-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="WDS1期第11课 根文件系统 1 _dev_console run_init_process(execute_command) sbin_init _etc_init">
+                        
+                        <span class="card-title">WDS1期第11课 根文件系统 1 _dev_console run_init_process(execute_command) sbin_init _etc_init</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/wds1-qi-di-10-ke-nei-he-4-nei-he-qi-dong-fen-qu-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="WDS1期第10课 内核 4 内核启动 分区">
+                        
+                        <span class="card-title">WDS1期第10课 内核 4 内核启动 分区</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

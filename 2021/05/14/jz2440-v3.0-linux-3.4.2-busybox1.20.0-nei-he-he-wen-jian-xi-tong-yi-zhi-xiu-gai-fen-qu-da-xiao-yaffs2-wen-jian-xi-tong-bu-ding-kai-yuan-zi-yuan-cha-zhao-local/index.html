@@ -1,0 +1,1572 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="JZ2440 v3.0 linux-3.4.2  busybox1.20.0内核 和 文件系统移植 修改分区大小 yaffs2文件系统补丁 开源资源查找, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>JZ2440 v3.0 linux-3.4.2  busybox1.20.0内核 和 文件系统移植 修改分区大小 yaffs2文件系统补丁 开源资源查找 | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">JZ2440 v3.0 linux-3.4.2  busybox1.20.0内核 和 文件系统移植 修改分区大小 yaffs2文件系统补丁 开源资源查找</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                <span class="chip bg-color">嵌入式Linux</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                嵌入式Linux
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.1k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]</p>
+<h1 id="零、平台-软件版本-烧写"><a href="#零、平台-软件版本-烧写" class="headerlink" title="零、平台 + 软件版本 + 烧写"></a>零、平台 + 软件版本 + 烧写</h1><h2 id="平台-和-版本"><a href="#平台-和-版本" class="headerlink" title="平台 和 版本"></a>平台 和 版本</h2><ol>
+<li>JZ2440v3.0</li>
+<li>u-boot-1.1.6 + u-boot-1.1.6_jz2440.patch <a href="ftp://ftp.denx.de/pub/u-boot/">ftp://ftp.denx.de/pub/u-boot/</a></li>
+<li>linux-3.4.2  <a target="_blank" rel="noopener" href="https://mirrors.edge.kernel.org/pub/linux/kernel/v3.x/">https://mirrors.edge.kernel.org/pub/linux/kernel/v3.x/</a><br>内核编译选的mini2440 ，机器id设置 set machid （mini2440 7cf ； smdk2440 16a）</li>
+<li>busybox1.20.0 <a target="_blank" rel="noopener" href="https://busybox.net/downloads/">https://busybox.net/downloads/</a><br>内核yaffs2补丁 <a target="_blank" rel="noopener" href="https://github.com/lifeyx/yaffs2.git">https://github.com/lifeyx/yaffs2.git</a></li>
+<li>arm-linux-gcc-4.3.2  <a target="_blank" rel="noopener" href="https://sourceforge.net/projects/sunsea1026/files/work/arm-linux-gcc-4.3.2.tgz/download">https://sourceforge.net/projects/sunsea1026/files/work/arm-linux-gcc-4.3.2.tgz/download</a>（这个资源真tm难找）</li>
+</ol>
+<p>查找开源资源<a target="_blank" rel="noopener" href="https://osdn.net/">https://osdn.net</a></p>
+<h2 id="烧写"><a href="#烧写" class="headerlink" title="烧写"></a>烧写</h2><p>u-boot用oflash工具烧写 ，windows下。（裸机，board – openJTAG – win）<br>内核和文件系统用DNW，windows下。（uboot cmd，boardUSB – win）</p>
+<h1 id="一、编译系统的一堆命令"><a href="#一、编译系统的一堆命令" class="headerlink" title="一、编译系统的一堆命令"></a>一、编译系统的一堆命令</h1><h2 id="1-编译uboot"><a href="#1-编译uboot" class="headerlink" title="1. 编译uboot"></a>1. 编译uboot</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">tar</span> xjf u-boot-1.1.6.tar.bz2    			解压
+<span class="token builtin class-name">cd</span> u-boot-1.1.6/                			到目录下
+patch -p1 <span class="token operator">&lt;</span> <span class="token punctuation">..</span>/u-boot-1.1.6_jz2440.patch  	打补丁 
+<span class="token function">make</span> 100ask24x0_config                    	配置make
+<span class="token function">make</span>                                      	<span class="token function">make</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="2-编译内核"><a href="#2-编译内核" class="headerlink" title="2. 编译内核"></a>2. 编译内核</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">tar</span> -xjf linux-3.4.2.tar.bz2
+<span class="token builtin class-name">cd</span> linux-3.4.2
+<span class="token function">make</span> mini2440_defconfig
+./patch-ker.sh c m <span class="token punctuation">..</span>/linux-3.4.2 <span class="token comment"># yaffs2文件补丁，按照下面错误2步骤下载 打补丁 编译</span>
+<span class="token function">make</span> menuconfig
+<span class="token function">make</span> uImage -j8<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="3-文件系统-yaffs2"><a href="#3-文件系统-yaffs2" class="headerlink" title="3. 文件系统 yaffs2"></a>3. 文件系统 yaffs2</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 解压编译安装到fsroot</span>
+<span class="token function">tar</span> -xjf busybox-1.20.0.tar.bz2
+<span class="token function">make</span> menuconfig
+	Busybox Settings  ---<span class="token operator">></span> 
+	Build Options  ---<span class="token operator">></span>
+	Cross Compiler prefix <span class="token punctuation">(</span>输入 arm-linux- 或 在中<span class="token punctuation">)</span>
+<span class="token function">make</span>
+<span class="token function">mkdir</span> fsroot1.20.0
+<span class="token function">make</span> <span class="token assign-left variable">CONFIG_PREFIX</span><span class="token operator">=</span>~/Desktop/uboot-kernel/fsroot1.20.0 <span class="token function">install</span>
+
+<span class="token comment"># 在fsroot中创建文件</span>
+<span class="token function">mkdir</span> etc
+<span class="token function">mkdir</span> lib usr/lib
+<span class="token function">cp</span> -pd /usr/local/arm/arm-linux-gcc-4.3.2/arm-none-linux-gnueabi/libc/armv4t/lib/*.so* lib/
+<span class="token function">cp</span> -pd /usr/local/arm/arm-linux-gcc-4.3.2/arm-none-linux-gnueabi/libc/armv4t/usr/lib/*.so* usr/lib/
+ 注意安装库的时候：加-pd选项（把链接文件cp后也作为链接文件，否则会cp链接后的实际文件，导致fs异常庞大，p是保留源文件属性。）
+
+<span class="token builtin class-name">cd</span> etc
+<span class="token function">vim</span> inittab
+-----------------------------
+<span class="token comment"># /etc/inittab</span>
+::sysinit:/etc/init.d/rcS
+console::askfirst:-/bin/sh
+::ctrlaltdel:/sbin/reboot
+::shutdown:/bin/umount -a -r
+-----------------------------
+<span class="token function">mkdir</span> init.d
+<span class="token function">vim</span> init.d/rcS
+------------------------------------------
+<span class="token comment">#!/bin/sh</span>
+<span class="token function">mount</span> -a
+<span class="token function">mkdir</span> /dev/pts
+<span class="token function">mount</span> -t devpts devpts /dev/pts
+<span class="token builtin class-name">echo</span> /sbin/mdev <span class="token operator">></span> /proc/sys/kernel/hotplug
+mdev -s
+------------------------------------------
+<span class="token function">chmod</span> a+x init.d/rcS
+<span class="token function">vim</span> fstab
+------------------------------------------------------------------
+<span class="token comment"># device     mount-point    type   options        dump  fsck order</span>
+proc           /proc        proc   defaults        <span class="token number">0</span>     <span class="token number">0</span>
+tmpfs          /tmp         tmpfs  defaults        <span class="token number">0</span>     <span class="token number">0</span>
+sysfs          /sys         sysfs  defaults        <span class="token number">0</span>     <span class="token number">0</span>
+tmpfs          /dev         tmpfs  defaults        <span class="token number">0</span>     <span class="token number">0</span>
+------------------------------------------------------------------
+<span class="token function">mkdir</span> dev
+<span class="token builtin class-name">cd</span> dev
+<span class="token function">sudo</span> <span class="token function">mknod</span> console c <span class="token number">5</span> <span class="token number">1</span>
+<span class="token function">sudo</span> <span class="token function">mknod</span> null c <span class="token number">1</span> <span class="token number">3</span>
+
+<span class="token function">mkdir</span> proc tmp mnt sys root
+
+<span class="token comment"># 制作yaffs2文件</span>
+mkyaffs2image fsroot1.20.0 fsroot.yaffs2  <span class="token comment"># 需要安装mkyaffs2image工具</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/images/20200627115801434.png"></p>
+<h3 id="额外的，自启动脚本配置-自动配置网卡"><a href="#额外的，自启动脚本配置-自动配置网卡" class="headerlink" title="额外的，自启动脚本配置 + 自动配置网卡"></a>额外的，自启动脚本配置 + 自动配置网卡</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">自启动脚本配置 + 自动配置网卡
+<span class="token function">vi</span> etc/init.d/rcS
+------------------------------------------
+<span class="token comment">#!/bin/sh</span>
+<span class="token function">mount</span> -a
+<span class="token function">mkdir</span> /dev/pts
+<span class="token function">mount</span> -t devpts devpts /dev/pts
+<span class="token builtin class-name">echo</span> /sbin/mdev <span class="token operator">></span> /proc/sys/kernel/hotplug
+mdev -s
+<span class="token builtin class-name">exec</span> /etc/rc.local <span class="token comment"># 添加这一行</span>
+------------------------------------------
+<span class="token function">vi</span> etc/rc.local
+----------------------------------------------------------
+<span class="token function">ifconfig</span> eth0 <span class="token number">192.168</span>.1.100
+<span class="token function">mount</span> -t nfs -o tcp,nolock <span class="token number">192.168</span>.1.103:/nfs/fs_root /mnt
+----------------------------------------------------------
+<span class="token function">chmod</span> +x rc.local<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="二、修改默认分区大小"><a href="#二、修改默认分区大小" class="headerlink" title="二、修改默认分区大小"></a>二、修改默认分区大小</h1><p>需要修改uboot的宏(或者直接在uboot cmd中修改) 和 内核代码的mtd分区和偏移，使得两者保持一致。</p>
+<blockquote>
+<p><strong>注意：如果进入uboot后<code>print</code>命令出现了<code>mtdparts</code>参数，那么需要去掉它才是我们在uboot中指定的默认参数（我们在uboot源码中修改的宏），否则会使用print出来的参数，就算uboot源码改过也不起作用。</strong><br>uboot命令中去掉mtdparts参数方法：<br>set mtdparts<br>save</p>
+</blockquote>
+<h2 id="1-修改uboot的宏"><a href="#1-修改uboot的宏" class="headerlink" title="1. 修改uboot的宏"></a>1. 修改uboot的宏</h2><p>uboot中在include/configs/100ask24x0.h，中修改, </p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 只修改这里不一定起作用，还要去掉uboot参数mtdparts。</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MTDPARTS_DEFAULT</span> <span class="token string">"mtdparts=nandflash0:256k@0(bootloader),"</span> <span class="token punctuation">\</span>
+                            <span class="token string">"128k(params),"</span> <span class="token punctuation">\</span>
+                            <span class="token string">"4m(kernel),"</span> <span class="token expression">\ </span><span class="token comment">// 2m -> 4m</span></span>
+                            <span class="token string">"-(root)"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="2-修改内核的mtd分区大小和偏移"><a href="#2-修改内核的mtd分区大小和偏移" class="headerlink" title="2. 修改内核的mtd分区大小和偏移"></a>2. 修改内核的mtd分区大小和偏移</h2><p>在文件arch/arm/mach-s3c24xx/mach-mini2440.c中，<br>原来nand为2MB用于存储内核镜像，现在修改为4M，偏移对应修改即可。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* NAND Flash on MINI2440 board */</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">mtd_partition</span> mini2440_default_nand_part<span class="token punctuation">[</span><span class="token punctuation">]</span> __initdata <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+		<span class="token punctuation">.</span>name	<span class="token operator">=</span> <span class="token string">"bootloader"</span><span class="token punctuation">,</span>
+		<span class="token punctuation">.</span>size	<span class="token operator">=</span> SZ_256K<span class="token punctuation">,</span>
+		<span class="token punctuation">.</span>offset	<span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+		<span class="token punctuation">.</span>name	<span class="token operator">=</span> <span class="token string">"params"</span><span class="token punctuation">,</span>
+		<span class="token punctuation">.</span>size	<span class="token operator">=</span> SZ_128K<span class="token punctuation">,</span>
+		<span class="token punctuation">.</span>offset	<span class="token operator">=</span> SZ_256K<span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+		<span class="token punctuation">.</span>name	<span class="token operator">=</span> <span class="token string">"kernel"</span><span class="token punctuation">,</span>
+		<span class="token comment">/* 5 megabytes, for a kernel with no modules
+		 * or a uImage with a ramdisk attached */</span>
+		<span class="token punctuation">.</span>size	<span class="token operator">=</span> <span class="token number">0x00400000</span><span class="token punctuation">,</span>						<span class="token comment">// 这里修改内核分区大小</span>
+		<span class="token punctuation">.</span>offset	<span class="token operator">=</span> SZ_256K <span class="token operator">+</span> SZ_128K<span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+		<span class="token punctuation">.</span>name	<span class="token operator">=</span> <span class="token string">"root"</span><span class="token punctuation">,</span>
+		<span class="token punctuation">.</span>offset	<span class="token operator">=</span> SZ_256K <span class="token operator">+</span> SZ_128K <span class="token operator">+</span> <span class="token number">0x00400000</span><span class="token punctuation">,</span>	<span class="token comment">// 这里修改root分区的offset</span>
+		<span class="token punctuation">.</span>size	<span class="token operator">=</span> MTDPART_SIZ_FULL<span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="三、在源码中修改uboot的tftp-ip"><a href="#三、在源码中修改uboot的tftp-ip" class="headerlink" title="三、在源码中修改uboot的tftp ip"></a>三、在源码中修改uboot的tftp ip</h1><p>在uboot的include/configs/100ask24x0.h中，</p>
+<pre class="line-numbers language-none"><code class="language-none">#define CONFIG_IPADDR		192.168.1.100
+#define CONFIG_SERVERIP		192.168.1.103<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h1 id="四、报错"><a href="#四、报错" class="headerlink" title="四、报错"></a>四、报错</h1><h2 id="1-读出内核但是-内核校验出错"><a href="#1-读出内核但是-内核校验出错" class="headerlink" title="1. 读出内核但是 内核校验出错"></a>1. 读出内核但是 内核校验出错</h2><pre class="line-numbers language-none"><code class="language-none">NAND read: device 0 offset 0x60000, size 0x200000
+
+Reading data from 0x25f800 -- 100% complete.
+ 2097152 bytes read: OK
+## Booting image at 30007fc0 ...
+   Image Name:   Linux-3.4.2
+   Created:      2020-06-26   7:42:00 UTC
+   Image Type:   ARM Linux Kernel Image (uncompressed)
+   Data Size:    2472992 Bytes &#x3D;  2.4 MB
+   Load Address: 30008000
+   Entry Point:  30008000
+   Verifying Checksum ... Bad Data CRC<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/images/20200627103712725.png"></p>
+<h2 id="1-解决办法"><a href="#1-解决办法" class="headerlink" title="1. 解决办法"></a>1. 解决办法</h2><p>如错误提示所示，内核大小为2.4MB，但是只从NAND中读出了2MB，当然校验出错。<br>需要修改内核分区的大小，保证uboot中的mtd分区大小和内核mtd分区大小和偏移保持一致即可。</p>
+<h2 id="2-版本3-4-2内核无法识别yaffs2文件系统"><a href="#2-版本3-4-2内核无法识别yaffs2文件系统" class="headerlink" title="2. 版本3.4.2内核无法识别yaffs2文件系统"></a>2. 版本3.4.2内核无法识别yaffs2文件系统</h2><pre class="line-numbers language-none"><code class="language-none">List of all partitions:
+1f00             256 mtdblock0  (driver?)
+1f01             128 mtdblock1  (driver?)
+1f02            4096 mtdblock2  (driver?)
+1f03          257664 mtdblock3  (driver?)
+No filesystem could mount root, tried:  ext3 cramfs vfat msdos romfs
+Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(31,3)
+[&lt;c000dc1c&gt;] (unwind_backtrace+0x0&#x2F;0xf8) from [&lt;c0340dac&gt;] (panic+0x74&#x2F;0x1d0)
+[&lt;c0340dac&gt;] (panic+0x74&#x2F;0x1d0) from [&lt;c0441e70&gt;] (mount_block_root+0x1d0&#x2F;0x22c)
+[&lt;c0441e70&gt;] (mount_block_root+0x1d0&#x2F;0x22c) from [&lt;c0441f4c&gt;] (mount_root+0x80&#x2F;0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/images/20200627101430230.png"></p>
+<h2 id="2-解决办法"><a href="#2-解决办法" class="headerlink" title="2. 解决办法"></a>2. 解决办法</h2><p><strong>内核默认没有yaffs2文件系统格式，需要下载补丁，重新配置内核，再make umage。</strong><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_16933601/article/details/105889600">这篇文章</a>详细介绍了如何打yaffs2的补丁和修改编译的错误。<br>主要步骤：</p>
+<ol>
+<li>下载yaffs源码 git clone <a href="mailto:&#103;&#x69;&#x74;&#64;&#x67;&#105;&#116;&#104;&#117;&#98;&#x2e;&#99;&#111;&#x6d;">&#103;&#x69;&#x74;&#64;&#x67;&#105;&#116;&#104;&#117;&#98;&#x2e;&#99;&#111;&#x6d;</a>:lifeyx/yaffs2.git</li>
+<li>打补丁到内核 <pre class="line-numbers language-none"><code class="language-none">cd yaffs2&#x2F;
+.&#x2F;patch-ker.sh  c m linux-3.4.2 &#x2F;&#x2F;c 将yffs2文件夹copy到linux-3.4.2&#x2F;fs   m 指定多版本<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>配置内核 <pre class="line-numbers language-none"><code class="language-none">make menuconfig
+
+-&gt; File systems
+      -&gt; Miscellaneous filesystems (MISC_FILESYSTEMS [&#x3D;y])
+             &lt;*&gt;   yaffs2 file system support <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+ <img src="/images/20200627095748566.png"><h2 id="3-文件系统挂上了-后面出错"><a href="#3-文件系统挂上了-后面出错" class="headerlink" title="3. 文件系统挂上了 后面出错"></a>3. 文件系统挂上了 后面出错</h2><img src="/images/20200626154258423.png"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">s3c-rtc s3c2410-rtc: setting system clock to <span class="token number">2000</span>-01-01 03:24:11 UTC <span class="token punctuation">(</span><span class="token number">946697051</span><span class="token punctuation">)</span>
+ALSA device list:
+  No soundcards found.
+yaffs: dev is <span class="token number">32505859</span> name is <span class="token string">"mtdblock3"</span> rw
+yaffs: passed flags <span class="token string">""</span>
+VFS: Mounted root <span class="token punctuation">(</span>yaffs filesystem<span class="token punctuation">)</span> on device <span class="token number">31</span>:3.
+Freeing init memory: 148K
+Kernel panic - not syncing: Attempted to <span class="token function">kill</span> init<span class="token operator">!</span> <span class="token assign-left variable">exitcode</span><span class="token operator">=</span>0x00000200
+
+<span class="token punctuation">[</span><span class="token operator">&lt;</span>c000dc1c<span class="token operator">></span><span class="token punctuation">]</span> <span class="token punctuation">(</span>unwind_backtrace+0x0/0xf8<span class="token punctuation">)</span> from <span class="token punctuation">[</span><span class="token operator">&lt;</span>c0352d2c<span class="token operator">></span><span class="token punctuation">]</span> <span class="token punctuation">(</span>panic+0x74/0x1d0<span class="token punctuation">)</span>
+<span class="token punctuation">[</span><span class="token operator">&lt;</span>c0352d2c<span class="token operator">></span><span class="token punctuation">]</span> <span class="token punctuation">(</span>panic+0x74/0x1d0<span class="token punctuation">)</span> from <span class="token punctuation">[</span><span class="token operator">&lt;</span>c001aabc<span class="token operator">></span><span class="token punctuation">]</span> <span class="token punctuation">(</span>do_exit+0x628/0x74c<span class="token punctuation">)</span>
+<span class="token punctuation">[</span><span class="token operator">&lt;</span>c001aabc<span class="token operator">></span><span class="token punctuation">]</span> <span class="token punctuation">(</span>do_exit+0x628/0x74c<span class="token punctuation">)</span> from <span class="token punctuation">[</span><span class="token operator">&lt;</span>c001acbc<span class="token operator">></span><span class="token punctuation">]</span> <span class="token punctuation">(</span>sys_exit+0x10/0x14<span class="token punctuation">)</span>
+<span class="token punctuation">[</span><span class="token operator">&lt;</span>c001acbc<span class="token operator">></span><span class="token punctuation">]</span> <span class="token punctuation">(</span>sys_exit+0x10/0x14<span class="token punctuation">)</span> from <span class="token punctuation">[</span><span class="token operator">&lt;</span>c000922<span class="token operator"><span class="token file-descriptor important">0</span>></span><span class="token punctuation">]</span> <span class="token punctuation">(</span>ret_fast_syscall+0x0/0x2c<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="3-解决办法"><a href="#3-解决办法" class="headerlink" title="3. 解决办法"></a>3. 解决办法</h2>内核配置选项中勾选下面两个选项，重新编译uImage：<pre class="line-numbers language-none"><code class="language-none">[*] Use the ARM EABI to compile the kernel.
+[*]  Allow old ABI binaries to run with this kernel (EXPERIMENTAL) (NEW)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<img src="/images/20200626155000869.png"></li>
+</ol>
+<h1 id="五、打印信息"><a href="#五、打印信息" class="headerlink" title="五、打印信息"></a>五、打印信息</h1><h2 id="u-boot打印信息"><a href="#u-boot打印信息" class="headerlink" title="u-boot打印信息"></a>u-boot打印信息</h2><h3 id="1-u-boot启动打印"><a href="#1-u-boot启动打印" class="headerlink" title="1. u-boot启动打印"></a>1. u-boot启动打印</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">U-Boot <span class="token number">1.1</span>.6 <span class="token builtin class-name">enable</span> Ethernet alltime<span class="token punctuation">(</span>May <span class="token number">15</span> <span class="token number">2018</span> - <span class="token number">19</span>:44:59<span class="token punctuation">)</span>
+
+DRAM:  <span class="token number">64</span> MB
+JEDEC PROBE: ID <span class="token number">90</span> <span class="token number">0</span> <span class="token number">0</span>
+Flash:  <span class="token number">0</span> kB
+NAND:  <span class="token number">256</span> MiB
+In:    serial
+Out:   serial
+Err:   serial
+UPLLVal <span class="token punctuation">[</span>M:38h,P:2h,S:2h<span class="token punctuation">]</span>
+MPLLVal <span class="token punctuation">[</span>M:5ch,P:1h,S:1h<span class="token punctuation">]</span>
+CLKDIVN:5h
+
+
++---------------------------------------------+
+<span class="token operator">|</span> S3C2440A USB Downloader ver R0.03 <span class="token number">2004</span> Jan  <span class="token operator">|</span>
++---------------------------------------------+
+USB: IN_ENDPOINT:1 OUT_ENDPOINT:3
+FORMAT: <span class="token operator">&lt;</span>ADDR<span class="token punctuation">(</span>DATA<span class="token punctuation">)</span>:<span class="token operator"><span class="token file-descriptor important">4</span>></span>+<span class="token operator">&lt;</span>SIZE<span class="token punctuation">(</span>n+10<span class="token punctuation">)</span>:<span class="token operator"><span class="token file-descriptor important">4</span>></span>+<span class="token operator">&lt;</span>DATA:n<span class="token operator">></span>+<span class="token operator">&lt;</span>CS:<span class="token operator"><span class="token file-descriptor important">2</span>></span>
+NOTE: Power off/on or press the reset button <span class="token keyword">for</span> <span class="token number">1</span> sec
+      <span class="token keyword">in</span> order to get a valid USB device address.
+
+Hit any key to stop autoboot:  <span class="token number">0</span>
+ERROR: resetting DM9000 -<span class="token operator">></span> not responding
+dm9000 i/o: 0x20000000, id: 0x90000a46
+DM9000: running <span class="token keyword">in</span> <span class="token number">16</span> bit mode
+MAC: 08:00:3e:26:0a:5b
+could not establish <span class="token function">link</span>
+
+<span class="token comment">##### 100ask Bootloader for OpenJTAG #####</span>
+<span class="token punctuation">[</span>n<span class="token punctuation">]</span> Download u-boot to Nand Flash
+<span class="token punctuation">[</span>c<span class="token punctuation">]</span> Re-scan Nor Flash
+<span class="token punctuation">[</span>u<span class="token punctuation">]</span> Copy bootloader from nand to nor
+<span class="token punctuation">[</span>v<span class="token punctuation">]</span> Copy bootloader from nor to nand
+<span class="token punctuation">[</span>k<span class="token punctuation">]</span> Download Linux kernel uImage
+<span class="token punctuation">[</span>j<span class="token punctuation">]</span> Download root_jffs2 image
+<span class="token punctuation">[</span>y<span class="token punctuation">]</span> Download root_yaffs image
+<span class="token punctuation">[</span>d<span class="token punctuation">]</span> Download to SDRAM <span class="token operator">&amp;</span> Run
+<span class="token punctuation">[</span>z<span class="token punctuation">]</span> Download zImage into RAM
+<span class="token punctuation">[</span>g<span class="token punctuation">]</span> Boot linux from RAM
+<span class="token punctuation">[</span>f<span class="token punctuation">]</span> Format the Nand Flash
+<span class="token punctuation">[</span>s<span class="token punctuation">]</span> Set the boot parameters
+<span class="token punctuation">[</span>b<span class="token punctuation">]</span> Boot the system
+<span class="token punctuation">[</span>r<span class="token punctuation">]</span> Reboot u-boot
+<span class="token punctuation">[</span>q<span class="token punctuation">]</span> Quit from menu
+Enter your selection:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="2-u-boot的print"><a href="#2-u-boot的print" class="headerlink" title="2. u-boot的print"></a>2. u-boot的print</h3><p>1.8M的内核镜像文件，这里分配2M够用，<br><img src="/images/20200626101722332.png"></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">OpenJTAG<span class="token operator">></span> print
+<span class="token assign-left variable">bootargs</span><span class="token operator">=</span>noinitrd <span class="token assign-left variable">root</span><span class="token operator">=</span>/dev/mtdblock3 <span class="token assign-left variable">init</span><span class="token operator">=</span>/linuxrc <span class="token assign-left variable">console</span><span class="token operator">=</span>ttySAC0,115200
+<span class="token assign-left variable">bootcmd</span><span class="token operator">=</span>nand read.jffs2 0x30007FC0 kernel<span class="token punctuation">;</span> bootm 0x30007FC0
+<span class="token assign-left variable">bootdelay</span><span class="token operator">=</span><span class="token number">2</span>
+<span class="token assign-left variable">baudrate</span><span class="token operator">=</span><span class="token number">115200</span>
+<span class="token assign-left variable">ethaddr</span><span class="token operator">=</span>08:00:3e:26:0a:5b
+<span class="token assign-left variable">netmask</span><span class="token operator">=</span><span class="token number">255.255</span>.255.0
+<span class="token assign-left variable">mtdids</span><span class="token operator">=</span>nand0<span class="token operator">=</span>nandflash0
+<span class="token assign-left variable">mtdparts</span><span class="token operator">=</span>mtdparts<span class="token operator">=</span>nandflash0:256k@0<span class="token punctuation">(</span>bootloader<span class="token punctuation">)</span>,128k<span class="token punctuation">(</span>params<span class="token punctuation">)</span>,2m<span class="token punctuation">(</span>kernel<span class="token punctuation">)</span>,-<span class="token punctuation">(</span>root<span class="token punctuation">)</span>
+<span class="token assign-left variable">serverip</span><span class="token operator">=</span><span class="token number">192.168</span>.1.103
+<span class="token assign-left variable">ipaddr</span><span class="token operator">=</span><span class="token number">192.168</span>.1.100
+<span class="token assign-left variable">stdin</span><span class="token operator">=</span>serial
+<span class="token assign-left variable">stdout</span><span class="token operator">=</span>serial
+<span class="token assign-left variable">stderr</span><span class="token operator">=</span>serial
+<span class="token assign-left variable">partition</span><span class="token operator">=</span>nand0,0
+<span class="token assign-left variable">mtddevnum</span><span class="token operator">=</span><span class="token number">0</span>
+<span class="token assign-left variable">mtddevname</span><span class="token operator">=</span>bootloader
+
+Environment size: <span class="token number">452</span>/131068 bytes
+OpenJTAG<span class="token operator">></span> b
+Unknown <span class="token builtin class-name">command</span> <span class="token string">'b'</span> - try <span class="token string">'help'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="3-uboot-mtd分区情况"><a href="#3-uboot-mtd分区情况" class="headerlink" title="3. uboot mtd分区情况"></a>3. uboot mtd分区情况</h3><p><img src="/images/20200626105248109.png"></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">OpenJTAG<span class="token operator">></span> mtd
+device nand0 <span class="token operator">&lt;</span>nandflash<span class="token operator"><span class="token file-descriptor important">0</span>></span>, <span class="token comment"># parts = 4</span>
+ <span class="token comment">#: name                        size            offset          mask_flags</span>
+ <span class="token number">0</span>: bootloader          0x00040000      0x00000000      <span class="token number">0</span>
+ <span class="token number">1</span>: params              0x00020000      0x00040000      <span class="token number">0</span>
+ <span class="token number">2</span>: kernel              0x00200000      0x00060000      <span class="token number">0</span>
+ <span class="token number">3</span>: root                0x0fda0000      0x00260000      <span class="token number">0</span>
+active partition: nand0,0 - <span class="token punctuation">(</span>bootloader<span class="token punctuation">)</span> 0x00040000 @ 0x00000000
+defaults:
+mtdids  <span class="token builtin class-name">:</span> <span class="token assign-left variable">nand0</span><span class="token operator">=</span>nandflash0
+mtdparts: <span class="token assign-left variable">mtdparts</span><span class="token operator">=</span>nandflash0:256k@0<span class="token punctuation">(</span>bootloader<span class="token punctuation">)</span>,128k<span class="token punctuation">(</span>params<span class="token punctuation">)</span>,4m<span class="token punctuation">(</span>kernel<span class="token punctuation">)</span>,-<span class="token punctuation">(</span>root<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="内核启动过程的打印信息"><a href="#内核启动过程的打印信息" class="headerlink" title="内核启动过程的打印信息"></a>内核启动过程的打印信息</h2><p><img src="/images/20200626101925180.png"></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">NAND read: device <span class="token number">0</span> offset 0x60000, size 0x200000
+
+Reading data from 0x25f800 -- <span class="token number">100</span>% complete.
+ <span class="token number">2097152</span> bytes read: OK
+<span class="token comment">## Booting image at 30007fc0 ...</span>
+   Image Name:   Linux-2.6.22.6
+   Created:      <span class="token number">2018</span>-05-15  <span class="token number">11</span>:57:26 UTC
+   Image Type:   ARM Linux Kernel Image <span class="token punctuation">(</span>uncompressed<span class="token punctuation">)</span>
+   Data Size:    <span class="token number">1848728</span> Bytes <span class="token operator">=</span>  <span class="token number">1.8</span> MB
+   Load Address: <span class="token number">30008000</span>
+   Entry Point:  <span class="token number">30008000</span>
+   Verifying Checksum <span class="token punctuation">..</span>. OK
+   XIP Kernel Image <span class="token punctuation">..</span>. OK
+
+Starting kernel <span class="token punctuation">..</span>.
+
+Uncompressing Linux<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span> done, booting the kernel.
+Linux version <span class="token number">2.6</span>.22.6 <span class="token punctuation">(</span>root@book-virtual-machine<span class="token punctuation">)</span> <span class="token punctuation">(</span>gcc version <span class="token number">3.4</span>.5<span class="token punctuation">)</span> <span class="token comment">#1 Tue May 15 19:57:22 CST 2018</span>
+CPU: ARM920T <span class="token punctuation">[</span><span class="token number">41129200</span><span class="token punctuation">]</span> revision <span class="token number">0</span> <span class="token punctuation">(</span>ARMv4T<span class="token punctuation">)</span>, <span class="token assign-left variable">cr</span><span class="token operator">=</span>c0007177
+Machine: SMDK2440
+Memory policy: ECC disabled, Data cache writeback
+CPU S3C2440A <span class="token punctuation">(</span>id 0x32440001<span class="token punctuation">)</span>
+S3C244X: core <span class="token number">400.000</span> MHz, memory <span class="token number">100.000</span> MHz, peripheral <span class="token number">50.000</span> MHz
+S3C24XX Clocks, <span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token number">2004</span> Simtec Electronics
+CLOCK: Slow mode <span class="token punctuation">(</span><span class="token number">1.500</span> MHz<span class="token punctuation">)</span>, fast, MPLL on, UPLL on
+CPU0: D VIVT write-back cache
+CPU0: I cache: <span class="token number">16384</span> bytes, associativity <span class="token number">64</span>, <span class="token number">32</span> byte lines, <span class="token number">8</span> sets
+CPU0: D cache: <span class="token number">16384</span> bytes, associativity <span class="token number">64</span>, <span class="token number">32</span> byte lines, <span class="token number">8</span> sets
+Built <span class="token number">1</span> zonelists.  Total pages: <span class="token number">16256</span>
+Kernel <span class="token builtin class-name">command</span> line: noinitrd <span class="token assign-left variable">root</span><span class="token operator">=</span>/dev/mtdblock3 <span class="token assign-left variable">init</span><span class="token operator">=</span>/linuxrc <span class="token assign-left variable">console</span><span class="token operator">=</span>ttySAC0,115200
+irq: clearing subpending status 00000003
+irq: clearing subpending status 00000002
+PID <span class="token builtin class-name">hash</span> table entries: <span class="token number">256</span> <span class="token punctuation">(</span>order: <span class="token number">8</span>, <span class="token number">1024</span> bytes<span class="token punctuation">)</span>
+timer <span class="token assign-left variable">tcon</span><span class="token operator">=</span>00500000, tcnt a2c1, tcfg 00000200,00000000, usec 00001eb8
+Console: colour dummy device 80x30
+Dentry cache <span class="token builtin class-name">hash</span> table entries: <span class="token number">8192</span> <span class="token punctuation">(</span>order: <span class="token number">3</span>, <span class="token number">32768</span> bytes<span class="token punctuation">)</span>
+Inode-cache <span class="token builtin class-name">hash</span> table entries: <span class="token number">4096</span> <span class="token punctuation">(</span>order: <span class="token number">2</span>, <span class="token number">16384</span> bytes<span class="token punctuation">)</span>
+Memory: 64MB <span class="token operator">=</span> 64MB total
+Memory: 60976KB available <span class="token punctuation">(</span>3264K code, 458K data, 140K init<span class="token punctuation">)</span>
+Mount-cache <span class="token builtin class-name">hash</span> table entries: <span class="token number">512</span>
+CPU: Testing <span class="token function">write</span> buffer coherency: ok
+NET: Registered protocol family <span class="token number">16</span>
+S3C2410 Power Management, <span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token number">2004</span> Simtec Electronics
+S3C2440: Initialising architecture
+S3C2440: IRQ Support
+S3C2440: Clock Support, DVS off
+S3C24XX DMA Driver, <span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token number">2003</span>-2004,2006 Simtec Electronics
+DMA channel <span class="token number">0</span> at c4800000, irq <span class="token number">33</span>
+DMA channel <span class="token number">1</span> at c4800040, irq <span class="token number">34</span>
+DMA channel <span class="token number">2</span> at c4800080, irq <span class="token number">35</span>
+DMA channel <span class="token number">3</span> at c48000c0, irq <span class="token number">36</span>
+SCSI subsystem initialized
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+NET: Registered protocol family <span class="token number">2</span>
+IP route cache <span class="token builtin class-name">hash</span> table entries: <span class="token number">1024</span> <span class="token punctuation">(</span>order: <span class="token number">0</span>, <span class="token number">4096</span> bytes<span class="token punctuation">)</span>
+TCP established <span class="token builtin class-name">hash</span> table entries: <span class="token number">2048</span> <span class="token punctuation">(</span>order: <span class="token number">2</span>, <span class="token number">16384</span> bytes<span class="token punctuation">)</span>
+TCP <span class="token builtin class-name">bind</span> <span class="token builtin class-name">hash</span> table entries: <span class="token number">2048</span> <span class="token punctuation">(</span>order: <span class="token number">1</span>, <span class="token number">8192</span> bytes<span class="token punctuation">)</span>
+TCP: Hash tables configured <span class="token punctuation">(</span>established <span class="token number">2048</span> <span class="token builtin class-name">bind</span> <span class="token number">2048</span><span class="token punctuation">)</span>
+TCP reno registered
+NetWinder Floating Point Emulator V0.97 <span class="token punctuation">(</span>double precision<span class="token punctuation">)</span>
+Registering GDB sysrq handler
+JFFS2 version <span class="token number">2.2</span>. <span class="token punctuation">(</span>NAND<span class="token punctuation">)</span> © <span class="token number">2001</span>-2006 Red Hat, Inc.
+yaffs May <span class="token number">15</span> <span class="token number">2018</span> <span class="token number">19</span>:56:07 Installing.
+io scheduler noop registered
+io scheduler anticipatory registered <span class="token punctuation">(</span>default<span class="token punctuation">)</span>
+io scheduler deadline registered
+io scheduler cfq registered
+Console: switching to colour frame buffer device 60x34
+fb0: s3c2410fb frame buffer device
+lp: driver loaded but no devices found
+ppdev: user-space parallel port driver
+S3C2410 Watchdog Timer, <span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token number">2004</span> Simtec Electronics
+Serial: <span class="token number">8250</span>/16550 driver <span class="token variable">$Revision</span><span class="token builtin class-name">:</span> <span class="token number">1.90</span> $ <span class="token number">4</span> ports, IRQ sharing enabled
+s3c2440-uart.0: s3c2410_serial0 at MMIO map 0x50000000 mem 0xf0400000 <span class="token punctuation">(</span>irq <span class="token operator">=</span> <span class="token number">70</span><span class="token punctuation">)</span> is a S3C2440
+s3c2440-uart.1: s3c2410_serial1 at MMIO map 0x50004000 mem 0xf0404000 <span class="token punctuation">(</span>irq <span class="token operator">=</span> <span class="token number">73</span><span class="token punctuation">)</span> is a S3C2440
+s3c2440-uart.2: s3c2410_serial2 at MMIO map 0x50008000 mem 0xf0408000 <span class="token punctuation">(</span>irq <span class="token operator">=</span> <span class="token number">76</span><span class="token punctuation">)</span> is a S3C2440
+RAMDISK driver initialized: <span class="token number">16</span> RAM disks of 4096K size <span class="token number">1024</span> blocksize
+loop: module loaded
+line <span class="token number">400</span> <span class="token operator">&lt;</span>DM9KS<span class="token operator">></span> I/O: c486a000, VID: 90000a46
+line <span class="token number">408</span> <span class="token operator">&lt;</span>DM9KS<span class="token operator">></span> I/O: c486a000, VID: 90000a46
+<span class="token operator">&lt;</span>DM9KS<span class="token operator">></span> error version, chip_revision <span class="token operator">=</span> 0x1a, chip_info <span class="token operator">=</span> 0x3
+<span class="token assign-left variable">id_val</span><span class="token operator">=</span><span class="token number">0</span>
+S3C24XX NAND Driver, <span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token number">2004</span> Simtec Electronics
+s3c2440-nand s3c2440-nand: <span class="token assign-left variable">Tacls</span><span class="token operator">=</span><span class="token number">3</span>, 30ns <span class="token assign-left variable">Twrph0</span><span class="token operator">=</span><span class="token number">7</span> 70ns, <span class="token assign-left variable">Twrph1</span><span class="token operator">=</span><span class="token number">3</span> 30ns
+NAND device: Manufacturer ID: 0xec, Chip ID: 0xda <span class="token punctuation">(</span>Samsung NAND 256MiB <span class="token number">3</span>,3V <span class="token number">8</span>-bit<span class="token punctuation">)</span>
+Scanning device <span class="token keyword">for</span> bad blocks
+Bad eraseblock <span class="token number">46</span> at 0x005c0000
+Bad eraseblock <span class="token number">785</span> at 0x06220000
+Bad eraseblock <span class="token number">789</span> at 0x062a0000
+Bad eraseblock <span class="token number">1622</span> at 0x0cac0000
+Bad eraseblock <span class="token number">1698</span> at 0x0d440000
+Creating <span class="token number">4</span> MTD partitions on <span class="token string">"NAND 256MiB 3,3V 8-bit"</span><span class="token builtin class-name">:</span>
+0x00000000-0x00040000 <span class="token builtin class-name">:</span> <span class="token string">"bootloader"</span>
+0x00040000-0x00060000 <span class="token builtin class-name">:</span> <span class="token string">"params"</span>
+0x00060000-0x00260000 <span class="token builtin class-name">:</span> <span class="token string">"kernel"</span>
+0x00260000-0x10000000 <span class="token builtin class-name">:</span> <span class="token string">"root"</span>
+s3c2410-ohci s3c2410-ohci: S3C24XX OHCI
+s3c2410-ohci s3c2410-ohci: new USB bus registered, assigned bus number <span class="token number">1</span>
+s3c2410-ohci s3c2410-ohci: irq <span class="token number">42</span>, io mem 0x49000000
+usb usb1: configuration <span class="token comment">#1 chosen from 1 choice</span>
+hub <span class="token number">1</span>-0:1.0: USB hub found
+hub <span class="token number">1</span>-0:1.0: <span class="token number">2</span> ports detected
+Initializing USB Mass Storage driver<span class="token punctuation">..</span>.
+usbcore: registered new interface driver usb-storage
+USB Mass Storage support registered.
+mice: PS/2 mouse device common <span class="token keyword">for</span> all mice
+s3c2410 TouchScreen successfully loaded
+input: s3c2410 TouchScreen as /class/input/input0
+S3C24XX RTC, <span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token number">2004,2006</span> Simtec Electronics
+s3c2440-i2c s3c2440-i2c: slave address 0x10
+s3c2440-i2c s3c2440-i2c: bus frequency <span class="token builtin class-name">set</span> to <span class="token number">390</span> KHz
+s3c2440-i2c s3c2440-i2c: i2c-0: S3C I2C adapter
+mapped channel <span class="token number">0</span> to <span class="token number">0</span>
+s3c2440-sdi s3c2440-sdi: powered down.
+s3c2440-sdi s3c2440-sdi: initialisation done.
+s3c2440-sdi s3c2440-sdi: running at 0kHz <span class="token punctuation">(</span>requested: 0kHz<span class="token punctuation">)</span>.
+s3c2440-sdi s3c2440-sdi: running at 196kHz <span class="token punctuation">(</span>requested: 195kHz<span class="token punctuation">)</span>.
+s3c2440-sdi s3c2440-sdi: running at 196kHz <span class="token punctuation">(</span>requested: 195kHz<span class="token punctuation">)</span>.
+s3c2440-sdi s3c2440-sdi: running at 196kHz <span class="token punctuation">(</span>requested: 195kHz<span class="token punctuation">)</span>.
+usbcore: registered new interface driver hiddev
+s3c2440-sdi s3c2440-sdi: CMD<span class="token punctuation">[</span>TIMEOUT<span class="token punctuation">]</span> <span class="token comment">#2 op:UNKNOWN(8) arg:0x000001aa flags:0x0875 retries:0 Status:nothing to complete</span>
+s3c2440-sdi s3c2440-sdi: CMD<span class="token punctuation">[</span>TIMEOUT<span class="token punctuation">]</span> <span class="token comment">#3 op:APP_CMD(55) arg:0x00000000 flags:0x0875 retries:0 Status:nothing to complete</span>
+usbcore: registered new interface driver usbhid
+drivers/hid/usbhid/hid-core.c: v2.6:USB HID core driver
+Advanced Linux Sound Architecture Driver Version <span class="token number">1.0</span>.14 <span class="token punctuation">(</span>Thu May <span class="token number">31</span> 09:03:25 <span class="token number">2007</span> UTC<span class="token punctuation">)</span>.
+ASoC version <span class="token number">0.13</span>.1
+s3c2440-sdi s3c2440-sdi: CMD<span class="token punctuation">[</span>TIMEOUT<span class="token punctuation">]</span> <span class="token comment">#4 op:APP_CMD(55) arg:0x00000000 flags:0x0875 retries:0 Status:nothing to complete</span>
+s3c2440-sdi s3c2440-sdi: CMD<span class="token punctuation">[</span>TIMEOUT<span class="token punctuation">]</span> <span class="token comment">#5 op:APP_CMD(55) arg:0x00000000 flags:0x0875 retries:0 Status:nothing to complete</span>
+s3c2410iis_probe<span class="token punctuation">..</span>.
+s3c2440-sdi s3c2440-sdi: CMD<span class="token punctuation">[</span>TIMEOUT<span class="token punctuation">]</span> <span class="token comment">#6 op:APP_CMD(55) arg:0x00000000 flags:0x0875 retries:0 Status:nothing to complete</span>
+s3c2440-sdi s3c2440-sdi: CMD<span class="token punctuation">[</span>TIMEOUT<span class="token punctuation">]</span> <span class="token comment">#7 op:ALL_SEND_OCR(1) arg:0x00000000 flags:0x0861 retries:0 Status:nothing to complete</span>
+s3c2440-sdi s3c2440-sdi: powered down.
+UDA1341 audio driver initialized
+ALSA device list:
+  No soundcards found.
+TCP cubic registered
+NET: Registered protocol family <span class="token number">1</span>
+drivers/rtc/hctosys.c: unable to <span class="token function">open</span> rtc device <span class="token punctuation">(</span>rtc0<span class="token punctuation">)</span>
+UDF-fs: No VRS found
+yaffs: dev is <span class="token number">32505859</span> name is <span class="token string">"mtdblock3"</span>
+yaffs: passed flags <span class="token string">""</span>
+yaffs: Attempting MTD <span class="token function">mount</span> on <span class="token number">31.3</span>, <span class="token string">"mtdblock3"</span>
+yaffs: auto selecting yaffs2
+block <span class="token number">28</span> is bad
+block <span class="token number">767</span> is bad
+block <span class="token number">771</span> is bad
+block <span class="token number">1604</span> is bad
+block <span class="token number">1680</span> is bad
+VFS: Mounted root <span class="token punctuation">(</span>yaffs filesystem<span class="token punctuation">)</span>.
+Freeing init memory: 140K
+init started: BusyBox v1.7.0 <span class="token punctuation">(</span><span class="token number">2008</span>-01-22 <span class="token number">10</span>:04:09 EST<span class="token punctuation">)</span>
+starting pid <span class="token number">764</span>, <span class="token function">tty</span> <span class="token string">''</span><span class="token builtin class-name">:</span> <span class="token string">'/etc/init.d/rcS'</span>
+
+Please press Enter to activate this console.
+starting pid <span class="token number">767</span>, <span class="token function">tty</span> <span class="token string">'/dev/ttySAC0'</span><span class="token builtin class-name">:</span> <span class="token string">'/bin/sh'</span>
+<span class="token comment">#</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="参考内容"><a href="#参考内容" class="headerlink" title="参考内容"></a>参考内容</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/multimicro/p/9872722.html">https://www.cnblogs.com/multimicro/p/9872722.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zzb-Dream-90Time/p/9726900.html">https://www.cnblogs.com/zzb-Dream-90Time/p/9726900.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Carl_0/article/details/87856439">https://blog.csdn.net/Carl_0/article/details/87856439</a></li>
+</ol>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/jz2440-v3.0-linux-3.4.2-busybox1.20.0-nei-he-he-wen-jian-xi-tong-yi-zhi-xiu-gai-fen-qu-da-xiao-yaffs2-wen-jian-xi-tong-bu-ding-kai-yuan-zi-yuan-cha-zhao-local/">https://wuyexkx.github.io/2021/05/14/jz2440-v3.0-linux-3.4.2-busybox1.20.0-nei-he-he-wen-jian-xi-tong-yi-zhi-xiu-gai-fen-qu-da-xiao-yaffs2-wen-jian-xi-tong-bu-ding-kai-yuan-zi-yuan-cha-zhao-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                    <span class="chip bg-color">嵌入式Linux</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/ucosiii-zhong-duan-yan-chi-fa-bu-guan-bi-zhong-duan-shi-jian-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="ucosiii 中断延迟发布关闭中断时间">
+                        
+                        <span class="card-title">ucosiii 中断延迟发布关闭中断时间</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/arm-de-yi-xie-ji-ben-gong-arm-hui-bian-chu-li-qi-chu-li-neng-li-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="ARM的一些基本功arm汇编 处理器处理能力">
+                        
+                        <span class="card-title">ARM的一些基本功arm汇编 处理器处理能力</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

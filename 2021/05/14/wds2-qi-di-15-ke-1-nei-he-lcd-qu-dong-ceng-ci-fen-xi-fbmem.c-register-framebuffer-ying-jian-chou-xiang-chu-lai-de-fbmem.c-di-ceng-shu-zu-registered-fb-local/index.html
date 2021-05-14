@@ -1,0 +1,1272 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="WDS2期第15课 1 内核LCD驱动层次分析 fbmem.c -- register_framebuffer -- 硬件 抽象出来的fbmem.c依赖底层硬件相关的数组registered_fb, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>WDS2期第15课 1 内核LCD驱动层次分析 fbmem.c -- register_framebuffer -- 硬件 抽象出来的fbmem.c依赖底层硬件相关的数组registered_fb | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">WDS2期第15课 1 内核LCD驱动层次分析 fbmem.c -- register_framebuffer -- 硬件 抽象出来的fbmem.c依赖底层硬件相关的数组registered_fb</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                <span class="chip bg-color">嵌入式Linux</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                嵌入式Linux
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    925
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]<br><img src="/images/20200416092502602.png"></p>
+<h1 id="分析内核自带LCD驱动程序drivers-video-fbmem-c"><a href="#分析内核自带LCD驱动程序drivers-video-fbmem-c" class="headerlink" title="分析内核自带LCD驱动程序drivers\video\fbmem.c"></a>分析内核自带LCD驱动程序drivers\video\fbmem.c</h1><p>内核自带的LCD驱动程序，在<code>drivers\video\fbmem.c</code>中，<code>fbmem.c</code>提供的都是抽象的，具体的实现依赖里边的数组<code>registered_fb[iminor(inode)]</code>，fb帧缓冲区（Frame Buffer），可以看到以下步骤：<br><img src="/images/20200416105944687.png"></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">major
+fops
+register_chrdev
+class_create
+没有 class_device_create
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token keyword">static</span> <span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">file_operations</span> fb_fops <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span>owner <span class="token operator">=</span>	THIS_MODULE<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>read <span class="token operator">=</span>		fb_read<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>write <span class="token operator">=</span>	fb_write<span class="token punctuation">,</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> __init
+<span class="token function">fbmem_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token function">create_proc_read_entry</span><span class="token punctuation">(</span><span class="token string">"fb"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> fbmem_read_proc<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">// major register_chrdev fops</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">register_chrdev</span><span class="token punctuation">(</span>FB_MAJOR<span class="token punctuation">,</span><span class="token string">"fb"</span><span class="token punctuation">,</span><span class="token operator">&amp;</span>fb_fops<span class="token punctuation">)</span><span class="token punctuation">)</span> 
+		<span class="token function">printk</span><span class="token punctuation">(</span><span class="token string">"unable to get major %d for fb devs\n"</span><span class="token punctuation">,</span> FB_MAJOR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">// class_create</span>
+	fb_class <span class="token operator">=</span> <span class="token function">class_create</span><span class="token punctuation">(</span>THIS_MODULE<span class="token punctuation">,</span> <span class="token string">"graphics"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">IS_ERR</span><span class="token punctuation">(</span>fb_class<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token function">printk</span><span class="token punctuation">(</span>KERN_WARNING <span class="token string">"Unable to create fb class; errno = %ld\n"</span><span class="token punctuation">,</span> <span class="token function">PTR_ERR</span><span class="token punctuation">(</span>fb_class<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		fb_class <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>查看open函数，和read函数，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">int</span>
+<span class="token function">fb_open</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">inode</span> <span class="token operator">*</span>inode<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>file<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> fbidx <span class="token operator">=</span> <span class="token function">iminor</span><span class="token punctuation">(</span>inode<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获取次设备号</span>
+	
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span>info <span class="token operator">=</span> registered_fb<span class="token punctuation">[</span>fbidx<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// 以此设备号为数组下标赋值给fb_info</span>
+
+		res <span class="token operator">=</span> info<span class="token operator">-></span>fbops<span class="token operator">-></span><span class="token function">fb_open</span><span class="token punctuation">(</span>info<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 调用open</span>
+	<span class="token keyword">return</span> res<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token class-name">ssize_t</span>
+<span class="token function">fb_read</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>file<span class="token punctuation">,</span> <span class="token keyword">char</span> __user <span class="token operator">*</span>buf<span class="token punctuation">,</span> <span class="token class-name">size_t</span> count<span class="token punctuation">,</span> <span class="token class-name">loff_t</span> <span class="token operator">*</span>ppos<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> fbidx <span class="token operator">=</span> <span class="token function">iminor</span><span class="token punctuation">(</span>inode<span class="token punctuation">)</span><span class="token punctuation">;</span>	<span class="token comment">// 获取次设备号</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>info <span class="token operator">=</span> registered_fb<span class="token punctuation">[</span>fbidx<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// 以次设备号为数组下标赋值给struct fb_info</span>
+	
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>info<span class="token operator">-></span>fbops<span class="token operator">-></span>fb_read<span class="token punctuation">)</span> <span class="token comment">// 有read就read</span>
+		<span class="token keyword">return</span> info<span class="token operator">-></span>fbops<span class="token operator">-></span><span class="token function">fb_read</span><span class="token punctuation">(</span>info<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> count<span class="token punctuation">,</span> ppos<span class="token punctuation">)</span><span class="token punctuation">;</span>	
+
+	src <span class="token operator">=</span> <span class="token punctuation">(</span>u32 __iomem <span class="token operator">*</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>info<span class="token operator">-></span>screen_base <span class="token operator">+</span> p<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 无read读取显存的缓存</span>
+	
+	<span class="token operator">*</span>dst<span class="token operator">++</span> <span class="token operator">=</span> <span class="token function">fb_readl</span><span class="token punctuation">(</span>src<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">copy_to_user</span><span class="token punctuation">(</span>buf<span class="token punctuation">,</span> buffer<span class="token punctuation">,</span> c<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>	 <span class="token comment">// 将读取的内容拷贝到用户空间</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="为fbmem-c提供硬件设备的数组registered-fb，register-framebuffer为fbmem-c和硬之间桥梁"><a href="#为fbmem-c提供硬件设备的数组registered-fb，register-framebuffer为fbmem-c和硬之间桥梁" class="headerlink" title="为fbmem.c提供硬件设备的数组registered_fb，register_framebuffer为fbmem.c和硬之间桥梁"></a>为fbmem.c提供硬件设备的数组registered_fb，register_framebuffer为fbmem.c和硬之间桥梁</h2><p>fbmem.c提供的都是抽象的，具体的实现依赖里边的数组<code>registered_fb[iminor(inode)]</code>，也在里边定义，修改也是，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>registered_fb<span class="token punctuation">[</span>FB_MAX<span class="token punctuation">]</span> __read_mostly<span class="token punctuation">;</span> <span class="token comment">// 定义</span>
+
+<span class="token comment">// fbmem.c依赖register_framebuffer，register_framebuffer会把底层设备向上注册</span>
+<span class="token keyword">int</span>
+<span class="token function">register_framebuffer</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>fb_info<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token comment">// device_create对应于前面fb_class = class_create(THIS_MODULE, "graphics");</span>
+	<span class="token comment">// 		创建设备节点</span>
+	fb_info<span class="token operator">-></span>dev <span class="token operator">=</span> <span class="token function">device_create</span><span class="token punctuation">(</span>fb_class<span class="token punctuation">,</span> fb_info<span class="token operator">-></span>device<span class="token punctuation">,</span>
+				     <span class="token function">MKDEV</span><span class="token punctuation">(</span>FB_MAJOR<span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"fb%d"</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				     
+	<span class="token function">fb_add_videomode</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mode<span class="token punctuation">,</span> <span class="token operator">&amp;</span>fb_info<span class="token operator">-></span>modelist<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	registered_fb<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> fb_info<span class="token punctuation">;</span>						<span class="token comment">// 修改</span>
+
+	event<span class="token punctuation">.</span>info <span class="token operator">=</span> fb_info<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="硬件相关以drivers-video-s3c2410fb-c为例"><a href="#硬件相关以drivers-video-s3c2410fb-c为例" class="headerlink" title="硬件相关以drivers\video\s3c2410fb.c为例"></a>硬件相关以drivers\video\s3c2410fb.c为例</h2><p>有很多驱动程序都会调用register_framebuffer函数，如我们的<code>drivers\video\s3c2410fb.c</code>，进去简单看看，<br><img src="/images/20200416104226451.png"></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 入口函数  </span>
+<span class="token keyword">int</span> __devinit <span class="token function">s3c2410fb_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">return</span> <span class="token function">platform_driver_register</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>s3c2410fb_driver<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// platform_driver_register --> add</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">platform_driver</span> s3c2410fb_driver <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span>probe		<span class="token operator">=</span> s3c2410fb_probe<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>remove		<span class="token operator">=</span> s3c2410fb_remove<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>suspend	<span class="token operator">=</span> s3c2410fb_suspend<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>resume		<span class="token operator">=</span> s3c2410fb_resume<span class="token punctuation">,</span>
+	<span class="token punctuation">.</span>driver		<span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+		<span class="token punctuation">.</span>name	<span class="token operator">=</span> <span class="token string">"s3c2410-lcd"</span><span class="token punctuation">,</span> <span class="token comment">// 会根据name寻找同名dev</span>
+		<span class="token punctuation">.</span>owner	<span class="token operator">=</span> THIS_MODULE<span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 首先根据platform_device获取硬件信息，然后分配struct fb_info，设置，注册framebuffer</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> __init <span class="token function">s3c2410fb_probe</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">platform_device</span> <span class="token operator">*</span>pdev<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token comment">// 获取硬件信息，</span>
+	mach_info <span class="token operator">=</span> pdev<span class="token operator">-></span>dev<span class="token punctuation">.</span>platform_data<span class="token punctuation">;</span>
+	
+	<span class="token comment">// 然后分配struct fb_info</span>
+	fbinfo <span class="token operator">=</span> <span class="token function">framebuffer_alloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">s3c2410fb_info</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>pdev<span class="token operator">-></span>dev<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+	<span class="token comment">// 设置</span>
+	fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>type	    <span class="token operator">=</span> FB_TYPE_PACKED_PIXELS<span class="token punctuation">;</span>
+	fbinfo<span class="token operator">-></span>fix<span class="token punctuation">.</span>type_aux	    <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>	
+	
+	<span class="token comment">// 注册framebuffer</span>
+	ret <span class="token operator">=</span> <span class="token function">register_framebuffer</span><span class="token punctuation">(</span>fbinfo<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="fbmem-c找到硬件信息的例子，如获取分辨率"><a href="#fbmem-c找到硬件信息的例子，如获取分辨率" class="headerlink" title="fbmem.c找到硬件信息的例子，如获取分辨率"></a>fbmem.c找到硬件信息的例子，如获取分辨率</h2><p>如果在用户空间想获得屏幕的分辨率，通过fops中的<code>fb_ioctl</code>可以获得可变的屏幕信息<code>FBIOGET_VSCREENINFO</code> V(var)</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">drivers\video\fbmem<span class="token punctuation">.</span>c
+<span class="token keyword">static</span> <span class="token keyword">int</span> 
+<span class="token function">fb_ioctl</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">inode</span> <span class="token operator">*</span>inode<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>file<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> cmd<span class="token punctuation">,</span>
+	 <span class="token keyword">unsigned</span> <span class="token keyword">long</span> arg<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> fbidx <span class="token operator">=</span> <span class="token function">iminor</span><span class="token punctuation">(</span>inode<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获取次设备号</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token operator">*</span>info <span class="token operator">=</span> registered_fb<span class="token punctuation">[</span>fbidx<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// 以次设备号为下标获取struct  fb_info  registered_fb数组很重要</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fb_ops</span> <span class="token operator">*</span>fb <span class="token operator">=</span> info<span class="token operator">-></span>fbops<span class="token punctuation">;</span> 
+	<span class="token keyword">case</span> FBIOGET_VSCREENINFO<span class="token operator">:</span>
+		<span class="token keyword">return</span> <span class="token function">copy_to_user</span><span class="token punctuation">(</span>argp<span class="token punctuation">,</span> <span class="token operator">&amp;</span>info<span class="token operator">-></span>var<span class="token punctuation">,</span>	<span class="token comment">// 通过struct fb_info找到var把结果拷贝到用户空间</span>
+				    <span class="token keyword">sizeof</span><span class="token punctuation">(</span>var<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">-</span>EFAULT <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+include\linux\fb<span class="token punctuation">.</span>h
+<span class="token keyword">struct</span> <span class="token class-name">fb_info</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> node<span class="token punctuation">;</span>
+	<span class="token keyword">int</span> flags<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fb_var_screeninfo</span> var<span class="token punctuation">;</span>	<span class="token comment">/* Current var */</span> <span class="token comment">// struct fb_info包含var结构</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fb_fix_screeninfo</span> fix<span class="token punctuation">;</span>	<span class="token comment">/* Current fix */</span>
+
+include\linux\fb<span class="token punctuation">.</span>h
+<span class="token keyword">struct</span> <span class="token class-name">fb_var_screeninfo</span> <span class="token punctuation">&#123;</span>
+	__u32 xres<span class="token punctuation">;</span>			<span class="token comment">/* visible resolution		*/</span> <span class="token comment">// x y 方向的分辨率</span>
+	__u32 yres<span class="token punctuation">;</span>
+	__u32 xres_virtual<span class="token punctuation">;</span>		<span class="token comment">/* virtual resolution		*/</span>
+	__u32 yres_virtual<span class="token punctuation">;</span>				  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="小结fbmem-c-lt-—-register-framebuffer-—-gt-硬件"><a href="#小结fbmem-c-lt-—-register-framebuffer-—-gt-硬件" class="headerlink" title="*** 小结fbmem.c &lt;—- register_framebuffer —-&gt; 硬件"></a>*** 小结fbmem.c &lt;—- register_framebuffer —-&gt; 硬件</h2><p><code>fbmem.c</code>提供抽象的代码，主要依赖数组<code>registered_fb[iminor(inode)]</code>的项获取硬件相关代码，而这个数组由<code>register_framebuffer</code>函数设置，<code>register_framebuffer</code>函数还完成自动创建设备节点的任务<code>device_create</code>，完成向上注册设备，而硬件部分就跟<code>fbmem.c</code>分离，由各自的芯片什么去完成如<code>drivers\video\s3c2410fb.c</code>然后调用<code>register_framebuffer</code>完成向上注册设备，<br><img src="/images/20200416110046693.png"></p>
+<h1 id="最终总结写LCD驱动应该以下步骤："><a href="#最终总结写LCD驱动应该以下步骤：" class="headerlink" title="最终总结写LCD驱动应该以下步骤："></a>最终总结写LCD驱动应该以下步骤：</h1><h2 id="1-分配struct-fb-info-用framebuffer-alloc-sizeof-struct-xxxfb-info-amp-pdev-gt-dev"><a href="#1-分配struct-fb-info-用framebuffer-alloc-sizeof-struct-xxxfb-info-amp-pdev-gt-dev" class="headerlink" title="1. 分配struct fb_info 用framebuffer_alloc(sizeof(struct xxxfb_info), &amp;pdev-&gt;dev);"></a>1. 分配<code>struct fb_info</code> 用<code>framebuffer_alloc(sizeof(struct xxxfb_info), &amp;pdev-&gt;dev);</code></h2><h2 id="2-设置"><a href="#2-设置" class="headerlink" title="2. 设置"></a>2. 设置</h2><h2 id="3-注册register-framebuffer"><a href="#3-注册register-framebuffer" class="headerlink" title="3. 注册register_framebuffer"></a>3. 注册<code>register_framebuffer</code></h2><h2 id="4-硬件相关操作"><a href="#4-硬件相关操作" class="headerlink" title="4. 硬件相关操作"></a>4. 硬件相关操作</h2>
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/wds2-qi-di-15-ke-1-nei-he-lcd-qu-dong-ceng-ci-fen-xi-fbmem.c-register-framebuffer-ying-jian-chou-xiang-chu-lai-de-fbmem.c-di-ceng-shu-zu-registered-fb-local/">https://wuyexkx.github.io/2021/05/14/wds2-qi-di-15-ke-1-nei-he-lcd-qu-dong-ceng-ci-fen-xi-fbmem.c-register-framebuffer-ying-jian-chou-xiang-chu-lai-de-fbmem.c-di-ceng-shu-zu-registered-fb-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                    <span class="chip bg-color">嵌入式Linux</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/wds2-qi-di-15-ke-2-3-4-lcd-qu-dong-cheng-xu-zhi-ying-jian-cao-zuo-gu-ding-ke-bian-can-shu-pei-zhi-lcd-kong-zhi-qi-lcd-ye-jing-shi-xu-he-s3c-de-lcd-shi-xu-hua-nei-cun-zuo-xian-cun-diao-se-ban-shu-ru-zi-xi-tong-an-jian-he-lcd-ce-shi-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="WDS2期第15课 2 3 4 LCD驱动程序之硬件操作 固定 可变参数 配置LCD控制器  LCD液晶时序和s3c的LCD时序，划内存做显存 调色板 输入子系统按键和LCD测试">
+                        
+                        <span class="card-title">WDS2期第15课 2 3 4 LCD驱动程序之硬件操作 固定 可变参数 配置LCD控制器  LCD液晶时序和s3c的LCD时序，划内存做显存 调色板 输入子系统按键和LCD测试</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/wds2-qi-di-14-ke-qu-dong-cheng-xu-fen-ceng-fen-chi-gai-nian-zong-xian-qu-dong-she-bei-mo-xing-dev-struct-resource-he-drv-get-resource-guan-xin-probe-shi-he-xin-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="WDS2期第14课 驱动程序分层分离概念 总线驱动设备模型 dev(struct resource)和drv(get_resource) 关心probe是核心">
+                        
+                        <span class="card-title">WDS2期第14课 驱动程序分层分离概念 总线驱动设备模型 dev(struct resource)和drv(get_resource) 关心probe是核心</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

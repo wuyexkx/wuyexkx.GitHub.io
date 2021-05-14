@@ -1,0 +1,1536 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="uCOS时钟 定时器分辨率 5个系统任务 任务延时 信号量 消息队列 时间标志组 同时等待多个内核对象, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>uCOS时钟 定时器分辨率 5个系统任务 任务延时 信号量 消息队列 时间标志组 同时等待多个内核对象 | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">uCOS时钟 定时器分辨率 5个系统任务 任务延时 信号量 消息队列 时间标志组 同时等待多个内核对象</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                <span class="chip bg-color">嵌入式Linux</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                嵌入式Linux
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]</p>
+<h1 id="delay-c"><a href="#delay-c" class="headerlink" title="delay.c"></a>delay.c</h1><h2 id="OS-TICKS-PER-SEC"><a href="#OS-TICKS-PER-SEC" class="headerlink" title="OS_TICKS_PER_SEC"></a>OS_TICKS_PER_SEC</h2><p>表示CPU一秒钟进行多少次时钟中断，决定了最小的延时间隔，修改os时间节拍，5ms为周期：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// UCOSII\CONFIG\os_cfg.h</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">OS_TICKS_PER_SEC</span>	<span class="token expression"><span class="token number">200u</span>   </span><span class="token comment">/* Set the number of ticks in one second 200u(5ms) 1000u(1ms)   */</span></span>
+
+<span class="token comment">// UCOSIII中</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span>  <span class="token macro-name">OS_CFG_TICK_RATE_HZ</span>	<span class="token expression"><span class="token number">200u</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="void-delay-us-u32-nus"><a href="#void-delay-us-u32-nus" class="headerlink" title="void delay_us(u32 nus)"></a>void delay_us(u32 nus)</h2><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//nus为要延时的us数. 不能发起任务调度		    								   </span>
+<span class="token keyword">void</span> <span class="token function">delay_us</span><span class="token punctuation">(</span>u32 nus<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>任务由三个部分组成：<strong>任务堆栈、任务控制块、任务函数</strong>。<br>任务控制块的初始化和任务堆栈的初始化一样，都是由<code>OSTaskCreate</code>自动完成的。</p>
+<h2 id="优先级，小数优先级高："><a href="#优先级，小数优先级高：" class="headerlink" title="优先级，小数优先级高："></a>优先级，小数优先级高：</h2><p>优先级最大多少级，最低优先级<code>X -1</code>：<br>uCOSIII: <code>OS_CFG_PRIO_MAX</code><br>uCOSII: <code>OS_LOWEST_PRIO</code></p>
+<h2 id="就绪表"><a href="#就绪表" class="headerlink" title="就绪表"></a>就绪表</h2><p>就绪表(先确定优先级[前导码归零&lt;硬件支持&gt;] — 再确定级下哪个任务)：<br>uCOSIII中包含两部分：<br>优先级位映射表 <code>OSPrioTbl[]</code>，记录哪个优先级下有任务就绪，<code>OSPrioTbl[OS_PRIO_TBL_SIZE]</code><br> 就绪任务列表<code>OSRdyList[]</code>，统计每个优先级下所有就绪的任务， <code>OSRdyList[OS_CFG_PRIO_MAX]</code>，数组成员为链表头（链表两个指针和统计数，时间片轮转，永远运行head所指的任务，时间片用完后插到尾部）。<br> <img src="/images/20201027142734139.png"></p>
+<h2 id="任务调度"><a href="#任务调度" class="headerlink" title="任务调度"></a>任务调度</h2><p>高优先级任务准备就绪，并且发起调度，他就会获得cpu使用权。</p>
+<p>uCOSIII任务调度器有两种：任务级调度器 和 中断级调度器。<br>任务级调度器接口：<code>OSSched();</code><br>中断级调度器接口：<code>OSIntCtxSw();</code></p>
+<h3 id="任务调度的点："><a href="#任务调度的点：" class="headerlink" title="任务调度的点："></a>任务调度的点：</h3><p><img src="/images/20201027151257784.png"></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">延时函数会发生任务调度，任务切换
+delay_ms <span class="token operator">/</span> delay_us
+	OSTimeDly
+			<span class="token function">OSSched</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="调度器的上锁和解锁"><a href="#调度器的上锁和解锁" class="headerlink" title="调度器的上锁和解锁"></a>调度器的上锁和解锁</h3><p>代码的执行过程不希望（不能）被打断，需要禁止调度，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">OSSchedLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">OSSchedUnlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="时间片轮转调度器"><a href="#时间片轮转调度器" class="headerlink" title="时间片轮转调度器"></a>时间片轮转调度器</h3><p>同优先级下的多个任务可以指定执行的时间，可以提前调度，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">OS_SchedRoundRobin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="任务切换"><a href="#任务切换" class="headerlink" title="任务切换"></a>任务切换</h2><p>任务调度包含任务切换。根据不同芯片修改汇编代码，切换很快。<br>任务级切换：<code>OSCtxSw()</code><br>中断级切换：<code>OSIntCtxSw()</code></p>
+<pre class="line-numbers language-none"><code class="language-none">OSCtxSw
+    LDR     R0, &#x3D;NVIC_INT_CTRL   ; Trigger the PendSV exception (causes context switch)
+    LDR     R1, &#x3D;NVIC_PENDSVSET
+    STR     R1, [R0]
+    BX      LR
+
+OSIntCtxSw
+    LDR     R0, &#x3D;NVIC_INT_CTRL    ; Trigger the PendSV exception (causes context switch)
+    LDR     R1, &#x3D;NVIC_PENDSVSET
+    STR     R1, [R0]
+    BX      LR<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="系统初始化-和-启动（必须）"><a href="#系统初始化-和-启动（必须）" class="headerlink" title="系统初始化 和 启动（必须）"></a>系统初始化 和 启动（必须）</h2><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">OSInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 初始化，必须调用</span>
+<span class="token function">OSStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 启动，必须调用</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>空闲任务 和 时钟节拍任务 是系统自动创建的。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//UCOSIII中以下优先级用户程序不能使用:</span>
+<span class="token comment">//将这些优先级分配给了UCOSIII的5个系统内部任务</span>
+<span class="token comment">//优先级0：中断服务服务管理任务 OS_IntQTask()</span>
+<span class="token comment">//优先级1：时钟节拍任务 OS_TickTask()</span>
+
+<span class="token comment">//优先级2：定时任务 OS_TmrTask()</span>
+<span class="token comment">//优先级OS_CFG_PRIO_MAX-2：统计任务 OS_StatTask()</span>
+<span class="token comment">//优先级OS_CFG_PRIO_MAX-1：空闲任务 OS_IdleTask()</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<h2 id="任务挂起-与-恢复"><a href="#任务挂起-与-恢复" class="headerlink" title="任务挂起 与 恢复"></a>任务挂起 与 恢复</h2><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 挂起哪个任务，把它的控制块指针放入第一个参数</span>
+<span class="token comment">// 第二个参数为错误码</span>
+<span class="token keyword">void</span>   <span class="token function">OSTaskSuspend</span> <span class="token punctuation">(</span>OS_TCB  <span class="token operator">*</span>p_tcb<span class="token punctuation">,</span> OS_ERR  <span class="token operator">*</span>p_err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// </span>
+<span class="token keyword">void</span>  <span class="token function">OSTaskResume</span> <span class="token punctuation">(</span>OS_TCB  <span class="token operator">*</span>p_tcb<span class="token punctuation">,</span> OS_ERR  <span class="token operator">*</span>p_err<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="时间片轮转调度"><a href="#时间片轮转调度" class="headerlink" title="时间片轮转调度"></a>时间片轮转调度</h2><p>ucosiii才有，只针对相同优先级的任务才有时间片轮转调度。</p>
+<ol>
+<li>首先必须宏置一，<code>OS_CFG_SCHED_ROUND_ROBIN_EN</code>，在UCOSIII\uCOS_CONFIG\os_cfg.h。</li>
+<li>然后调用这个函数配置系统时间片刻度，<br><code>void OSSchedRoundRobinCfg(CPU_BOOLEAN en, OS_TICK dflt_time_quanta, OS_ERR *p_err);</code> <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 设置时间片大小</span>
+<span class="token comment">// 任务的时间片 =  n x 系统时间片刻度	// 系统时间片刻度 = 系统时钟节拍间隔 x OSSchedRoundRobinCfg的第二个参数</span>
+<span class="token comment">// 任务的时间片 =  n x 5ms			// 5ms = 5ms x 1</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span>	<span class="token expression">OS_CFG_SCHED_ROUND_ROBIN_EN  </span><span class="token comment">//当使用时间片轮转的时候</span></span>
+	 <span class="token comment">//使能时间片轮转调度功能, 时间片长度为1个系统时钟节拍，既1*5=5ms</span>
+	 <span class="token comment">// 0 means assumes OSCfg_TickRate_Hz / 10. == 系统时钟节拍 x 10</span>
+	<span class="token function">OSSchedRoundRobinCfg</span><span class="token punctuation">(</span>DEF_ENABLED<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 设置系统时间片刻度</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span>	</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>最后在<code>OSTaskCreate()</code>时参数<code>(OS_TICK     )2</code>，设置该task的时间片长度为n个系统时间片刻度。<h3 id="提前放弃时间片"><a href="#提前放弃时间片" class="headerlink" title="提前放弃时间片"></a>提前放弃时间片</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span>  <span class="token function">OSSchedRoundRobinYield</span> <span class="token punctuation">(</span>OS_ERR  <span class="token operator">*</span>p_err<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="ucos的5个系统任务"><a href="#ucos的5个系统任务" class="headerlink" title="ucos的5个系统任务"></a>ucos的5个系统任务</h1><h2 id="1-空闲任务"><a href="#1-空闲任务" class="headerlink" title="1. 空闲任务"></a>1. 空闲任务</h2></li>
+<li>空闲任务是ucosiii创建的第一个任务</li>
+<li>必须创建</li>
+<li>优先级总是最低的</li>
+<li>空闲任务中不能调用任何 能使其进入等待态的函数<br><img src="/images/20201028221010809.png"></li>
+</ol>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// OSInit(&amp;err);创建了第一个任务，空闲任务，里面</span>
+<span class="token function">OSInit</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">OS_IdleTaskInit</span><span class="token punctuation">(</span>p_err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	    <span class="token function">OSTaskCreate</span><span class="token punctuation">(</span><span class="token punctuation">(</span>OS_TASK_PTR<span class="token punctuation">)</span>OS_IdleTask
+	    	OS_IdleTask
+	    		OSIdleTaskCtr<span class="token operator">++</span><span class="token punctuation">;</span> 	<span class="token comment">// 变化越快表示执行空闲任务越频繁，应用层的执行较少</span>
+				<span class="token function">OSIdleTaskHook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>	<span class="token comment">// 钩子函数</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="2-时钟节拍任务"><a href="#2-时钟节拍任务" class="headerlink" title="2. 时钟节拍任务"></a>2. 时钟节拍任务</h2><p>用来跟踪任务延时和任务等待超时， <strong>等待内核对象超时</strong>。<br>如OS自带的延时函数，请求信号量消息队列时等内核对象。<br>任务函数为<code>OS_TickTask()</code> 是UCOSIII必须创建的一个任务,任务优先级用宏<code>OS_CFG_TICK_TASK_PRIO</code>来定义,一般时钟节拍任务的任务应该设置一个相对较高的优先级。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* Priority 时钟节拍任务，一般设置一个相对较高的优先级      */</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span>  <span class="token macro-name">OS_CFG_TICK_TASK_PRIO</span>    <span class="token expression"><span class="token number">1u</span>               </span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="3-统计任务"><a href="#3-统计任务" class="headerlink" title="3. 统计任务"></a>3. 统计任务</h2><p><strong>统计CPU的使用率</strong>、<strong>各个任务的CPU使用率和各任务的堆栈使用情况。</strong></p>
+<p>默认情况下统计任务是不会创建的。</p>
+<p>需要使用则以下步骤：</p>
+<ol>
+<li>将宏<code>OS_CFG_STAT_TASK_EN</code>置1</li>
+<li>必须在main函数创建的一个任务也是唯一的一个应用任务里面调用函数<code>void  OSStatTaskCPUUsageInit (OS_ERR  *p_err)</code>。</li>
+<li>优先级通常设置为倒数第2个，通过宏<code>OS_CFG_STAT_TASK_PRIO</code>来设置,一般设置0 S CFG PRIO_MX-2,也就是倒数第二个优先级 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span>  <span class="token macro-name">OS_CFG_STAT_TASK_PRIO</span>  <span class="token expression"><span class="token punctuation">(</span>OS_CFG_PRIO_MAX<span class="token operator">-</span><span class="token number">2u</span><span class="token punctuation">)</span>   	</span><span class="token comment">/* Priority 统计任务优先级                                 */</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h2 id="4-定时任务"><a href="#4-定时任务" class="headerlink" title="4. 定时任务"></a>4. 定时任务</h2><p>UCOSIII提供软件定时器功能，定时任务是可选的。<br>将宏<code>OS_CFG_TMR_EN</code>设置为1就会使能定时任务。</p>
+<p>在·<code>OSInit()</code>将会调用函数<code>OS_TmrInit(p_err)</code>来创建定时任务。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression">OS_CFG_TMR_EN <span class="token operator">></span> <span class="token number">0u</span>     </span><span class="token comment">/* Initialize the Timer Manager module                    */</span></span>
+    <span class="token function">OS_TmrInit</span><span class="token punctuation">(</span>p_err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">*</span>p_err <span class="token operator">!=</span> OS_ERR_NONE<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>定时任务的优先级通过宏<code>OS_CFG_TMR_TASK_PRIO</code>定义, ALIENTEK默认将定时器任务优先级设置为2。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span>  <span class="token macro-name">OS_CFG_TMR_TASK_PRIO</span>   <span class="token expression"><span class="token number">2u</span>   </span><span class="token comment">/* Priority of 'Timer Task' 定时任务优先级				  */</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="5-中断服务管理任务"><a href="#5-中断服务管理任务" class="headerlink" title="5. 中断服务管理任务"></a>5. 中断服务管理任务</h2><p>为了减少中断关闭的时间。<br>当把 os_cfg.h文件中的宏<code>OS_CFG_ISR_POST_DEFERRED_EN</code>置1使能。</p>
+<p>当ISR(中断服务函数)调用UCOSIII提供的“post”函数时，要发送的数据和发送的目的地都会存入一个特别的缓冲队列中，<br>当所有嵌套的ISR都执行完成以后 UCOSIII会做任务切换，运行中断服务管理任务，该任务会把缓存队列中存放的信息重发给相应的任务。</p>
+<p>这样做的好处就是可以减少中断关闭的时间，否则，在ISR中还需要把任务从等待列表中删除，并把任务放入就绪表，以及做一些其他的耗时操作。中断服务管理任务的优先级永远为0，不可更改。</p>
+<p>UCOSIII关中断几乎全部关闭，除了halt_fault和AIM中断。</p>
+<h2 id="钩子函数"><a href="#钩子函数" class="headerlink" title="钩子函数"></a>钩子函数</h2><p><strong>UCOS里的hook函数用于当发生指定事件时（ucos内部的事件），调用的函数，类似回调。<font color=red>帮助用户扩展ucos的功能。</font></strong></p>
+<p>主要用于扩展其他函数（任务）的功能。<br>最终调用到函数在UCOSIII\uCOS_CONFIG\os_app_hooks.c中填充即可。<br><img src="/images/20201028225830392.png"></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">OSInit</span> <span class="token punctuation">(</span>OS_ERR  <span class="token operator">*</span>p_err<span class="token punctuation">)</span>
+	<span class="token function">OS_IdleTaskInit</span><span class="token punctuation">(</span>p_err<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+		 <span class="token function">OSTaskCreate</span><span class="token punctuation">(</span><span class="token punctuation">(</span>OS_TCB     <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>OSIdleTaskTCB<span class="token punctuation">,</span>
+		                 <span class="token punctuation">(</span>CPU_CHAR   <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token string">"uC/OS-III Idle Task"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		                 <span class="token punctuation">(</span>OS_TASK_PTR<span class="token punctuation">)</span>OS_IdleTask<span class="token punctuation">,</span>	
+			 <span class="token function">OSIdleTaskHook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 	<span class="token comment">// 钩子函数</span>
+			 		<span class="token punctuation">(</span><span class="token operator">*</span>OS_AppIdleTaskHookPtr<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 调用了app函数</span>
+			 		<span class="token comment">// 	OS_AppIdleTaskHookPtr = App_OS_IdleTaskHook;	</span>
+			 		<span class="token comment">// 用App_OS_IdleTaskHook赋值</span>
+			    
+ <span class="token comment">// UCOSIII\uCOS-III\Ports\ARM-Cortex-M3\Generic\RealView\os_cpu_c.c </span>
+ <span class="token comment">// 空闲函数的钩子函数 OSIdleTaskHook</span>
+			<span class="token keyword">void</span>  <span class="token function">OSIdleTaskHook</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+			<span class="token punctuation">&#123;</span>
+			<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression">OS_CFG_APP_HOOKS_EN <span class="token operator">></span> <span class="token number">0u</span></span></span>
+			    <span class="token keyword">if</span> <span class="token punctuation">(</span>OS_AppIdleTaskHookPtr <span class="token operator">!=</span> <span class="token punctuation">(</span>OS_APP_HOOK_VOID<span class="token punctuation">)</span><span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			        <span class="token punctuation">(</span><span class="token operator">*</span>OS_AppIdleTaskHookPtr<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			    <span class="token punctuation">&#125;</span>
+			<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+			<span class="token punctuation">&#125;</span>			 
+
+<span class="token comment">// UCOSIII\uCOS_CONFIG\os_app_hooks.c</span>
+<span class="token keyword">void</span>  <span class="token function">App_OS_SetAllHooks</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression">OS_CFG_APP_HOOKS_EN <span class="token operator">></span> <span class="token number">0u</span></span></span>
+    <span class="token function">CPU_SR_ALLOC</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+    <span class="token function">CPU_CRITICAL_ENTER</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    OS_AppTaskCreateHookPtr <span class="token operator">=</span> App_OS_TaskCreateHook<span class="token punctuation">;</span>
+    OS_AppTaskDelHookPtr    <span class="token operator">=</span> App_OS_TaskDelHook<span class="token punctuation">;</span>
+    OS_AppTaskReturnHookPtr <span class="token operator">=</span> App_OS_TaskReturnHook<span class="token punctuation">;</span>
+
+    OS_AppIdleTaskHookPtr   <span class="token operator">=</span> App_OS_IdleTaskHook<span class="token punctuation">;</span>	<span class="token comment">// 用App_OS_IdleTaskHook赋值</span>
+    OS_AppStatTaskHookPtr   <span class="token operator">=</span> App_OS_StatTaskHook<span class="token punctuation">;</span>
+    OS_AppTaskSwHookPtr     <span class="token operator">=</span> App_OS_TaskSwHook<span class="token punctuation">;</span>
+    OS_AppTimeTickHookPtr   <span class="token operator">=</span> App_OS_TimeTickHook<span class="token punctuation">;</span>
+    <span class="token function">CPU_CRITICAL_EXIT</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// UCOSIII\uCOS_CONFIG\os_app_hooks.c</span>
+<span class="token comment">// 自定义，最终调用的就是App_OS_IdleTaskHook</span>
+<span class="token keyword">void</span>  <span class="token function">App_OS_IdleTaskHook</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="中断服务函数"><a href="#中断服务函数" class="headerlink" title="中断服务函数"></a>中断服务函数</h1><p>中断服务函数内部的写法结构：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">xxx_Handler</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>	
+	<span class="token function">OSIntEnter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>							<span class="token comment">//进入中断   </span>
+	。。。        
+	<span class="token function">OSIntExit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       	 					<span class="token comment">//触发任务切换软中断</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>中断嵌套的全局变量：<code>OSIntNestingCtr </code>, ucos最大支持250级嵌套，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span>  <span class="token function">OSIntEnter</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>OSRunning <span class="token operator">!=</span> OS_STATE_OS_RUNNING<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>                 <span class="token comment">/* Is OS running?                                         */</span>
+        <span class="token keyword">return</span><span class="token punctuation">;</span>                                             <span class="token comment">/* No                                                     */</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>OSIntNestingCtr <span class="token operator">>=</span> <span class="token punctuation">(</span>OS_NESTING_CTR<span class="token punctuation">)</span><span class="token number">250u</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>          <span class="token comment">/* Have we nested past 250 levels?                        */</span>
+        <span class="token keyword">return</span><span class="token punctuation">;</span>                                             <span class="token comment">/* Yes                                                    */</span>
+    <span class="token punctuation">&#125;</span>
+    OSIntNestingCtr<span class="token operator">++</span><span class="token punctuation">;</span>                                      <span class="token comment">/* Increment ISR nesting level                            */</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// </span>
+<span class="token keyword">void</span>  <span class="token function">OSIntExit</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">CPU_SR_ALLOC</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">CPU_INT_DIS</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 关闭全局中断，保存现场</span>
+    。。。
+    <span class="token function">OSIntCtxSw</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">/* 中断级任务调度器 Perform interrupt level ctx switch */</span>
+    <span class="token function">CPU_INT_EN</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 恢复现场</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="临界区保护"><a href="#临界区保护" class="headerlink" title="临界区保护"></a>临界区保护</h1><p>保护临界区代码ucos有两种方式：<br>关闭全局中断，<br>上锁调度器 ，<br>当<code>OS_CFG_ISR_POST_DEFERRED_EN</code>为<strong>0</strong>时 使用关中断的方式保护临界区，<br>当<code>OS_CFG_ISR_POST_DEFERRED_EN</code>为<strong>1</strong>时 使用上锁调度器保护临界区。</p>
+<p>进入临界区只有一种方式，<code>OS_CRITICAL_ENTER();</code><br>退出临界区有两种，<code>OS_CRITICAL_EXIT();</code> 和 <code>OS_CRITICAL_EXIT_NO_SCHED(); </code></p>
+<p><strong>要使用临界区保护的接口 必须与<code>CPU_SR_ALLOC();</code>配合使用，因为此宏函数定义了全局变量<code>cpu_sr </code></strong></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span>  <span class="token macro-name function">CPU_SR_ALLOC</span><span class="token expression"><span class="token punctuation">(</span><span class="token punctuation">)</span>             CPU_SR  cpu_sr <span class="token operator">=</span> <span class="token punctuation">(</span>CPU_SR<span class="token punctuation">)</span><span class="token number">0</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="任务延时"><a href="#任务延时" class="headerlink" title="任务延时"></a>任务延时</h1><p>ucosiii任务是一个无限循环 抢占式的，防止高优先级任务独占cpu，除空闲任务以外的任务必须在合适的位置<strong>调用引起任务切换的接口（如：系统提供的延时函数）</strong>。</p>
+<p>有两个系统的延时函数，<code>OSTimeDly()</code>和<code>OSTimeDlyHMSM()</code>。</p>
+<p>  <code>OSTimeDly()</code>函数有三种工作模式：相对模式、周期模式和绝对模式。<br>  <code>OSTimeDlyHMSM()</code>函数仅在相对模式下工作。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token operator">*</span> OS_OPT_TIME_HMSM_STRICT   strictly allow only  <span class="token function">hours</span>   <span class="token punctuation">(</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token number">.99</span><span class="token punctuation">)</span>
+<span class="token operator">*</span>                                                <span class="token function">minutes</span>      <span class="token punctuation">(</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token number">.59</span><span class="token punctuation">)</span>
+<span class="token operator">*</span>                                                <span class="token function">seconds</span>      <span class="token punctuation">(</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token number">.59</span><span class="token punctuation">)</span>
+<span class="token operator">*</span>                                                <span class="token function">milliseconds</span> <span class="token punctuation">(</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token number">.999</span><span class="token punctuation">)</span>
+<span class="token operator">*</span> OS_OPT_TIME_HMSM_NON_STRICT allow any value of <span class="token function">hours</span>        <span class="token punctuation">(</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token number">.999</span><span class="token punctuation">)</span>
+<span class="token operator">*</span>                                                <span class="token function">minutes</span>      <span class="token punctuation">(</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token number">.9999</span><span class="token punctuation">)</span>
+<span class="token operator">*</span>                                                <span class="token function">seconds</span>      <span class="token punctuation">(</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token number">.65535</span><span class="token punctuation">)</span>
+<span class="token operator">*</span>                                                <span class="token function">milliseconds</span> <span class="token punctuation">(</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token number">.4294967295</span><span class="token punctuation">)</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression">OS_CFG_TIME_DLY_HMSM_EN <span class="token operator">></span> <span class="token number">0u</span></span></span>
+<span class="token keyword">void</span>  <span class="token function">OSTimeDlyHMSM</span> <span class="token punctuation">(</span>CPU_INT16U   hours<span class="token punctuation">,</span>
+                     CPU_INT16U   minutes<span class="token punctuation">,</span>
+                     CPU_INT16U   seconds<span class="token punctuation">,</span>
+                     CPU_INT32U   milli<span class="token punctuation">,</span>
+                     OS_OPT       opt<span class="token punctuation">,</span>
+                     OS_ERR      <span class="token operator">*</span>p_err<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>也可以在其他任务中取消任务的延时：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">OSTimeDlyResume</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 取消延时而进入就绪状态，此函数最后会引发一次任务调度。</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="获取和设置系统时间，节拍"><a href="#获取和设置系统时间，节拍" class="headerlink" title="获取和设置系统时间，节拍"></a>获取和设置系统时间，节拍</h1><p>CPU_INT32U类型的全局变量<code>OSTickCtr</code>来记录系统时钟节拍数，在调用<code>OSInit()</code>时被初始化为0，以后每发生1个时钟节拍，<code>OSTickCtr</code>加1。</p>
+<p><code>OSTimeSet()</code>允许用户改变当前时钟节拍计数器的值。<br><code>OSTimeGet()</code>用来获取动迁时钟节拍计数器的值。</p>
+<h1 id="软件定时器"><a href="#软件定时器" class="headerlink" title="软件定时器"></a>软件定时器</h1><p>UCOSIII中定时器的时间分辨率由一个宏<code>OS_CFG_TMR_TASK_RATE_HZ</code>，单位为<code>HZ</code>，默认为100Hz。</p>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OSTmrCreate()</td>
+<td>创建定时器并制定运行模式</td>
+</tr>
+<tr>
+<td>OSTmrDel()</td>
+<td>删除定时器</td>
+</tr>
+<tr>
+<td>OSTmrRemainGet()</td>
+<td>获取定时器的剩余时间</td>
+</tr>
+<tr>
+<td>OSTmrStart()</td>
+<td>启动定时器计数</td>
+</tr>
+<tr>
+<td>OSTmrStateGet()</td>
+<td>获取当前定时器状态</td>
+</tr>
+<tr>
+<td>OSTmrStop()</td>
+<td>停止计数器倒计时</td>
+</tr>
+</tbody></table>
+<p>软件定时器的模式：单次定时、周期无初始延迟模式、周期有初始延迟。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/*
+opt		Specifies either:
+		OS_OPT_TMR_ONE_SHOT       The timer counts down only once
+		OS_OPT_TMR_PERIODIC       The timer counts down and then reloads itself
+*/</span>
+<span class="token keyword">void</span>  <span class="token function">OSTmrCreate</span> <span class="token punctuation">(</span>OS_TMR               <span class="token operator">*</span>p_tmr<span class="token punctuation">,</span>
+                   CPU_CHAR             <span class="token operator">*</span>p_name<span class="token punctuation">,</span>
+                   OS_TICK               dly<span class="token punctuation">,</span>
+                   OS_TICK               period<span class="token punctuation">,</span>
+                   OS_OPT                opt<span class="token punctuation">,</span>	<span class="token comment">// 模式选择</span>
+                   OS_TMR_CALLBACK_PTR   p_callback<span class="token punctuation">,</span>
+                   <span class="token keyword">void</span>                 <span class="token operator">*</span>p_callback_arg<span class="token punctuation">,</span>
+                   OS_ERR               <span class="token operator">*</span>p_err<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol>
+<li>单次定时，手动<code>OSTmrStart()</code><br><img src="/images/20201029114043751.png"></li>
+<li><ol start="3">
+<li>周期无初始延迟模式 和 周期有初始延迟模式<br><img src="/images/20201029140826323.png"><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 步骤</span>
+<span class="token number">0.</span> 定时器分辨率（<span class="token number">10</span>ms）  OS_CFG_TMR_TASK_RATE_HZ，默认<span class="token number">100</span>Hz 
+<span class="token number">1.</span> 打开宏使能 #define OS_CFG_TMR_EN <span class="token number">1u</span>   <span class="token comment">/* Enable (1) or Disable (0) code generation for TIMERS */</span>
+<span class="token number">2.</span> 定义定时器（全局）OS_TMR tmr1<span class="token punctuation">;</span>
+<span class="token number">3.</span> 回调函数 <span class="token keyword">void</span> <span class="token function">tmr1_clbk</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span> p_tmr<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> p_arg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token number">4.</span> 创建定时器（start_task中） <span class="token function">OSTmrCreate</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token number">5.</span> 开启软件定时器 <span class="token function">OSTmrStart</span> <span class="token punctuation">(</span>OS_TMR  <span class="token operator">*</span>p_tmr<span class="token punctuation">,</span> OS_ERR  <span class="token operator">*</span>p_err<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+</li>
+</ol>
+<h1 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h1><p>信号量通常分为两种：<strong>二进制信号量</strong>和<strong>计数型信号量</strong>。<br>信号量默认为0，请求到信号量就-1，释放或发送就+1。</p>
+<ol>
+<li>二进制信号量：只能取0和1两个值，一次只能一个任务使用的资源，比如I/O设备，打印机。</li>
+<li>计数型信号量：的信号量值大于1，范围由<code>OS_SEM_CTR</code>决定，可以为8位，16位和32位，取值范围分别为：0 ~ 255, 0 ~ 65535和 0 ~ 4294967295。可以同时被几个任务所使用，如一个缓存池有10个缓存块，那么同时最多支持10个任务使用内存池。</li>
+</ol>
+<p> <strong>使用：</strong><br> 资源与信号量绑定，<strong>等待</strong>获取资源，可设置超时可死等。<br>  要资源的任务必须执行“<strong>等待</strong>”操作，</p>
+<ul>
+<li> 如该资源对应的信号量有效值大于1，则任务可以获得该资源，任务继续运行</li>
+<li>如该信号量的有效值为0，则任务加入等待信号量的任务表中</li>
+<li>如等待时间超过某一个设定值，则等待信号量的任务就进入就绪态</li>
+<li>如将等待时间设置为0则任务就将一直等待该信号量</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OSSemCreate()</td>
+<td>建立一个信号量</td>
+</tr>
+<tr>
+<td>OSSemDel()</td>
+<td>删除一个信号量</td>
+</tr>
+<tr>
+<td>OSSemPend()</td>
+<td>等待一个信号量</td>
+</tr>
+<tr>
+<td>OSSemPendAbrot()</td>
+<td>取消等待</td>
+</tr>
+<tr>
+<td>OSSemPost()</td>
+<td>释放或者发出一个信号量</td>
+</tr>
+<tr>
+<td>OSSemSet()</td>
+<td>强制设置一个信号量的值</td>
+</tr>
+</tbody></table>
+<h2 id="优先级翻转"><a href="#优先级翻转" class="headerlink" title="优先级翻转"></a>优先级翻转</h2><p>优先级反转在可剥夺内核中是非常常见的，在实时系统中不允许出现这种现象，这样会破坏任务的预期顺序，可能会导致严重的后果。</p>
+<p><font color=red><strong>解决办法：将L级任务的优先级 提升到 与其竞争相同资源的高优先级任务 的相同水平，使用完资源释放之后再把优先级恢复成L级别。（加使用互斥信号量</strong>）。</font><br>这样 M等优先级任务 只能 在L级任务执行释放后由H级任务运行完成后 才能执行，因此低优先级任务占用信号量时间必须短。</p>
+<p>优先级翻转现象：<br><img src="/images/20201029162857492.png"></p>
+<p>用提升优先级  和 二值信号量（互斥量）方法解决：<br><img src="/images/20201029163400902.png"></p>
+<h2 id="互斥信号量"><a href="#互斥信号量" class="headerlink" title="互斥信号量"></a>互斥信号量</h2><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OSMutexCreate()</td>
+<td>建立一个互斥信号量</td>
+</tr>
+<tr>
+<td>OSMutexDel()</td>
+<td>删除一个互斥信号量</td>
+</tr>
+<tr>
+<td>OSMutexPend()</td>
+<td>等待一个互斥信号量</td>
+</tr>
+<tr>
+<td>OSMutexPendAbrot()</td>
+<td>取消等待</td>
+</tr>
+<tr>
+<td>OSMutexPost()</td>
+<td>释放或者发布一个互斥信号量</td>
+</tr>
+</tbody></table>
+<h2 id="任务内嵌信号量"><a href="#任务内嵌信号量" class="headerlink" title="任务内嵌信号量"></a>任务内嵌信号量</h2><p>任务创建时自动创建，因此没有提供创建函数，可以设置信号初始值，<br>只能请求自带的信号量，可以发送到别人信号量。<br>函数名      |    作用<br>——|——–<br>OSTaskSemPend()        |     等待一个任务信号量<br>OSTaskSemPendAbort()        |    取消等待任务信号量<br>OSTaskSemPost()    |    发布任务信号量<br>OSTaskSemSet()    |    强行设置任务信号量计数</p>
+<h1 id="消息传递"><a href="#消息传递" class="headerlink" title="消息传递"></a>消息传递</h1><p>消息包含一下几个部分：指向数据的<strong>指针</strong>，数据的<strong>长度</strong>，记录消息发布时刻的<br><strong>时间戳</strong>。<br>消息以指针方式传递，因此消息内容可以是动态申请的<strong>内存块</strong>、<strong>全局变量</strong>、<strong>函数</strong>。<br>ucosiii没有消息邮箱只有消息队列，邮箱是长度为1的消息队列。</p>
+<p><img src="/images/20201029172113328.png"><br>消息队列的API：<br>函数名 |    作用<br>———-| ——<br>OSQCreate()    |  创建一个消息 队列<br>OSQDel()    |   删除一个消息队列<br>OSQFlush()      |   清空消息队列<br>OSQPend()     |       等待消息<br>OSQPendAbort()  |        取消等待消息<br>OSQPost()      |     向消息队列发布一则消息</p>
+<p> 任务或者中断服务程序都可以给消息队列发送消息，当发送消息时，如果队列未满，uCOS 会将从消息池中取出一个消息，将消息挂载到队列的尾部，消息中的成员变量MsgPtr 指向要发送的消息。如果队列已满， 则返回错误代码，入队失败。<br><img src="/images/20201107221032482.png"><br><img src="/images/20201107221528767.png"></p>
+<h2 id="任务间通信"><a href="#任务间通信" class="headerlink" title="任务间通信"></a>任务间通信</h2><p>两种方式，消息队列 和 全局变量加独占访问（信号量）。</p>
+<h2 id="任务内建消息队列"><a href="#任务内建消息队列" class="headerlink" title="任务内建消息队列"></a>任务内建消息队列</h2><p>需要Create去配置消息队列大小和处理函数，不需要定义消息队列。<br>多个任务等待同一个消息队列的应用很少见。<br> 如果需要使用任务内建消息队列功能的时候需要将宏<code>OS_CFG_TASK_Q_EN</code>置1。<br>函数名    |作用<br>—|—<br>OSTaskQPend()    |等待消息<br>OSTaskQPendAbort()    |取消等待消息<br>OSTaskQPost()    |向任务发布一则消息<br>OSTaskQFlush()    |清空任务的消息队列</p>
+<h1 id="事件标志组（多个任务到达后-才触发事件）"><a href="#事件标志组（多个任务到达后-才触发事件）" class="headerlink" title="事件标志组（多个任务到达后 才触发事件）"></a>事件标志组（多个任务到达后 才触发事件）</h1><p>事件标志组用于 一个任务与多个任务同步。<br>事件标志组与任务之间有两种同步机制：<strong>“或”</strong> 和 <strong>“与”</strong>。</p>
+<ul>
+<li>“或”同步：等待多个事件时，任何一个事件发生 ，任务都被同步。</li>
+<li>“与”同步：当所有的事件都发生时任务才被同步。</li>
+</ul>
+<p>在UCOSIII中事件标志组为<code>OS_FLAG_GRP</code>，将宏<code>OS_CFG_FLAG_EN</code>置1。</p>
+<p>事件标志：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span>   CPU_INT32U  OS_FLAGS<span class="token punctuation">;</span>  <span class="token comment">/* Event flags,  8/16/&lt;32> */</span>
+
+OS_FLAGS	flags<span class="token punctuation">;</span>	<span class="token comment">// 每bit表示一个事件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>事件标志组API：<br>函数名    |        作用<br>——-|——–<br>OSFlagCreate()    |创建事件标志组<br>OSFlagDel()    |    删除事件标志组<br>OSFlagPend()        |    等待事件标志组<br>OSFlagPendAbort()    |    取消等待事件标志<br>OSFlagPendGetFlagsRdy()    |    获取使任务就绪的事件标志<br>OSFlagPost()    |    向事件标志组发布标志</p>
+<h1 id="同时等待多个内核对象-（多个信号量、消息队列）"><a href="#同时等待多个内核对象-（多个信号量、消息队列）" class="headerlink" title="同时等待多个内核对象 （多个信号量、消息队列）"></a>同时等待多个内核对象 （多个信号量、消息队列）</h1><p>前面的都是等待单个内核对象。包括：信号量、互斥信号量、消息队列和事件标志组。</p>
+<p>在UCOSIII中允许任务同时等待<strong>多个信号量和多个消息队列</strong>，<br>不支持同时等待多个事件标志组或互斥信号量。</p>
+<p>一个任务可以等待任意数量的信号量和消息队列，第一个信号量或消息队列的发布会导致该任务进入就绪态。</p>
+<p>一个任务可以调用函数<code>OSPendMulti()</code>函数来等待多个对象，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">OS_OBJ_QTY  <span class="token function">OSPendMulti</span> <span class="token punctuation">(</span>OS_PEND_DATA   <span class="token operator">*</span>p_pend_data_tbl<span class="token punctuation">,</span>
+                         OS_OBJ_QTY     tbl_size<span class="token punctuation">,</span>
+                         OS_TICK        timeout<span class="token punctuation">,</span>
+                         OS_OPT         opt<span class="token punctuation">,</span>
+                         OS_ERR         <span class="token operator">*</span>p_err<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在调用函数OSPendMulti()之前我们需要先初始化<code>OS_PEND_DATA</code>数组，数组的大小取决于任务同时等待的内核对象的总数量。</p>
+<h1 id="存储管理"><a href="#存储管理" class="headerlink" title="存储管理"></a>存储管理</h1><p>UCOSIII中提供了一种替代<code>malloc()</code>和<code>free()</code>函数的方法，UCOSIII中将存储空间分成<strong>区和块</strong>，每个存储区有数量不等大小相同的存储块，在一个系统中可以有多个存储区。<br>UCOSIII使用区块组合内存很粗糙。</p>
+<p>修改栈、堆空间大小：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// CORE\startup_stm32f10x_md.s</span>
+Stack_Size      EQU     <span class="token number">0x00000400</span>
+
+Heap_Size       EQU     <span class="token number">0x00000200</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="互斥量与二值信号量"><a href="#互斥量与二值信号量" class="headerlink" title="互斥量与二值信号量"></a>互斥量与二值信号量</h1><p>uCOS 中的信号量不具备传递数据的功能。</p>
+<p>互斥量有优先级继承机制，二值信号量则没有这个机制。这使得二值信号量更偏向应用于同步功能（任务与任务间的同步或任务和中断间同步），而互斥量更偏向应用于临界资源的互斥访问。</p>
+<p>在嵌入式操作系统中二值信号量是任务间、 任务与中断间同步的重要手段。</p>
+<p>而 uCOS 提供的互斥量可以通过优先级继承算法，可以降低优先级翻转问题产生的影响，所以，用于临界资源的保护一般建议使用互斥量。</p>
+<p>互斥量与二值信号量最大的不同是：互斥量具有优先级继承机制，而信号量没有。</p>
+<p>优先级翻转：暂时提高某个占有某种资源的低优先级任务的优先级，使之与在所有等待该资源<br>的任务中优先级最高那个任务的优先级相等，而当这个低优先级任务执行完毕释放该资源时，优先级重新回到初始设定值。</p>
+<h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><p>但是它与信号量不同的是，事件的发送操作是不可累计的，而信号量的释放动作是可累计的。</p>
+<p>事件是一种实现任务间通信的机制，主要用于实现多任务间的同步，<strong>但事件通信只能是事件类型的通信，无数据传输。</strong> 与信号量不同的是，它可以实现一对多，多对多的同步。<br>即一个任务可以等待多个事件的发生：可以是任意一个事件发生时唤醒任务进行事件处理；也可以是几个事件都发生后才唤醒任务进行事件处理。同样，也可以是多个任务同步多个事件。</p>
+<p>一般将其定义为 32 位的变量， 有 32 个位用来实现事件标志组。 每一位代表一个事件，任务通过“逻辑与”或“逻辑或”与一个或多个事件建立关联，形成一个事件组。事件的“逻辑或”也被称作是独立型同步，指的是任务感兴趣的所有事件任一件发生即可被唤醒；事件“逻辑与”则被称为是关联型同步，指的是任务感兴趣的若干事件都发生时才被唤醒，并且事件发生的时间可以不同步。</p>
+<p><img src="/images/20201109214418711.png"></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/ucos-shi-zhong-ding-shi-qi-fen-bian-lu-5-ge-xi-tong-ren-wu-ren-wu-yan-shi-xin-hao-liang-xiao-xi-dui-lie-shi-jian-biao-zhi-zu-tong-shi-deng-dai-duo-ge-nei-he-dui-xiang-local/">https://wuyexkx.github.io/2021/05/14/ucos-shi-zhong-ding-shi-qi-fen-bian-lu-5-ge-xi-tong-ren-wu-ren-wu-yan-shi-xin-hao-liang-xiao-xi-dui-lie-shi-jian-biao-zhi-zu-tong-shi-deng-dai-duo-ge-nei-he-dui-xiang-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                    <span class="chip bg-color">嵌入式Linux</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/wds1-qi-di-10-ke-nei-he-1-bian-yi-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="WDS1期第10课 内核 1 编译">
+                        
+                        <span class="card-title">WDS1期第10课 内核 1 编译</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/ucosiii-xi-tong-shi-zhong-shi-jian-chuo-zu-sai-yan-shi-yu-kong-xian-ren-wu-lin-jie-duan-jiu-xu-biao-you-xian-ji-wei-ying-she-biao-he-jiu-xu-ren-wu-lie-biao-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="ucosiii 系统时钟，时间戳 阻塞延时与空闲任务 临界段 就绪表（优先级位映射表和就绪任务列表）">
+                        
+                        <span class="card-title">ucosiii 系统时钟，时间戳 阻塞延时与空闲任务 临界段 就绪表（优先级位映射表和就绪任务列表）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

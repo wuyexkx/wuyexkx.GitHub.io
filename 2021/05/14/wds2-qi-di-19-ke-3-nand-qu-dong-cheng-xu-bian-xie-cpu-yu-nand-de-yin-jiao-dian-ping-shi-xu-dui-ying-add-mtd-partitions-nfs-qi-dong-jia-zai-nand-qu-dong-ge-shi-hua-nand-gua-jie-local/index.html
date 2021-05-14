@@ -1,0 +1,1484 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="WDS2期第19课 3 NAND驱动程序编写 cpu与nand的引脚电平时序对应，add_mtd_partitions，nfs启动-加载nand驱动-格式化nand-挂接, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>WDS2期第19课 3 NAND驱动程序编写 cpu与nand的引脚电平时序对应，add_mtd_partitions，nfs启动-加载nand驱动-格式化nand-挂接 | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">WDS2期第19课 3 NAND驱动程序编写 cpu与nand的引脚电平时序对应，add_mtd_partitions，nfs启动-加载nand驱动-格式化nand-挂接</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                <span class="chip bg-color">嵌入式Linux</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                嵌入式Linux
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.2k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]<br>参考：<br><code>drivers\mtd\nand\s3c2410.c</code><br><code>drivers\mtd\nand\at91_nand.c</code></p>
+<h1 id="设置电平维持时间的寄存器，需要将cpu和nand对应看"><a href="#设置电平维持时间的寄存器，需要将cpu和nand对应看" class="headerlink" title="设置电平维持时间的寄存器，需要将cpu和nand对应看"></a>设置电平维持时间的寄存器，需要将cpu和nand对应看</h1><p>2440手册 ，P225，<br><img src="/images/20200428171852526.png"><br>2440手册nand P217，<br><img src="/images/20200428172136403.png"><br>NAND的手册K9F2G08U0C(NAND FLASH).pdf上 P19<br><img src="/images/202004281816496.png"><br>NAND的手册K9F2G08U0C(NAND FLASH).pdf上， P12，<br><img src="/images/20200428181706232.png"><br><img src="/images/20200428211842945.png"></p>
+<h1 id="代码2-代码1是need-sth这里没有"><a href="#代码2-代码1是need-sth这里没有" class="headerlink" title="代码2 代码1是need_sth这里没有"></a>代码2 代码1是need_sth这里没有</h1><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/types.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/ioport.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/platform_device.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/delay.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/err.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/slab.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/clk.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mtd/mtd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mtd/nand.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mtd/nand_ecc.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mtd/partitions.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/io.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-nand.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/nand.h></span></span>
+
+<span class="token keyword">struct</span> <span class="token class-name">s3c2440_nand_regs</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfconf  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000000</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfcont  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000004</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfcmd   <span class="token punctuation">;</span> <span class="token comment">// 0x4E000008</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfaddr  <span class="token punctuation">;</span> <span class="token comment">// 0x4E00000C</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfdata  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000010</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfmecc0 <span class="token punctuation">;</span> <span class="token comment">// 0x4E000014</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfmecc1 <span class="token punctuation">;</span> <span class="token comment">// 0x4E000018</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfsecc  <span class="token punctuation">;</span> <span class="token comment">// 0x4E00001C</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfstat  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000020</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfestat0<span class="token punctuation">;</span> <span class="token comment">// 0x4E000024</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfestat1<span class="token punctuation">;</span> <span class="token comment">// 0x4E000028</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfmecc0 <span class="token punctuation">;</span> <span class="token comment">// 0x4E00002C</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfmecc1 <span class="token punctuation">;</span> <span class="token comment">// 0x4E000030</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfsecc  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000034</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfsblk  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000038</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfeblk  <span class="token punctuation">;</span> <span class="token comment">// 0x4E00003C</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">struct</span> <span class="token class-name">s3c2440_nand_regs</span> <span class="token operator">*</span>s3c_nand_regs<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">nand_chip</span> <span class="token operator">*</span>s3c_nand<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">mtd_info</span> <span class="token operator">*</span>s3c_mtd<span class="token punctuation">;</span>
+
+<span class="token comment">// nand片选</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">s3c2440_select_chip</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">mtd_info</span> <span class="token operator">*</span>mtd<span class="token punctuation">,</span> <span class="token keyword">int</span> chipnr<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 片选</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>chipnr <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> 
+        <span class="token comment">// 取消选中芯片 NFCONT[1] 为1</span>
+        s3c_nand_regs<span class="token operator">-></span>nfcont <span class="token operator">|=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span> 
+        <span class="token comment">// 选中芯片 NFCONT[1] 为0</span>
+        s3c_nand_regs<span class="token operator">-></span>nfcont <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 发命令或者地址</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">s3c2440_cmd_ctrl</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">mtd_info</span> <span class="token operator">*</span>mtd<span class="token punctuation">,</span> <span class="token keyword">int</span> dat<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> ctrl<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ctrl <span class="token operator">&amp;</span> NAND_CLE<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 发命令</span>
+        <span class="token comment">// NFCMMD = dat</span>
+        s3c_nand_regs<span class="token operator">-></span>nfcmd  <span class="token operator">=</span> dat<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>               <span class="token comment">// 发地址</span>
+        <span class="token comment">// NFADDR = dat</span>
+        s3c_nand_regs<span class="token operator">-></span>nfcmd  <span class="token operator">=</span> dat<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 判断状态</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">s3c2440_dev_ready</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">mtd_info</span> <span class="token operator">*</span>mtd<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 返回NFSTAT的bit0</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>s3c_nand_regs<span class="token operator">-></span>nfstat <span class="token operator">&amp;</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">s3c_nand_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">clk</span> <span class="token operator">*</span>nand_clk<span class="token punctuation">;</span>
+    <span class="token comment">// 1.分配一个nand_chip结构体</span>
+	s3c_nand <span class="token operator">=</span> <span class="token function">kzalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">nand_chip</span><span class="token punctuation">)</span><span class="token punctuation">,</span> GFP_KERNEL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 3.硬件相关操作 nand寄存器地址映射</span>
+    s3c_nand_regs <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x4E000000</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">s3c2440_nand_regs</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    
+    <span class="token comment">// 2.设置nand_chip, nand_chip是给nand_scan函数用，</span>
+        <span class="token comment">// 可以先看nand_scan怎么用nand_chip的，再去设置</span>
+        <span class="token comment">// nand_chip应该提供 选中、发命令、地址、数据，读数据、判断状态 功能</span>
+    s3c_nand<span class="token operator">-></span>select_chip <span class="token operator">=</span> s3c2440_select_chip<span class="token punctuation">;</span><span class="token comment">// 默认的选择函数不能用需要自己写</span>
+    s3c_nand<span class="token operator">-></span>cmdfunc   <span class="token operator">=</span> s3c2440_cmd_ctrl<span class="token punctuation">;</span>     <span class="token comment">// 默认的会调用nand_chip->cmdfunc，这里也需要构造</span>
+    s3c_nand<span class="token operator">-></span>IO_ADDR_R <span class="token operator">=</span> s3c_nand_regs<span class="token operator">-></span>nfdata<span class="token punctuation">;</span><span class="token comment">// 读取数据 NFDATA的虚拟地址 </span>
+    s3c_nand<span class="token operator">-></span>IO_ADDR_W <span class="token operator">=</span> s3c_nand_regs<span class="token operator">-></span>nfdata<span class="token punctuation">;</span><span class="token comment">// 写入数据</span>
+    s3c_nand<span class="token operator">-></span>dev_ready <span class="token operator">=</span> s3c2440_dev_ready<span class="token punctuation">;</span>    <span class="token comment">// 判断状态</span>
+    <span class="token comment">// 3.硬件相关操作 电平维持时间</span>
+        <span class="token comment">// 使能nand控制器的时钟，后面才能读写寄存器</span>
+	nand_clk <span class="token operator">=</span> <span class="token function">clk_get</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token string">"nand"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">clk_enable</span><span class="token punctuation">(</span>nand_clk<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// CLKCON的bit4</span>
+        <span class="token comment">// HCLK=100MHz, 10ns</span>
+        <span class="token comment">// TACLS: 发出CLE/ALE之后隔多久发出nWE信号，</span>
+        <span class="token comment">//  从nand手册计算得知CLE/ALE与nWE可以同时，所以TACLS=0</span>
+        <span class="token comment">// TWRPH0: nWE的脉冲宽度，HCLK x ( TWRPH0 + 1 )</span>
+        <span class="token comment">//  从nand手册知>=12ns,所以TWRPH0=1</span>
+        <span class="token comment">// TWRPH1: nWE变为高电平后CLE/ALE才能变为低电平，</span>
+        <span class="token comment">//  从nand手册知>=5ns，所以TWRPH1>=0</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">TACLS</span>   <span class="token expression"><span class="token number">0</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">TWRPH0</span>  <span class="token expression"><span class="token number">1</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">TWRPH1</span>  <span class="token expression"><span class="token number">0</span></span></span>
+    s3c_nand_regs<span class="token operator">-></span>nfconf <span class="token operator">=</span> <span class="token punctuation">(</span>TACLS<span class="token operator">&lt;&lt;</span><span class="token number">12</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span>TWRPH0<span class="token operator">&lt;&lt;</span><span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span>TWRPH1<span class="token operator">&lt;&lt;</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// NFCONF 取消片选，使能nand控制器 </span>
+        <span class="token comment">//  bit1为1 取消片选</span>
+        <span class="token comment">//  bit0为1 使能nand控制器</span>
+    s3c_nand_regs<span class="token operator">-></span>nfcont <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 4.使用 nand_scan，nand_scan识别nand，构造mtd_info（包含读写擦除等方法）</span>
+    s3c_mtd <span class="token operator">=</span> <span class="token function">kzalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">mtd_info</span><span class="token punctuation">)</span><span class="token punctuation">,</span> GFP_KERNEL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    s3c_mtd<span class="token operator">-></span>priv   <span class="token operator">=</span> s3c_nand<span class="token punctuation">;</span> <span class="token comment">// mtd与nand_chip联系</span>
+    s3c_mtd<span class="token operator">-></span>owner  <span class="token operator">=</span> THIS_MODULE<span class="token punctuation">;</span> 
+    <span class="token function">nand_scan</span><span class="token punctuation">(</span>s3c_mtd<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 1个芯片</span>
+
+    <span class="token comment">// 5.add_mtd_partitions</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">s3c_nand_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">kfree</span><span class="token punctuation">(</span>s3c_mtd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>s3c_nand_regs<span class="token punctuation">)</span><span class="token punctuation">;</span>    
+    <span class="token function">kfree</span><span class="token punctuation">(</span>s3c_nand<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token function">module_init</span><span class="token punctuation">(</span>s3c_nand_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>s3c_nand_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="实验2-nand识别-没有add-mtd-partitions函数"><a href="#实验2-nand识别-没有add-mtd-partitions函数" class="headerlink" title="实验2 nand识别 没有add_mtd_partitions函数"></a>实验2 nand识别 没有add_mtd_partitions函数</h1><p><img src="/images/20200428203800118.png"><br>有个NAND_ECC_NONE警告。因为没有使用ECC校验。</p>
+<h2 id="nand位反转-解决办法ECC码"><a href="#nand位反转-解决办法ECC码" class="headerlink" title="nand位反转 解决办法ECC码"></a>nand位反转 解决办法ECC码</h2><p><img src="/images/20200428215149812.png"></p>
+<p>nand每页（2K）之外还有不参与编址的OOB区（64字节，out of bank），<br>在读每页数据时可能某位发生反转，需要用ECC校验。ECC不仅可以<strong>知道是否数据有误</strong>还能<strong>计算出具体的bit反转</strong>。</p>
+<h3 id="解决反转"><a href="#解决反转" class="headerlink" title="解决反转"></a>解决反转</h3><p>在写入时：</p>
+<ol>
+<li>按page写入</li>
+<li>生成ECC码</li>
+<li>保存ECC码到OOB区</li>
+</ol>
+<p>在读出数据时：</p>
+<ol>
+<li>按page读取</li>
+<li>读取OOB的ECC</li>
+<li>计算page的ECC码</li>
+<li>比较两个ECC</li>
+<li>校验</li>
+</ol>
+<p>解决位反转有硬件和软件的方法，这里用软件的方法，在程序2上添加一行代码行，<code>s3c_nand-&gt;ecc.mode  = NAND_ECC_SOFT;</code></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">s3c_nand<span class="token operator">-></span>select_chip <span class="token operator">=</span> s3c2440_select_chip<span class="token punctuation">;</span><span class="token comment">// 默认的选择函数不能用需要自己写</span>
+s3c_nand<span class="token operator">-></span>cmdfunc   <span class="token operator">=</span> s3c2440_cmd_ctrl<span class="token punctuation">;</span>     <span class="token comment">// 默认的会调用nand_chip->cmdfunc，这里也需要构造</span>
+s3c_nand<span class="token operator">-></span>IO_ADDR_R <span class="token operator">=</span> s3c_nand_regs<span class="token operator">-></span>nfdata<span class="token punctuation">;</span><span class="token comment">// 读取数据 NFDATA的虚拟地址 </span>
+s3c_nand<span class="token operator">-></span>IO_ADDR_W <span class="token operator">=</span> s3c_nand_regs<span class="token operator">-></span>nfdata<span class="token punctuation">;</span><span class="token comment">// 写入数据</span>
+s3c_nand<span class="token operator">-></span>dev_ready <span class="token operator">=</span> s3c2440_dev_ready<span class="token punctuation">;</span>    <span class="token comment">// 判断状态</span>
+s3c_nand<span class="token operator">-></span>ecc<span class="token punctuation">.</span>mode  <span class="token operator">=</span> NAND_ECC_SOFT<span class="token punctuation">;</span>        <span class="token comment">// 软件的方法ECC校验 // 添加这一行就行</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>重新装载警告消失，<br><img src="/images/20200428215038812.png"></p>
+<h1 id="代码3-完善add-mtd-partitions函数"><a href="#代码3-完善add-mtd-partitions函数" class="headerlink" title="代码3 完善add_mtd_partitions函数"></a>代码3 完善add_mtd_partitions函数</h1><p><img src="/images/20200429142256309.png"></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">arch\arm\plat<span class="token operator">-</span>s3c24xx\common<span class="token operator">-</span>smdk<span class="token punctuation">.</span>c分区名称操作
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">mtd_partition</span> smdk_default_nand_part<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">.</span>name   <span class="token operator">=</span> <span class="token string">"bootloader"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>size   <span class="token operator">=</span> <span class="token number">0x00040000</span><span class="token punctuation">,</span>
+		<span class="token punctuation">.</span>offset	<span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">.</span>name   <span class="token operator">=</span> <span class="token string">"params"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>offset <span class="token operator">=</span> MTDPART_OFS_APPEND<span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>size   <span class="token operator">=</span> <span class="token number">0x00020000</span><span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">.</span>name   <span class="token operator">=</span> <span class="token string">"kernel"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>offset <span class="token operator">=</span> MTDPART_OFS_APPEND<span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>size   <span class="token operator">=</span> <span class="token number">0x00200000</span><span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">.</span>name   <span class="token operator">=</span> <span class="token string">"root"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>offset <span class="token operator">=</span> MTDPART_OFS_APPEND<span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>size   <span class="token operator">=</span> MTDPART_SIZ_FULL<span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>代码3，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/types.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/ioport.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/platform_device.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/delay.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/err.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/slab.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/clk.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mtd/mtd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mtd/nand.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mtd/nand_ecc.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/mtd/partitions.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/io.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-nand.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/nand.h></span></span>
+
+<span class="token keyword">struct</span> <span class="token class-name">s3c2440_nand_regs</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfconf  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000000</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfcont  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000004</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfcmd   <span class="token punctuation">;</span> <span class="token comment">// 0x4E000008</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfaddr  <span class="token punctuation">;</span> <span class="token comment">// 0x4E00000C</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfdata  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000010</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfmecc0 <span class="token punctuation">;</span> <span class="token comment">// 0x4E000014</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfmecc1 <span class="token punctuation">;</span> <span class="token comment">// 0x4E000018</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfsecc  <span class="token punctuation">;</span> <span class="token comment">// 0x4E00001C</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfstat  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000020</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfestat0<span class="token punctuation">;</span> <span class="token comment">// 0x4E000024</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfestat1<span class="token punctuation">;</span> <span class="token comment">// 0x4E000028</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfmecc0 <span class="token punctuation">;</span> <span class="token comment">// 0x4E00002C</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfmecc1 <span class="token punctuation">;</span> <span class="token comment">// 0x4E000030</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfsecc  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000034</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfsblk  <span class="token punctuation">;</span> <span class="token comment">// 0x4E000038</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> nfeblk  <span class="token punctuation">;</span> <span class="token comment">// 0x4E00003C</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">struct</span> <span class="token class-name">s3c2440_nand_regs</span> <span class="token operator">*</span>s3c_nand_regs<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">nand_chip</span> <span class="token operator">*</span>s3c_nand<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">mtd_info</span> <span class="token operator">*</span>s3c_mtd<span class="token punctuation">;</span> <span class="token comment">// mtd_info包含了nand的通用读取写入的方法</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">mtd_partition</span> s3c_nand_part<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 用于nand分区的数组</span>
+	<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">.</span>name   <span class="token operator">=</span> <span class="token string">"bootloader"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>size   <span class="token operator">=</span> <span class="token number">0x00040000</span><span class="token punctuation">,</span>
+		<span class="token punctuation">.</span>offset	<span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">.</span>name   <span class="token operator">=</span> <span class="token string">"params"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>offset <span class="token operator">=</span> MTDPART_OFS_APPEND<span class="token punctuation">,</span> <span class="token comment">// 紧跟上面的分区</span>
+        <span class="token punctuation">.</span>size   <span class="token operator">=</span> <span class="token number">0x00020000</span><span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">.</span>name   <span class="token operator">=</span> <span class="token string">"kernel"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>offset <span class="token operator">=</span> MTDPART_OFS_APPEND<span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>size   <span class="token operator">=</span> <span class="token number">0x00200000</span><span class="token punctuation">,</span>
+	<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">.</span>name   <span class="token operator">=</span> <span class="token string">"root"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>offset <span class="token operator">=</span> MTDPART_OFS_APPEND<span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>size   <span class="token operator">=</span> MTDPART_SIZ_FULL<span class="token punctuation">,</span> <span class="token comment">// 剩下的所有都是该分区</span>
+	<span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">// nand片选</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">s3c2440_select_chip</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">mtd_info</span> <span class="token operator">*</span>mtd<span class="token punctuation">,</span> <span class="token keyword">int</span> chipnr<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 片选</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>chipnr <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> 
+        <span class="token comment">// 取消选中芯片 NFCONT[1] 为1</span>
+        s3c_nand_regs<span class="token operator">-></span>nfcont <span class="token operator">|=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span> 
+        <span class="token comment">// 选中芯片 NFCONT[1] 为0</span>
+        s3c_nand_regs<span class="token operator">-></span>nfcont <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 发命令或者地址</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">s3c2440_cmd_ctrl</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">mtd_info</span> <span class="token operator">*</span>mtd<span class="token punctuation">,</span> <span class="token keyword">int</span> dat<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> ctrl<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ctrl <span class="token operator">&amp;</span> NAND_CLE<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 发命令</span>
+        <span class="token comment">// NFCMMD = dat</span>
+        s3c_nand_regs<span class="token operator">-></span>nfcmd  <span class="token operator">=</span> dat<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>               <span class="token comment">// 发地址</span>
+        <span class="token comment">// NFADDR = dat</span>
+        s3c_nand_regs<span class="token operator">-></span>nfcmd  <span class="token operator">=</span> dat<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 判断状态</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">s3c2440_dev_ready</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">mtd_info</span> <span class="token operator">*</span>mtd<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 返回NFSTAT的bit0</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>s3c_nand_regs<span class="token operator">-></span>nfstat <span class="token operator">&amp;</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">s3c_nand_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">clk</span> <span class="token operator">*</span>nand_clk<span class="token punctuation">;</span>
+    <span class="token comment">// 1.分配一个nand_chip结构体</span>
+	s3c_nand <span class="token operator">=</span> <span class="token function">kzalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">nand_chip</span><span class="token punctuation">)</span><span class="token punctuation">,</span> GFP_KERNEL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 3.硬件相关操作 nand寄存器地址映射</span>
+    s3c_nand_regs <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span><span class="token number">0x4E000000</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">s3c2440_nand_regs</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    
+    <span class="token comment">// 2.设置nand_chip, nand_chip是给nand_scan函数用，</span>
+        <span class="token comment">// 可以先看nand_scan怎么用nand_chip的，再去设置</span>
+        <span class="token comment">// nand_chip应该提供 选中、发命令、地址、数据，读数据、判断状态 功能</span>
+    s3c_nand<span class="token operator">-></span>select_chip <span class="token operator">=</span> s3c2440_select_chip<span class="token punctuation">;</span><span class="token comment">// 默认的选择函数不能用需要自己写</span>
+    s3c_nand<span class="token operator">-></span>cmdfunc   <span class="token operator">=</span> s3c2440_cmd_ctrl<span class="token punctuation">;</span>     <span class="token comment">// 默认的会调用nand_chip->cmdfunc，这里也需要构造</span>
+    s3c_nand<span class="token operator">-></span>IO_ADDR_R <span class="token operator">=</span> s3c_nand_regs<span class="token operator">-></span>nfdata<span class="token punctuation">;</span><span class="token comment">// 读取数据 NFDATA的虚拟地址 </span>
+    s3c_nand<span class="token operator">-></span>IO_ADDR_W <span class="token operator">=</span> s3c_nand_regs<span class="token operator">-></span>nfdata<span class="token punctuation">;</span><span class="token comment">// 写入数据</span>
+    s3c_nand<span class="token operator">-></span>dev_ready <span class="token operator">=</span> s3c2440_dev_ready<span class="token punctuation">;</span>    <span class="token comment">// 判断状态</span>
+    s3c_nand<span class="token operator">-></span>ecc<span class="token punctuation">.</span>mode  <span class="token operator">=</span> NAND_ECC_SOFT<span class="token punctuation">;</span>        <span class="token comment">// 软件的方法ECC校验</span>
+    <span class="token comment">// 3.硬件相关操作 电平维持时间</span>
+        <span class="token comment">// 使能nand控制器的时钟，后面才能读写寄存器</span>
+	nand_clk <span class="token operator">=</span> <span class="token function">clk_get</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token string">"nand"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">clk_enable</span><span class="token punctuation">(</span>nand_clk<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// CLKCON的bit4</span>
+        <span class="token comment">// HCLK=100MHz, 10ns</span>
+        <span class="token comment">// TACLS: 发出CLE/ALE之后隔多久发出nWE信号，</span>
+        <span class="token comment">//  从nand手册计算得知CLE/ALE与nWE可以同时，所以TACLS=0</span>
+        <span class="token comment">// TWRPH0: nWE的脉冲宽度，HCLK x ( TWRPH0 + 1 )</span>
+        <span class="token comment">//  从nand手册知>=12ns,所以TWRPH0=1</span>
+        <span class="token comment">// TWRPH1: nWE变为高电平后CLE/ALE才能变为低电平，</span>
+        <span class="token comment">//  从nand手册知>=5ns，所以TWRPH1>=0</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">TACLS</span>   <span class="token expression"><span class="token number">0</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">TWRPH0</span>  <span class="token expression"><span class="token number">1</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">TWRPH1</span>  <span class="token expression"><span class="token number">0</span></span></span>
+    s3c_nand_regs<span class="token operator">-></span>nfconf <span class="token operator">=</span> <span class="token punctuation">(</span>TACLS<span class="token operator">&lt;&lt;</span><span class="token number">12</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span>TWRPH0<span class="token operator">&lt;&lt;</span><span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span>TWRPH1<span class="token operator">&lt;&lt;</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// NFCONF 取消片选，使能nand控制器 </span>
+        <span class="token comment">//  bit1为1 取消片选</span>
+        <span class="token comment">//  bit0为1 使能nand控制器</span>
+    s3c_nand_regs<span class="token operator">-></span>nfcont <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 4.使用 nand_scan，nand_scan识别nand，构造mtd_info（包含读写擦除等方法）</span>
+    s3c_mtd <span class="token operator">=</span> <span class="token function">kzalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">mtd_info</span><span class="token punctuation">)</span><span class="token punctuation">,</span> GFP_KERNEL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    s3c_mtd<span class="token operator">-></span>priv   <span class="token operator">=</span> s3c_nand<span class="token punctuation">;</span> <span class="token comment">// mtd与nand_chip联系</span>
+    s3c_mtd<span class="token operator">-></span>owner  <span class="token operator">=</span> THIS_MODULE<span class="token punctuation">;</span> 
+    <span class="token function">nand_scan</span><span class="token punctuation">(</span>s3c_mtd<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 1个芯片</span>
+    <span class="token comment">// 5.add_mtd_partitions</span>
+        <span class="token comment">// 1struct mtd_info </span>
+        <span class="token comment">// 2struct mtd_partition *parts 分区结构体数据</span>
+        <span class="token comment">// 3 int nbparts 该结构体数组的项数</span>
+    <span class="token function">add_mtd_partitions</span><span class="token punctuation">(</span>s3c_mtd<span class="token punctuation">,</span> s3c_nand_part<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 需要对nand分区才用</span>
+    <span class="token comment">// add_mtd_device(); // 不对nand分区用add_mtd_device就行</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">s3c_nand_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">del_mtd_partitions</span><span class="token punctuation">(</span>s3c_mtd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">kfree</span><span class="token punctuation">(</span>s3c_mtd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>s3c_nand_regs<span class="token punctuation">)</span><span class="token punctuation">;</span>    
+    <span class="token function">kfree</span><span class="token punctuation">(</span>s3c_nand<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token function">module_init</span><span class="token punctuation">(</span>s3c_nand_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>s3c_nand_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="测试代码3"><a href="#测试代码3" class="headerlink" title="测试代码3"></a>测试代码3</h1><ol>
+<li><code>make menuconfig</code>去掉内核原来的nand驱动程序，输入<code>N</code>不选，<br><img src="/images/20200429143032551.png"></li>
+<li><code>make uImage</code> 使用新的内核启动，并且用NFS启动，因为nand驱动没有了<br>先进入uboot，<br>然后设置参数，保存save，<br>从网络文件系统下载uImages 无nand的，<br>启动kernel，在启动信息中没有nand的信息了，<br><img src="/images/20200429145524931.png"></li>
+<li>插入nand驱动模块<br>查看mtd设备，开始没有，加载nand驱动，在查看就有了mtd设备了，分区了，<br><img src="/images/20200429145739446.png"><br>查看新的分区能否挂接，能挂街上是因为之前的nand烧好了系统，而实际可能nand是空的，需要格式化，<br><img src="/images/20200429150658534.png"></li>
+<li>格式化nand<br>需要专门的工具，<code>mtd-utils-05.07.23.tar.bz2</code>.<br><img src="/images/20200429151630415.png"><br>其中绿色文件就是<code>mtd-utils</code>工具生成的工具，<br><img src="/images/20200429151444549.png"><br>先<code>umount /mnt</code>再擦除。用工具格式化<code>nand</code>的<code>root</code>分区，<code>erase</code>是擦除扇区，<code>erase_all</code>是擦除整个分区，擦除之和就是yaffs文件系统，<br><img src="/images/20200429151924593.png"></li>
+<li>挂接<br><img src="/images/20200429152326998.png"><br>然后就可以在/mnt创建文件了。创建之后重启试试。</li>
+</ol>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/wds2-qi-di-19-ke-3-nand-qu-dong-cheng-xu-bian-xie-cpu-yu-nand-de-yin-jiao-dian-ping-shi-xu-dui-ying-add-mtd-partitions-nfs-qi-dong-jia-zai-nand-qu-dong-ge-shi-hua-nand-gua-jie-local/">https://wuyexkx.github.io/2021/05/14/wds2-qi-di-19-ke-3-nand-qu-dong-cheng-xu-bian-xie-cpu-yu-nand-de-yin-jiao-dian-ping-shi-xu-dui-ying-add-mtd-partitions-nfs-qi-dong-jia-zai-nand-qu-dong-ge-shi-hua-nand-gua-jie-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                    <span class="chip bg-color">嵌入式Linux</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/wds2-qi-di-20-ke-1-nor-flash-yuan-li-ji-ying-jian-cao-zuo-nand-nor-bi-jiao-uboot-ce-shi-norflash-du-he-nei-cun-yi-yang-xie-xu-yao-jin-ru-program-mo-shi-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="WDS2期第20课 1 NOR FLASH原理及硬件操作 nand nor比较 uboot测试norflash 读和内存一样 写需要进入program模式">
+                        
+                        <span class="card-title">WDS2期第20课 1 NOR FLASH原理及硬件操作 nand nor比较 uboot测试norflash 读和内存一样 写需要进入program模式</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/wds2-qi-di-19-ke-2-nand-qu-dong-kuang-jia-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="WDS2期第19课 2 NAND驱动框架">
+                        
+                        <span class="card-title">WDS2期第19课 2 NAND驱动框架</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

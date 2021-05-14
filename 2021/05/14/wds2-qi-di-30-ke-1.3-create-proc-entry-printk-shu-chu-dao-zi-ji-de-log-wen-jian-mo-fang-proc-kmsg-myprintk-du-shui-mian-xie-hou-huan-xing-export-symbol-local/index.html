@@ -1,0 +1,1376 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="WDS2期第30课 1.3 create_proc_entry printk输出到自己的log文件模仿 _proc_kmsg myprintk 读睡眠写后唤醒 EXPORT_SYMBOL, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>WDS2期第30课 1.3 create_proc_entry printk输出到自己的log文件模仿 _proc_kmsg myprintk 读睡眠写后唤醒 EXPORT_SYMBOL | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">WDS2期第30课 1.3 create_proc_entry printk输出到自己的log文件模仿 _proc_kmsg myprintk 读睡眠写后唤醒 EXPORT_SYMBOL</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                <span class="chip bg-color">嵌入式Linux</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                嵌入式Linux
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    1.4k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]</p>
+<h1 id="让printk的输出到自己的log文件-proc-my-msg"><a href="#让printk的输出到自己的log文件-proc-my-msg" class="headerlink" title="让printk的输出到自己的log文件 /proc/my_msg"></a>让printk的输出到自己的log文件 /proc/my_msg</h1><p>在用户的命令行中 执行 <code>cat /proc/kmsg</code>时候，进入内核态，<br>内核找到对应的fops调用read，在read中copy_to_user<br>对proc的操作函数在fs/proc中,参考fs/proc/proc_misc.c， </p>
+<h2 id="程序1-能在-proc-xx打开文件-框架"><a href="#程序1-能在-proc-xx打开文件-框架" class="headerlink" title="程序1 能在/proc/xx打开文件 框架"></a>程序1 能在/proc/xx打开文件 框架</h2><h3 id="源代码1"><a href="#源代码1" class="headerlink" title="源代码1"></a>源代码1</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/proc_fs.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span>   <span class="token comment">// MODULE_LICENSE</span></span>
+
+<span class="token keyword">static</span> <span class="token keyword">struct</span>  <span class="token operator">*</span>my_entry<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token class-name">ssize_t</span> <span class="token function">mymsg_read</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>file<span class="token punctuation">,</span> <span class="token keyword">char</span> __user <span class="token operator">*</span>buf<span class="token punctuation">,</span> <span class="token class-name">size_t</span> count<span class="token punctuation">,</span> <span class="token class-name">loff_t</span> <span class="token operator">*</span>ppos<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span><span class="token string">"mymsg_read is called.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">file_operations</span> proc_mymsg_operations <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span>read		<span class="token operator">=</span> mymsg_read<span class="token punctuation">,</span>
+	<span class="token comment">// .poll		= kmsg_poll,</span>
+	<span class="token comment">// .open		= kmsg_open,</span>
+	<span class="token comment">// .release	= kmsg_release,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">proc_msg_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+
+    my_entry <span class="token operator">=</span> <span class="token function">create_proc_entry</span><span class="token punctuation">(</span><span class="token string">"mymsg"</span><span class="token punctuation">,</span> S_IRUSR<span class="token punctuation">,</span> <span class="token operator">&amp;</span>proc_root<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>my_entry<span class="token punctuation">)</span>
+        my_entry<span class="token operator">-></span>proc_fops <span class="token operator">=</span> <span class="token operator">&amp;</span>proc_mymsg_operations<span class="token punctuation">;</span>
+        
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">proc_msg_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">remove_proc_entry</span><span class="token punctuation">(</span><span class="token string">"mymsg"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>proc_root<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">module_init</span><span class="token punctuation">(</span>proc_msg_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>proc_msg_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="实验1"><a href="#实验1" class="headerlink" title="实验1"></a>实验1</h3><p><img src="/images/20200601212846999.png"><br>简单的写了read函数，<br><img src="/images/20200601213502980.png"></p>
+<h2 id="程序2-利用vsnprintf写自己的printk-并导出到内核空间EXPORT-SYMBOL"><a href="#程序2-利用vsnprintf写自己的printk-并导出到内核空间EXPORT-SYMBOL" class="headerlink" title="程序2  利用vsnprintf写自己的printk 并导出到内核空间EXPORT_SYMBOL"></a>程序2  利用vsnprintf写自己的printk 并导出到内核空间EXPORT_SYMBOL</h2><p>用vsnprintf把myprintk的参数复制到临时缓存区tmp_buf，再把tmp_buf写入到ring_bug，<br>然后读取ring_bug到用户空间。<br>参考<code>fs/proc/kmsg.c</code>的kmsg_read, 阻塞读取数据时等到被唤醒，由执行put的地方唤醒，</p>
+<h3 id="源代码2"><a href="#源代码2" class="headerlink" title="源代码2"></a>源代码2</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/io.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/irq.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/arch/regs-gpio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/hardware.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/proc_fs.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span>   <span class="token comment">// MODULE_LICENSE</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/fs.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm/uaccess.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/delay.h></span></span>
+
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">proc_dir_entry</span> <span class="token operator">*</span>my_entry<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">char</span> tmp_buf<span class="token punctuation">[</span><span class="token number">1024</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token comment">/* 定义一个等待队列button_waitq，这个等待队列实际上是由中断驱动的，
+    当中断发生时，会令挂接到这个等待队列的休眠进程唤醒 */</span>
+<span class="token keyword">static</span> <span class="token function">DECLARE_WAIT_QUEUE_HEAD</span><span class="token punctuation">(</span>log_waitq<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// -------------------------------------环形缓存区----------------------------------------------</span>
+<span class="token comment">// 环形缓冲区 log_buf</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">BUF_SIZE</span> <span class="token expression"><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">)</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">DATA_TYPE</span> <span class="token expression"><span class="token keyword">char</span></span></span>
+
+<span class="token comment">/* 环形顺序缓存区
+@BUF_SIZE    需要自定义两个宏 缓存区大小
+@DATA_TYPE   存储数据的类型
+
+@.head = 0,
+@.tail = 0,
+@.size = 0,
+@.capacity = BUF_SIZE   */</span>
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">ring_buf</span> ring_buf<span class="token punctuation">;</span>
+<span class="token keyword">struct</span> <span class="token class-name">ring_buf</span><span class="token punctuation">&#123;</span>
+    DATA_TYPE buf<span class="token punctuation">[</span>BUF_SIZE<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> head<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> tail<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> size<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> capacity<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> <span class="token punctuation">(</span><span class="token operator">*</span>isempty<span class="token punctuation">)</span><span class="token punctuation">(</span>ring_buf<span class="token operator">*</span> rb<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>put<span class="token punctuation">)</span><span class="token punctuation">(</span>ring_buf<span class="token operator">*</span> rb<span class="token punctuation">,</span> DATA_TYPE c<span class="token punctuation">)</span><span class="token punctuation">;</span>    
+    <span class="token keyword">int</span> <span class="token punctuation">(</span><span class="token operator">*</span>gets<span class="token punctuation">)</span><span class="token punctuation">(</span>ring_buf<span class="token operator">*</span> rb<span class="token punctuation">,</span> DATA_TYPE<span class="token operator">*</span> dst<span class="token punctuation">,</span>  <span class="token keyword">int</span> len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token comment">/* 往环形缓存区存入数据
+@ring_buf* rb 需要处理的环形缓存区 通常为THIS
+@DATA_TYPE c  需要存入的数据    */</span> 
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">ring_buf_put</span><span class="token punctuation">(</span>ring_buf<span class="token operator">*</span> rb<span class="token punctuation">,</span> DATA_TYPE c<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    rb<span class="token operator">-></span>tail <span class="token operator">=</span> <span class="token punctuation">(</span>rb<span class="token operator">-></span>tail <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">%</span> rb<span class="token operator">-></span>capacity<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>rb<span class="token operator">-></span>head <span class="token operator">==</span> rb<span class="token operator">-></span>tail<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// 满了就覆盖</span>
+        rb<span class="token operator">-></span>head <span class="token operator">=</span> <span class="token punctuation">(</span>rb<span class="token operator">-></span>head <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">%</span> rb<span class="token operator">-></span>capacity<span class="token punctuation">;</span>
+        rb<span class="token operator">-></span>size <span class="token operator">=</span> rb<span class="token operator">-></span>capacity<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">else</span> rb<span class="token operator">-></span>size<span class="token operator">++</span><span class="token punctuation">;</span>               
+    rb<span class="token operator">-></span>buf<span class="token punctuation">[</span>rb<span class="token operator">-></span>tail<span class="token punctuation">]</span> <span class="token operator">=</span> c<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">/* 检查环形缓存区是否为空
+@ring_buf* rb 需要处理的环形缓存区 通常为THIS    */</span> 
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">ring_buf_isempty</span><span class="token punctuation">(</span>ring_buf<span class="token operator">*</span> rb<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span> <span class="token keyword">return</span> rb<span class="token operator">-></span>head <span class="token operator">==</span> rb<span class="token operator">-></span>tail<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span> 
+<span class="token comment">/* 从环形缓存区中获取数据
+@ring_buf* rb   需要处理的环形缓存区 通常为THIS 
+@DATA_TYPE* dst 存入目标
+@int len        获取的数据的个数    
+return: 成功复制到dst的数据个数 */</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">ring_buf_gets</span><span class="token punctuation">(</span>ring_buf<span class="token operator">*</span> rb<span class="token punctuation">,</span> DATA_TYPE<span class="token operator">*</span> dst<span class="token punctuation">,</span> <span class="token keyword">int</span> len<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 实际能复制的长度</span>
+    <span class="token keyword">int</span> cp_len <span class="token operator">=</span> len <span class="token operator">></span> rb<span class="token operator">-></span>size <span class="token operator">?</span> rb<span class="token operator">-></span>size <span class="token operator">:</span> len<span class="token punctuation">;</span>    
+    <span class="token comment">// 缓存区为空</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>rb<span class="token operator">-></span><span class="token function">isempty</span><span class="token punctuation">(</span>rb<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 将数据复制到dst，检查是否wrap</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>rb<span class="token operator">-></span>tail <span class="token operator">></span> rb<span class="token operator">-></span>head<span class="token punctuation">)</span>        <span class="token comment">// not wrap</span>
+        <span class="token function">memcpy</span><span class="token punctuation">(</span>dst<span class="token punctuation">,</span> rb<span class="token operator">-></span>buf <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> cp_len <span class="token operator">*</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>DATA_TYPE<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>                          <span class="token comment">// wrap</span>
+        <span class="token keyword">int</span> len_back<span class="token punctuation">;</span>              <span class="token comment">// 后部分的长度</span>
+        len_back <span class="token operator">=</span> rb<span class="token operator">-></span>capacity <span class="token operator">-</span> rb<span class="token operator">-></span>head<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>cp_len <span class="token operator">&lt;=</span> len_back<span class="token punctuation">)</span>     <span class="token comment">// 需要的数据长度 &lt;= 后半部的长度 直接复制需要的长度即可</span>
+            <span class="token function">memcpy</span><span class="token punctuation">(</span>dst<span class="token punctuation">,</span> rb<span class="token operator">-></span>buf <span class="token operator">+</span> rb<span class="token operator">-></span>head<span class="token punctuation">,</span> cp_len <span class="token operator">*</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>DATA_TYPE<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>                      <span class="token comment">// 需要的数据长度 > 后半部的长度 分两部分复制</span>
+            <span class="token function">memcpy</span><span class="token punctuation">(</span>dst<span class="token punctuation">,</span> rb<span class="token operator">-></span>buf <span class="token operator">+</span> rb<span class="token operator">-></span>head<span class="token punctuation">,</span> len_back <span class="token operator">*</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>DATA_TYPE<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>           <span class="token comment">// 后半部</span>
+            <span class="token function">memcpy</span><span class="token punctuation">(</span>dst <span class="token operator">+</span> len_back<span class="token punctuation">,</span> rb<span class="token operator">-></span>buf<span class="token punctuation">,</span> <span class="token punctuation">(</span>cp_len <span class="token operator">-</span> len_back<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>DATA_TYPE<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 前半部</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> cp_len<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 定义并初始化一个缓存区</span>
+<span class="token keyword">static</span> ring_buf log_buf <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">.</span>head <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>tail <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>size <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>capacity <span class="token operator">=</span> BUF_SIZE<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>isempty <span class="token operator">=</span> ring_buf_isempty<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>put <span class="token operator">=</span> ring_buf_put<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>gets <span class="token operator">=</span> ring_buf_gets<span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token comment">// -------------------------------------------------------------------------------------------</span>
+
+<span class="token comment">// 巧妙用vsnprintf将日志写到临时缓存区</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">myprintk</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>fmt<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    va_list args<span class="token punctuation">;</span> <span class="token comment">// typedef char *va_list;</span>
+    <span class="token keyword">int</span> len<span class="token punctuation">,</span> i<span class="token punctuation">;</span>
+    <span class="token function">va_start</span><span class="token punctuation">(</span>args<span class="token punctuation">,</span> fmt<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// ? 拆解可变参数？</span>
+    len <span class="token operator">=</span> <span class="token function">vsnprintf</span><span class="token punctuation">(</span>tmp_buf<span class="token punctuation">,</span> INT_MAX<span class="token punctuation">,</span> fmt<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">va_end</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 将临时缓存区数据放入环形缓存区中</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span>len<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> 
+        log_buf<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>log_buf<span class="token punctuation">,</span> tmp_buf<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 当缓存区有数据后，唤醒等待log_waitq的进程</span>
+    <span class="token function">wake_up_interruptible</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>log_waitq<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> len<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 参考fs/proc/kmsg.c的kmsg_read,</span>
+<span class="token keyword">static</span> <span class="token class-name">ssize_t</span> <span class="token function">mymsg_read</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>file<span class="token punctuation">,</span> <span class="token keyword">char</span> __user <span class="token operator">*</span>buff<span class="token punctuation">,</span> <span class="token class-name">size_t</span> count<span class="token punctuation">,</span> <span class="token class-name">loff_t</span> <span class="token operator">*</span>ppos<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">static</span> <span class="token keyword">int</span> read_flag <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">int</span> err<span class="token punctuation">,</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> cp_len<span class="token punctuation">;</span>
+    <span class="token comment">// 非阻塞方式打开 并且 buf为空 返回错误咯</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>file<span class="token operator">-></span>f_flags <span class="token operator">&amp;</span> O_NONBLOCK<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> log_buf<span class="token punctuation">.</span><span class="token function">isempty</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>log_buf<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span>EAGAIN<span class="token punctuation">;</span>
+
+    <span class="token comment">// 阻塞方式打开文件时 休眠直到buf不为空</span>
+    <span class="token comment">// 休眠时放入队列log_wait，唤醒时在队列里找，在写数据后唤醒</span>
+    err <span class="token operator">=</span> <span class="token function">wait_event_interruptible</span><span class="token punctuation">(</span>log_waitq<span class="token punctuation">,</span> <span class="token operator">!</span>log_buf<span class="token punctuation">.</span><span class="token function">isempty</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>log_buf<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 被唤醒之后做点事，copy_to_user</span>
+    <span class="token comment">// 方法一 类似视频==================================================</span>
+    <span class="token comment">// cp_len = log_buf.gets(&amp;log_buf, tmp_buf, count);   // 先从log_buf中取出到tmp_buf</span>
+    <span class="token comment">// while (!err &amp;&amp; i &lt; cp_len) &#123;                       // 然后搬运到用户buff</span>
+    <span class="token comment">//     err = __put_user(tmp_buf[i], buff);</span>
+    <span class="token comment">//     buff++;</span>
+    <span class="token comment">//     i++;</span>
+    <span class="token comment">// &#125;</span>
+    <span class="token comment">// // 没有出错返回i，出错返回错误值</span>
+    <span class="token comment">// if (!err)  </span>
+    <span class="token comment">//     err = i;</span>
+
+    <span class="token comment">// // cat /proc/mymsg 时打印不停 因为返回永远是有长度的</span>
+    <span class="token comment">// //  临时解决 flag 0 1</span>
+    <span class="token comment">// read_flag = read_flag == 1 ? 0 : 1; // 改变值</span>
+    <span class="token comment">// if (read_flag == 0) return 0;       // 首次读取返回读取长度</span>
+    <span class="token comment">// return err;  </span>
+
+    <span class="token comment">// 方法二 不用copy_to_user直接memcpy ================================</span>
+    <span class="token comment">// cat /proc/mymsg 时打印不停 因为返回永远是有长度的</span>
+    <span class="token comment">//  临时解决 flag 0 1</span>
+    read_flag <span class="token operator">=</span> read_flag <span class="token operator">==</span> <span class="token number">1</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token comment">// 改变值</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>read_flag <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>       <span class="token comment">// 首次读取返回读取长度</span>
+    <span class="token keyword">return</span> log_buf<span class="token punctuation">.</span><span class="token function">gets</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>log_buf<span class="token punctuation">,</span> buff<span class="token punctuation">,</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">file_operations</span> proc_mymsg_operations <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span>read		<span class="token operator">=</span> mymsg_read<span class="token punctuation">,</span>
+	<span class="token comment">// .poll		= kmsg_poll,</span>
+	<span class="token comment">// .open		= kmsg_open,</span>
+	<span class="token comment">// .release	= kmsg_release,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">proc_msg_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    my_entry <span class="token operator">=</span> <span class="token function">create_proc_entry</span><span class="token punctuation">(</span><span class="token string">"mymsg"</span><span class="token punctuation">,</span> S_IRUSR<span class="token punctuation">,</span> <span class="token operator">&amp;</span>proc_root<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>my_entry<span class="token punctuation">)</span>
+        my_entry<span class="token operator">-></span>proc_fops <span class="token operator">=</span> <span class="token operator">&amp;</span>proc_mymsg_operations<span class="token punctuation">;</span>
+    
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">proc_msg_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">remove_proc_entry</span><span class="token punctuation">(</span><span class="token string">"mymsg"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>proc_root<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token function">module_init</span><span class="token punctuation">(</span>proc_msg_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>proc_msg_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">EXPORT_SYMBOL</span><span class="token punctuation">(</span>myprintk<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// 导出</span>
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// EXPORT_SYMBOL是Linux内核中一个常见的工具，</span>
+<span class="token comment">// 其作用是讲一个”Symbol”（函数或者变量）导出到内核空间，使得内核的所有代码都可以使用。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="实验2"><a href="#实验2" class="headerlink" title="实验2"></a>实验2</h3><p>可以在自定义的文件中看到myprintk输出的内容。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 编译复制清空</span>
+<span class="token function">rm</span> /nfs/fs_root/tzb/* ./*.ko ./*.o ./led_user -r
+<span class="token function">make</span> <span class="token operator">&amp;&amp;</span> arm-linux-gcc -o led_user led_user.c
+<span class="token function">cp</span> ./*.ko ./led_user /nfs/fs_root/tzb/
+
+<span class="token comment"># 加载模块 测试用户</span>
+rmmod led_myprintk
+rmmod proc_msg
+insmod proc_msg.ko
+insmod led_myprintk.ko
+./led_user led0 on
+./led_user led0 off
+<span class="token function">cat</span> /proc/mymsg<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/images/20200605204946229.png"></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/wds2-qi-di-30-ke-1.3-create-proc-entry-printk-shu-chu-dao-zi-ji-de-log-wen-jian-mo-fang-proc-kmsg-myprintk-du-shui-mian-xie-hou-huan-xing-export-symbol-local/">https://wuyexkx.github.io/2021/05/14/wds2-qi-di-30-ke-1.3-create-proc-entry-printk-shu-chu-dao-zi-ji-de-log-wen-jian-mo-fang-proc-kmsg-myprintk-du-shui-mian-xie-hou-huan-xing-export-symbol-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                    <span class="chip bg-color">嵌入式Linux</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/wds2-qi-di-30-ke-4-nei-he-jiang-si-wu-fa-shu-ru-ye-mei-fan-ying-dang-nei-he-qia-si-shi-li-yong-nei-he-xin-zang-shi-zhong-zhong-duan-jian-cha-lian-xu-10s-nei-du-shi-tong-yi-ge-pid-ze-jiu-shi-zhe-ge-jin-cheng-chu-wen-ti-pt-regs-jie-gou-ti-bao-cun-liao-r-ji-cun-qi-de-zhi-da-yin-pc-hou-hui-dao-qian-mian-fen-xi-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="WDS2期第30课 4 内核僵死 无法输入也没反应 当内核卡死时利用内核心脏时钟中断检查连续10s内都是同一个pid则就是这个进程出问题，pt_regs结构体保存了R寄存器的值，打印PC后回到前面分析">
+                        
+                        <span class="card-title">WDS2期第30课 4 内核僵死 无法输入也没反应 当内核卡死时利用内核心脏时钟中断检查连续10s内都是同一个pid则就是这个进程出问题，pt_regs结构体保存了R寄存器的值，打印PC后回到前面分析</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/wds2-qi-di-30-ke-1.1-1.2-qu-dong-diao-shi-zhi-printk-de-shi-yong-define-dbg-printk-printk-xiu-gai-log-level-diao-zheng-da-yin-ji-bie-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="WDS2期第30课 1.1 1.2 驱动调试之printk的使用">
+                        
+                        <span class="card-title">WDS2期第30课 1.1 1.2 驱动调试之printk的使用</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
