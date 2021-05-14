@@ -280,13 +280,417 @@
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/ucos-shi-zhong-ding-shi-qi-fen-bian-lu-5-ge-xi-tong-ren-wu-ren-wu-yan-shi-xin-hao-liang-xiao-xi-dui-lie-shi-jian-biao-zhi-zu-tong-shi-deng-dai-duo-ge-nei-he-dui-xiang-local/">
+                    <a href="/2021/05/14/wds1-qi-di-10-ke-nei-he-3-nei-he-zhi-makefile-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="uCOS时钟 定时器分辨率 5个系统任务 任务延时 信号量 消息队列 时间标志组 同时等待多个内核对象">
+                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="WDS1期第10课 内核 3 内核之Makefile">
                             
-                            <span class="card-title">uCOS时钟 定时器分辨率 5个系统任务 任务延时 信号量 消息队列 时间标志组 同时等待多个内核对象</span>
+                            <span class="card-title">WDS1期第10课 内核 3 内核之Makefile</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                整个内核Makefile的分析过程与uboot的Makefile分析类似，最终都是找到链接文件lds和第一个文件.s是哪个，.S中可以看到内核的启动流程。
+选择子目录下的Makefile，drivers/char/Makefile，-y表示
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds1-qi-di-2-ke-luo-ji-1-cheng-xu-qi-dong-liu-cheng-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="WDS1期第2课 裸机1 - 程序启动流程">
+                            
+                            <span class="card-title">WDS1期第2课 裸机1 - 程序启动流程</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                启动方式有两种1 从nand启动2440内部有4K的SRAM，通常2440裸机程序由外部Nand启动，nand的前4K会被强制复制到内部4K的SRAM中，起始地址都是0。nand的地址是串行总线的方法（不是由cpu统一编址），不能像读RAM
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds1-qi-di-3-ke-luo-ji-2-cun-chu-guan-li-qi-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="WDS1期第3课 裸机2 - 存储管理器">
+                            
+                            <span class="card-title">WDS1期第3课 裸机2 - 存储管理器</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                CPU是通过存储管理单元访问到外部存储器的，存储器一般包括以下几个部分：地址线 数据线 （数据宽度），时钟频率，寻址相关跟芯片有关，如SDRAM bank-行地址-列地址以SDRAM为例，32位，16位，8位的内存接线方法不一样，如32位内
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds1-qi-di-4-ke-luo-ji-3-mmu-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="WDS1期第4课 裸机3 - MMU">
+                            
+                            <span class="card-title">WDS1期第4课 裸机3 - MMU</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                通常CPU不是和内存直接打交道，CPU执行程序时要存放A变量到内存的某个地址，由MMU做地址转换，然后交给存储管理器去存放。CPU —–(虚拟地址)—– MMU —–(物理地址)—— 存储管理器
+但是在裸机程序中，CPU也可以绕过MMU(不
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds1-qi-di-5-ke-luo-ji-4-nand-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="WDS1期第5课 裸机4 - nand">
+                            
+                            <span class="card-title">WDS1期第5课 裸机4 - nand</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                CPU统一编址
+
+片内内存SRAM （0地址）
+SDRAM
+网卡
+CPU寄存器
+
+NandNand由很多块组成，块由很多页组成。大页2Kbyte，小页512Byte。每页由2KByte存储数据的单元和64Byte的ooB组成，64页组成一块
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds2-qi-di-30-ke-3-zi-zhi-gong-ju-qu-dong-dai-ma-cao-zuo-ji-cun-qi-bian-ji-du-xie-yong-hu-dai-ma-diao-yong-jie-kou-du-xie-ji-cun-qi-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="WDS2期第30课 3 自制工具 驱动代码操作寄存器编辑读写 用户代码调用接口读写寄存器">
+                            
+                            <span class="card-title">WDS2期第30课 3 自制工具 驱动代码操作寄存器编辑读写 用户代码调用接口读写寄存器</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                相当于 再写一个驱动程序 提供ioctl函数，在函数里对cpu寄存器直接操作，读或者写，再写一个用户程序，调用ioctl函数简单操作寄存器。
+
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds2-qi-di-30-ke-2.2-mei-shi-me-dong-xi-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="WDS2期第30课2.2没什么东西">
+                            
+                            <span class="card-title">WDS2期第30课2.2没什么东西</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+根据栈信息分析函数调用过程./firstdrvtest onUnable to handle kernel paging request at virtual address 56000050pgd = c3e78000[56000050
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds2-qi-di-31-ke-1-ying-yong-cheng-xu-diao-shi-zhi-shi-yong-strace-strace-o-log.txt-rmmod-app-trace-fu-jin-cheng-chuang-jian-app-zi-jin-cheng-ji-lu-ri-zhi-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="WDS2期第31课 1 应用程序调试之使用strace strace -o log.txt rmmod app trace父进程创建app子进程记录日志">
+                            
+                            <span class="card-title">WDS2期第31课 1 应用程序调试之使用strace strace -o log.txt rmmod app trace父进程创建app子进程记录日志</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                 strace是一种调试工具，需要自己下载 打补丁 编译然后生成可执行文件。用可执行文件跟踪app输出到日志。
+strace 原理在使用时是这样： strace -o log.txt rmmod app，跟踪某个appstrace本身是父进
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/linux-ubuntu-de-yi-xie-ming-ling-linux-mu-lu-de-yi-yi-ban-ben-hao-zhu-ban-ben-wen-ding-or-kai-fa-xiu-ding-ci-shu-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="linux ubuntu的一些命令 linux目录的意义 版本号-主版本-稳定or开发-修订次数">
+                            
+                            <span class="card-title">linux ubuntu的一些命令 linux目录的意义 版本号-主版本-稳定or开发-修订次数</span>
                         </div>
                     </a>
 
@@ -294,9 +698,7 @@
                         <div class="summary block-with-text">
                             
                                 @[toc]
-delay.cOS_TICKS_PER_SEC表示CPU一秒钟进行多少次时钟中断，决定了最小的延时间隔，修改os时间节拍，5ms为周期：
-// UCOSII\CONFIG\os_cfg.h
-#define OS_TICKS_P
+开发板相关uboot设置bootargs： set bootargs noinitrd root=/dev/mtdblock3 rootfstype=yaffs2 init=/linuxrc console=ttySAC0设置
                             
                         </div>
                         <div class="publish-info">
@@ -332,21 +734,22 @@ delay.cOS_TICKS_PER_SEC表示CPU一秒钟进行多少次时钟中断，决定了
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/ucosiii-xi-tong-shi-zhong-shi-jian-chuo-zu-sai-yan-shi-yu-kong-xian-ren-wu-lin-jie-duan-jiu-xu-biao-you-xian-ji-wei-ying-she-biao-he-jiu-xu-ren-wu-lie-biao-local/">
+                    <a href="/2021/05/14/16-wei-cpu-jie-8-wei-ram-han-zi-zi-ku-cun-chu-jian-suo-shi-jian-bian-hua-xian-shi-mo-ni-messagebox-han-shu-ju-bu-bian-liang-he-xing-can-cai-neng-shi-ji-cun-qi-bian-liang-qu-yu-wei-yi-cao-zuo-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="ucosiii 系统时钟，时间戳 阻塞延时与空闲任务 临界段 就绪表（优先级位映射表和就绪任务列表）">
+                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="16位cpu接8位ram 汉字字库存储检索 时间变化显示 模拟MessageBox函数 局部变量和形参才能是寄存器变量 取余位移操作">
                             
-                            <span class="card-title">ucosiii 系统时钟，时间戳 阻塞延时与空闲任务 临界段 就绪表（优先级位映射表和就绪任务列表）</span>
+                            <span class="card-title">16位cpu接8位ram 汉字字库存储检索 时间变化显示 模拟MessageBox函数 局部变量和形参才能是寄存器变量 取余位移操作</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                系统时基 Cortex-M 内核自带一个系统定时器，使得os移植变得很简单。
-刚好 Cortex-M 内核中有一个系统定时器 SysTick， 它内嵌在 NVIC 中，是一个 24 位的递减的计数器，计数器每计数一次的时间为 1/SYSCL
+                                https://mp.weixin.qq.com/s/w3-3nyYk0qQ9lk05asFz9w
+经典：C语言在嵌入式系统编程时的注意事项嵌入式ARM 昨天
+C语言是一门通用计算机编程语言，应用广泛。C语言的设计目标是提供一种能以简易的方
                             
                         </div>
                         <div class="publish-info">
@@ -371,416 +774,6 @@ delay.cOS_TICKS_PER_SEC表示CPU一秒钟进行多少次时钟中断，决定了
                         
                         <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
                             <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/ucosiii-zhong-duan-yan-chi-fa-bu-guan-bi-zhong-duan-shi-jian-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="ucosiii 中断延迟发布关闭中断时间">
-                            
-                            <span class="card-title">ucosiii 中断延迟发布关闭中断时间</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]
-uCOS-III内核实现与应用开发实战指南—基于STM32.pdf
-中断相关通用基础关闭中段时间在操作系统中，很多时候我们会主动进入临界段，系统不允许当前状态被中断打断，故而在临界区发生的中断会被挂起，直到退出临界段时候打开中
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/jz2440-v3.0-linux-3.4.2-busybox1.20.0-nei-he-he-wen-jian-xi-tong-yi-zhi-xiu-gai-fen-qu-da-xiao-yaffs2-wen-jian-xi-tong-bu-ding-kai-yuan-zi-yuan-cha-zhao-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="JZ2440 v3.0 linux-3.4.2  busybox1.20.0内核 和 文件系统移植 修改分区大小 yaffs2文件系统补丁 开源资源查找">
-                            
-                            <span class="card-title">JZ2440 v3.0 linux-3.4.2  busybox1.20.0内核 和 文件系统移植 修改分区大小 yaffs2文件系统补丁 开源资源查找</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]
-零、平台 + 软件版本 + 烧写平台 和 版本
-JZ2440v3.0
-u-boot-1.1.6 + u-boot-1.1.6_jz2440.patch ftp://ftp.denx.de/pub/u-boot/
-linux-3
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/arm-de-yi-xie-ji-ben-gong-arm-hui-bian-chu-li-qi-chu-li-neng-li-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="ARM的一些基本功arm汇编 处理器处理能力">
-                            
-                            <span class="card-title">ARM的一些基本功arm汇编 处理器处理能力</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]
-寻址方式：处理器根据指令中给出的信息来找到指令所需操作数的方式。 
-ARM寄存器的分类和三种寻址方式讲的很清楚：https://blog.csdn.net/Sandeldeng/article/details/52954781
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/arm-soc-ban-ben-hao-xin-pian-xing-hao-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="ARM SoC版本号 芯片型号">
-                            
-                            <span class="card-title">ARM SoC版本号 芯片型号</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                ARM8 – ARM9 – ARM15 – ARM7依次为时间顺序。
-ARM8 单核ARM9 多核，功耗性能都不错，双核或四核。ARM15 性能强，功耗大，好点的手机。ARM7 性能差些，功耗低，4核8核，便宜，山寨平板电脑，哈哈哈。
-So
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/atlas200dk-mind-studio-wang-ye-ban-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Atlas200DK Mind_Studio 网页版">
-                            
-                            <span class="card-title">Atlas200DK Mind_Studio 网页版</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                找到Mind_Studio对应的版本：https://www.huaweicloud.com/ascend/resources/Tools/0DDK对应的版本，https://www.huaweicloud.com/ascend/resou
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/Atlas/" class="post-category">
-                                    Atlas
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/Atlas/">
-                            <span class="chip bg-color">Atlas</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/atlas-200-hilens-kit-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Atlas 200 HiLens Kit">
-                            
-                            <span class="card-title">Atlas 200 HiLens Kit</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]常见技术问题https://bbs.huaweicloud.com/forum/thread-38487-1-1.html
-默认密码
-硬件支持最多8路网络摄像头  1路USB摄像头。
-Hilens Kit USB接口当前只支持接
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/Atlas/" class="post-category">
-                                    Atlas
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/Atlas/">
-                            <span class="chip bg-color">Atlas</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/atlas-200-dk-deng-lu-mi-ma-zhi-qia-an-zhuang-ddk-he-lib-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Atlas 200 DK登录密码 制卡安装DDK和lib">
-                            
-                            <span class="card-title">Atlas 200 DK登录密码 制卡安装DDK和lib</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                华为云账户：账户：icv-hilens 密码：
-昇腾资源：https://www.huaweicloud.com/ascend/resources
-https://drive.google.com/drive/folders/1Drs_Ai
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/Atlas/" class="post-category">
-                                    Atlas
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/Atlas/">
-                            <span class="chip bg-color">Atlas</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/atlas-200-dkcam-she-xiang-tou-yolov3-opencv-can-shu-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="Atlas 200 DKcam   摄像头yolov3 opencv参数">
-                            
-                            <span class="card-title">Atlas 200 DKcam   摄像头yolov3 opencv参数</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]
-cam例程项目github地址 https://github.com/Atlas200dk/sample-ascendcamera
-
-修改param_configure.conf内容为remote_host=192.168.0
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/Atlas/" class="post-category">
-                                    Atlas
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/Atlas/">
-                            <span class="chip bg-color">Atlas</span>
                         </a>
                         
                     </div>
@@ -806,7 +799,7 @@ cam例程项目github地址 https://github.com/Atlas200dk/sample-ascendcamera
             
         </div>
         <div class="page-info col m4 l4 hide-on-small-only">
-            <div class="center-align b-text-gray">13 / 14</div>
+            <div class="center-align b-text-gray">13 / 21</div>
         </div>
         <div class="col s6 m4 l4">
             

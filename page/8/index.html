@@ -280,22 +280,23 @@
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-30-ke-4-nei-he-jiang-si-wu-fa-shu-ru-ye-mei-fan-ying-dang-nei-he-qia-si-shi-li-yong-nei-he-xin-zang-shi-zhong-zhong-duan-jian-cha-lian-xu-10s-nei-du-shi-tong-yi-ge-pid-ze-jiu-shi-zhe-ge-jin-cheng-chu-wen-ti-pt-regs-jie-gou-ti-bao-cun-liao-r-ji-cun-qi-de-zhi-da-yin-pc-hou-hui-dao-qian-mian-fen-xi-local/">
+                    <a href="/2021/05/14/jie-gou-ti-struct-lian-he-ti-union-tong-xin-xie-yi-da-xiao-duan-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="WDS2期第30课 4 内核僵死 无法输入也没反应 当内核卡死时利用内核心脏时钟中断检查连续10s内都是同一个pid则就是这个进程出问题，pt_regs结构体保存了R寄存器的值，打印PC后回到前面分析">
+                            <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="结构体struct 联合体union 通信协议 大小端">
                             
-                            <span class="card-title">WDS2期第30课 4 内核僵死 无法输入也没反应 当内核卡死时利用内核心脏时钟中断检查连续10s内都是同一个pid则就是这个进程出问题，pt_regs结构体保存了R寄存器的值，打印PC后回到前面分析</span>
+                            <span class="card-title">结构体struct 联合体union 通信协议 大小端</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]在内核时钟中断中加入打印pid和进程名信息。当内核卡死时，利用内核心脏时钟中断处理函数检查连续10s内都是同一个pid则就是这个进程出问题。
-查看内核中断，30号中断是时钟中断，查找Timer Tick，在这里，中断处理函数，
-
+                                参考：https://mp.weixin.qq.com/s/Zt0z-C__IZMsNVAvwQEAlQ
+@[toc]
+联合体占用的字节数与成员中最大数据类型占用的字节数。共享内存空间。
+1 管理不同的数据建立起了对应关系，我们的模块很多，
                             
                         </div>
                         <div class="publish-info">
@@ -306,8 +307,8 @@
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -318,8 +319,8 @@
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -331,13 +332,67 @@
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-30-ke-1.3-create-proc-entry-printk-shu-chu-dao-zi-ji-de-log-wen-jian-mo-fang-proc-kmsg-myprintk-du-shui-mian-xie-hou-huan-xing-export-symbol-local/">
+                    <a href="/2021/05/14/yu-dao-de-c-zhi-shi-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="WDS2期第30课 1.3 create_proc_entry printk输出到自己的log文件模仿 _proc_kmsg myprintk 读睡眠写后唤醒 EXPORT_SYMBOL">
+                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="遇到的 C++知识">
                             
-                            <span class="card-title">WDS2期第30课 1.3 create_proc_entry printk输出到自己的log文件模仿 _proc_kmsg myprintk 读睡眠写后唤醒 EXPORT_SYMBOL</span>
+                            <span class="card-title">遇到的 C++知识</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                std::make_shared一次申请内存操作，new需要两次
+return std::make_shared&lt;Type>();
+new Type();
+shared_ptr.reset 方法
+namespace
+namespace
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/hou-jie-lao-shi-p8-dui-zhan-nei-cun-guan-li-stack-zhan-and-heap-dui-sheng-ming-qi-de-jian-dan-li-jie-c-nei-cun-qu-yu-text-data-bss-dui-zhan-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="侯捷老师 P8堆栈内存管理 stack(栈) and heap(堆) 生命期 的简单理解（c++）内存区域text--data--bss--堆--栈">
+                            
+                            <span class="card-title">侯捷老师 P8堆栈内存管理 stack(栈) and heap(堆) 生命期 的简单理解（c++）内存区域text--data--bss--堆--栈</span>
                         </div>
                     </a>
 
@@ -345,7 +400,10 @@
                         <div class="summary block-with-text">
                             
                                 @[toc]
-让printk的输出到自己的log文件 /proc/my_msg在用户的命令行中 执行 cat /proc/kmsg时候，进入内核态，内核找到对应的fops调用read，在read中copy_to_user对proc的操作函数
+侯捷老师 P8堆栈内存管理 https://www.bilibili.com/video/av19038490/?p=8
+#include &lt;iostream>
+
+/* stack(栈) and heap(堆) and 
                             
                         </div>
                         <div class="publish-info">
@@ -356,8 +414,8 @@
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -368,8 +426,8 @@
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -381,22 +439,24 @@
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-30-ke-1.1-1.2-qu-dong-diao-shi-zhi-printk-de-shi-yong-define-dbg-printk-printk-xiu-gai-log-level-diao-zheng-da-yin-ji-bie-local/">
+                    <a href="/2021/05/14/ba-c-huo-zhe-cpp-yu-yan-dang-zuo-shell-jiao-ben-wen-jian-yun-xing-de-sao-cao-zuo-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="WDS2期第30课 1.1 1.2 驱动调试之printk的使用">
+                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="把c或者cpp语言当作shell脚本文件运行的骚操作">
                             
-                            <span class="card-title">WDS2期第30课 1.1 1.2 驱动调试之printk的使用</span>
+                            <span class="card-title">把c或者cpp语言当作shell脚本文件运行的骚操作</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]内核调试方法有几种
-printk()printk的数据实际存放在数组log_buf，也在console打印。
-dmesg命令可以看到log_buf数组的打印数据，从这个文件/proc/kmsg里读取，/etc/fstab文件系统
+                                #if 0	// C不编译以下内容	#同时也是shell的注释
+filename="$0"					# 获取整个文件名
+name="$&#123;filename%.*&#125;"			# 去除后缀
+CC="gcc"
+if [ "$&#1
                             
                         </div>
                         <div class="publish-info">
@@ -407,8 +467,8 @@ dmesg命令可以看到log_buf数组的打印数据，从这个文件/proc/kmsg�
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -419,8 +479,8 @@ dmesg命令可以看到log_buf数组的打印数据，从这个文件/proc/kmsg�
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -432,265 +492,13 @@ dmesg命令可以看到log_buf数组的打印数据，从这个文件/proc/kmsg�
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-29-ke-1-2-3-luo-ban-diao-shi-fang-fa-dian-deng-chuan-kou-jtag-chong-ding-wei-qian-de-dai-ma-bu-neng-yong-yuan-ma-ji-bie-de-diao-shi-zhi-neng-yong-hui-bian-ji-bie-de-diao-shi-zhu-tiao-zhi-ling-diao-shi-local/">
+                    <a href="/2021/05/14/zhi-zhen-yu-shu-zu-a-he-a-yi-er-wei-chai-jie-yuan-ze-you-zuo-gui-ze-zhi-xiang-han-shu-zhi-zhen-shu-zu-de-zhi-zhen-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="WDS2期第29课 1 2 3 裸板调试方法 点灯 串口 JTAG 重定位前的代码不能用源码级别的调试只能用汇编级别的调试，逐条指令调试。">
+                            <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="指针与数组 a和&amp;a, 一二维 拆解原则右左规则 指向函数指针数组的指针">
                             
-                            <span class="card-title">WDS2期第29课 1 2 3 裸板调试方法 点灯 串口 JTAG 重定位前的代码不能用源码级别的调试只能用汇编级别的调试，逐条指令调试。</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]
-裸板调试方 需要结合汇编源码点灯串口打印JTAGJTAG(Joint Test Action Group，联合测试工作组)，主要用于芯片内部测试。标准的JTAG接口是4线：TMS、TCK、TDI、TDO，分别为模式选择、时钟、
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-27-ke-1-2-3-dma-shu-ju-ban-yun-gong-zuo-yuan-mu-de-chang-du-ban-yun-wan-cheng-chan-sheng-dma-zhong-duan-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="WDS2期第27课 1 2 3  DMA 数据搬运工作 源 目的 长度 搬运完成产生DMA中断">
-                            
-                            <span class="card-title">WDS2期第27课 1 2 3  DMA 数据搬运工作 源 目的 长度 搬运完成产生DMA中断</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]DMA(Direct Memory Access，直接存储器访问)cpu命令DMA控制器，搬运工作由DMA控制器完成。地址设置，拷贝完地址自增、自减、不动。手动启动和外部启动。如mic采集到数据存入自己的i2s中buff，满了之
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-24-ke-2-iic-linux-xia-qu-dong-cheng-xu-i2c-driver-jie-gou-ti-li-you-attach-adapter-yong-i2c-zong-xian-qu-dong-cheng-xu-de-i2c-transfer-han-shu-shou-fa-shu-ju-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="WDS2期第24课 2 IIC Linux下驱动程序 i2c_driver结构体里有attach_adapter  用i2c总线驱动程序的i2c_transfer函数收发数据">
-                            
-                            <span class="card-title">WDS2期第24课 2 IIC Linux下驱动程序 i2c_driver结构体里有attach_adapter  用i2c总线驱动程序的i2c_transfer函数收发数据</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]参考drivers\i2c\busses\i2c-s3c2410.c，drivers\i2c\chips\eeprom.c，drivers\i2c\chips\ds1374.c。
-如何写i2c设备驱动程序
-
-分配一个i2c_dr
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-24-ke-1-iic-qu-dong-kuang-jia-adapter-he-drv-zui-zhong-drv-de-attach-adapter-de-i2c-probe-zhong-adapter.master-xfer-que-ding-she-bei-ran-hou-function-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="WDS2期第24课 1 IIC 驱动框架 adapter和drv 最终drv的attach_adapter的i2c_probe中adapter.master_xfer确定设备然后function">
-                            
-                            <span class="card-title">WDS2期第24课 1 IIC 驱动框架 adapter和drv 最终drv的attach_adapter的i2c_probe中adapter.master_xfer确定设备然后function</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                APP： open read write
------------------------------------------------------------
-drv_open drv_read drv_write	IIC设备驱动，知道数
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-23-ke-2-iic-luo-ban-cheng-xu-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="WDS2期第23课 2 IIC 裸板程序">
-                            
-                            <span class="card-title">WDS2期第23课 2 IIC 裸板程序</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                程序假设从nand启动，上电时nand前4k被自动复制到片内4K内存SRAM，从0地址开始执行，前4k中的copy2ram前面的代码必须是位置无关码，后面的按照程序员指定的连接地址执行。
-head.S@*******************
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-23-ke-1-iic-inter-integrated-circuit-jian-dan-jie-shao-qi-shi-ting-zhi-ack-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="WDS2期第23课 1 IIC(Inter-Integrated Circuit) 简单介绍 起始停止ACK">
-                            
-                            <span class="card-title">WDS2期第23课 1 IIC(Inter-Integrated Circuit) 简单介绍 起始停止ACK</span>
+                            <span class="card-title">指针与数组 a和&amp;a, 一二维 拆解原则右左规则 指向函数指针数组的指针</span>
                         </div>
                     </a>
 
@@ -698,11 +506,8 @@ head.S@*******************
                         <div class="summary block-with-text">
                             
                                 @[toc]
-参考资料参考 面试总结，Linux中IIC驱动框架等
-参考 程序代码，传输流程理解
-IIC 即Inter-Integrated Circuit(集成电路总线）
-I2C总线是PHLIPS公司推出的一种串行总线。
-I2C总线只有两
+拆解原则（右左规则）https://www.cnblogs.com/zhangjing0502/archive/2012/06/08/2542059.html
+因为C语言所有复杂的指针声明，都是由各种声明嵌套构成的。而右左法则
                             
                         </div>
                         <div class="publish-info">
@@ -713,8 +518,8 @@ I2C总线只有两
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -725,8 +530,8 @@ I2C总线只有两
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -738,22 +543,26 @@ I2C总线只有两
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-22-ke-1-2-3-wang-qia-dm9000c-yi-zhi-pei-zhi-ji-di-zhi-zhong-duan-yin-jiao-shi-xu-shi-jian-mo-ren-de-ke-yong-geng-kuai-yao-diao-zi-ji-she-zhi-nei-cun-kong-zhi-qi-wei-kuan-yu-du-qu-shu-ju-zi-jie-chang-du-local/">
+                    <a href="/2021/05/14/thread-1-2-jin-cheng-he-xian-cheng-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="WDS2期第22课 1 2 3 网卡DM9000C移植 配置基地址、中断、引脚时序时间(默认的可用，更快要调自己设置)    内存控制器 位宽与读取数据字节长度">
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="thread 1 2进程和线程">
                             
-                            <span class="card-title">WDS2期第22课 1 2 3 网卡DM9000C移植 配置基地址、中断、引脚时序时间(默认的可用，更快要调自己设置)    内存控制器 位宽与读取数据字节长度</span>
+                            <span class="card-title">thread 1 2进程和线程</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                网卡驱动移植 配置基地址、中断、引脚时序时间(默认的可用，更快要调自己设置)内核自带的DM9000C网卡驱动不能用，移植DM900C芯片厂家提供的驱动程序。
-网卡与内存接口一样，修改 基地址 和 中断引脚。
-引脚设置，中断设置需要的头文件：
+                                @[toc]
+章节1前言
+课时1.1 前言
+章节2正式开讲
+课时2.1 并发基本概念及实现，进程、线程基本概念
+课时2.2 线程启动、结束，创建线程多法、join，detach
+课时2.3 线程传参详解，detach()大坑，成员函数做线程
                             
                         </div>
                         <div class="publish-info">
@@ -764,8 +573,8 @@ I2C总线只有两
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -776,8 +585,209 @@ I2C总线只有两
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/c-yu-yan-hui-diao-han-shu-yi-qsort-wei-li-shang-ceng-diao-xia-ceng-xia-ceng-fan-hui-diao-hui-diao-han-shu-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="C语言 回调函数 以qsort为例 上层调下层-下层返回调回调函数">
+                            
+                            <span class="card-title">C语言 回调函数 以qsort为例 上层调下层-下层返回调回调函数</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                参考：https://mp.weixin.qq.com/s/NxuVlyl75AzGHsruzbFkvw
+
+一般函数调用的顺序都是上层函数（调用者）调用下层函数（被调用者）。+++++++++++++++++++++++++++++++++
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/c-yu-yan-shi-xian-feng-zhuang-ji-cheng-duo-tai-han-shu-chong-zai-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="C语言实现封装 继承 多态 函数重载">
+                            
+                            <span class="card-title">C语言实现封装 继承 多态 函数重载</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                @[toc]
+有纯虚函数的类叫做抽象类(abstract class)，它不能生成对象。
+用基类指针访问虚函数: 这时虽然大家都是Animal*，但是调用的Speak函数却是各自的类实现的Speak。 用哪个子类初始化基类指针就可以调用对应
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/c-new-features-lambda-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="C++new features — lambda">
+                            
+                            <span class="card-title">C++new features — lambda</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                lambda产生的是一个对象。[]导入符号，()函数参数，mutable说明[]内的参数是否可以改动，thowSpec抛出异常，-&gt;retType返回类型，后面三个为可选项，只要存在一个就要写前面的()。&#123;&#125;函数b
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/c-ke-bian-can-shu-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="C可变参数">
+                            
+                            <span class="card-title">C可变参数</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                函数 func() 最后一个参数写成省略号，即三个点号（…），省略号之前的那个参数是 int，代表了要传递的可变参数的总数。为了使用这个功能，您需要使用stdarg.h头文件，该文件提供了实现可变参数功能的函数和宏。
+https://www
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -803,7 +813,7 @@ I2C总线只有两
             
         </div>
         <div class="page-info col m4 l4 hide-on-small-only">
-            <div class="center-align b-text-gray">8 / 14</div>
+            <div class="center-align b-text-gray">8 / 21</div>
         </div>
         <div class="col s6 m4 l4">
             
