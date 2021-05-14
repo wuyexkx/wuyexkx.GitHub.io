@@ -241,7 +241,7 @@
                     var typed = new Typed("#subtitle", {
                         strings: [ 
                             
-                                "The only constant in life is change.",
+                                "The only constant is change.",
                             
                         ],
                         startDelay: 300,
@@ -280,13 +280,13 @@
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-21-ke-1-2-wang-qia-qu-dong-kuang-jia-mo-ni-xu-ni-wang-qia-jie-shou-sk-buff-shang-bao-yi-ban-wang-qia-han-jia-du-hui-gei-qu-dong-cheng-xu-xiu-gai-ji-ke-local/">
+                    <a href="/2021/05/14/linux-cha-zhao-ming-ling-find-wen-jian-grep-wen-jian-nei-rong-inode-suo-yin-jie-dian-ying-lian-jie-ruan-lian-jie-inode-he-mu-lu-stat-cha-kan-wen-jian-inode-shu-ju-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="WDS2期第21课 1 2 网卡驱动框架 模拟虚拟网卡接收sk_buff上报  一般网卡厂家都会给驱动程序，修改即可">
+                            <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Linux 查找命令 find文件  grep文件内容 inode索引节点硬链接软连接 inode和目录 stat查看文件inode数据">
                             
-                            <span class="card-title">WDS2期第21课 1 2 网卡驱动框架 模拟虚拟网卡接收sk_buff上报  一般网卡厂家都会给驱动程序，修改即可</span>
+                            <span class="card-title">Linux 查找命令 find文件  grep文件内容 inode索引节点硬链接软连接 inode和目录 stat查看文件inode数据</span>
                         </div>
                     </a>
 
@@ -294,14 +294,8 @@
                         <div class="summary block-with-text">
                             
                                 @[toc]
-比较字符设备 和 块设备比较字符设备和块设备，字符设备。字符设备，首先在user中先open一个 /dev/xxx，块设备，首先挂接一个盘 mount /dev/xxx。
-
-主设备号
-fops
-register
-入口出口
-
-块
+grepgrep hello* ./ -r 查找当前目录下内容包含hello字符串的文件grep –i &quot;被查找的字符串&quot; 文件名 查找时不区分大小写 -i
+find find . -name *hello
                             
                         </div>
                         <div class="publish-info">
@@ -337,65 +331,13 @@ register
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-20-ke-3-nor-qu-dong-cheng-xu-zhi-xu-ying-jian-xiang-guan-cao-zuo-local/">
+                    <a href="/2021/05/14/ubuntu-xi-tong-suo-you-wen-zi-quan-bu-bian-cheng-kuang-kuang-zhong-duan-ye-shi-kuang-kuang-wu-fa-xian-shi-zi-yi-ban-shi-an-zhuang-wps-deng-xu-yao-te-shu-zi-ti-de-ruan-jian-shi-po-pi-liao-xi-tong-mo-ren-zi-ti-mmp-qi-ta-da-an-gu-yi-wu-dao-ren-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="WDS2期第20课 3 nor驱动程序 只需硬件相关操作">
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Ubuntu系统所有文字全部变成框框 终端也是框框 无法显示字 （一般是安装WPS等需要特殊字体的软件时破坏了系统默认字体）mmp其他答案故意误导人">
                             
-                            <span class="card-title">WDS2期第20课 3 nor驱动程序 只需硬件相关操作</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]参考drivers\mtd\maps\physmap.c。最后分析出我们配置硬件相关需要做：
-
-分配map_info结构体
-设置 物理基地址(phys)、大小(size)、位宽(bankwidth) 虚拟基地址(virt)。 内
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-20-ke-2-nor-flash-qu-dong-kuang-jia-chai-yi-zui-xiao-ji-di-zhi-he-wei-kuan-local/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="WDS2期第20课 2 NOR FLASH 驱动框架 差异最小-基地址和位宽">
-                            
-                            <span class="card-title">WDS2期第20课 2 NOR FLASH 驱动框架 差异最小-基地址和位宽</span>
+                            <span class="card-title">Ubuntu系统所有文字全部变成框框 终端也是框框 无法显示字 （一般是安装WPS等需要特殊字体的软件时破坏了系统默认字体）mmp其他答案故意误导人</span>
                         </div>
                     </a>
 
@@ -403,8 +345,7 @@ register
                         <div class="summary block-with-text">
                             
                                 @[toc]
-nor flash驱动框架 分析右下角放大协议层已经做好，需要配置的是硬件相关的设置，基地址和位宽。
-字符设备就找字符设备驱动程序，普通文件就找文件系统 找到块设备驱动，文件系统把对文件的读写转换成对块设备的读写。RAMblo
+乱码无法查看命令的情况 盲输*劳资terminal都看不到文字了，mmp，很多答案完全是误导乱搞，故意不说权限问题（因为反正你也看不到输出信息。。。）让永远弄不好还浪费宝贵的时间，我简直要***，！！！！！！！！！！！！！！！
                             
                         </div>
                         <div class="publish-info">
@@ -415,8 +356,8 @@ nor flash驱动框架 分析右下角放大协议层已经做好，需要配置�
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
                                 </a>
                                 
                                 
@@ -427,8 +368,8 @@ nor flash驱动框架 分析右下角放大协议层已经做好，需要配置�
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/Ubuntu/">
+                            <span class="chip bg-color">Ubuntu</span>
                         </a>
                         
                     </div>
@@ -440,13 +381,13 @@ nor flash驱动框架 分析右下角放大协议层已经做好，需要配置�
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-20-ke-1-nor-flash-yuan-li-ji-ying-jian-cao-zuo-nand-nor-bi-jiao-uboot-ce-shi-norflash-du-he-nei-cun-yi-yang-xie-xu-yao-jin-ru-program-mo-shi-local/">
+                    <a href="/2021/05/14/ubuntu-chang-yong-ming-ling-geng-xin-shan-chu-ruan-jian-geng-gai-quan-xian-zhong-wen-shu-ru-fa-sunpinyin-jing-xiang-yuan-an-zhuang-gcc-firefox-an-zhuang-flash-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="WDS2期第20课 1 NOR FLASH原理及硬件操作 nand nor比较 uboot测试norflash 读和内存一样 写需要进入program模式">
+                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="ubuntu常用命令 更新 删除软件 更改权限 中文输入法SunPinYin 镜像源 安装gcc firefox安装flash">
                             
-                            <span class="card-title">WDS2期第20课 1 NOR FLASH原理及硬件操作 nand nor比较 uboot测试norflash 读和内存一样 写需要进入program模式</span>
+                            <span class="card-title">ubuntu常用命令 更新 删除软件 更改权限 中文输入法SunPinYin 镜像源 安装gcc firefox安装flash</span>
                         </div>
                     </a>
 
@@ -454,37 +395,11 @@ nor flash驱动框架 分析右下角放大协议层已经做好，需要配置�
                         <div class="summary block-with-text">
                             
                                 @[toc]
-NAND 和 NOR对比
+1.获取root权限，修改只读文件1.  sudo su   ---输入密码
+2. cd /etc/default  切换到指定路径
+3. sudo gedit xxx.conf
 
-
-
-NOR
-NAND
-
-
-
-接口
-RAM-Like，引脚多
-引脚少，复用
-
-
-容量
-小 1M 2M…
-大 512M 8G…
-
-
-读
-简单
-复杂
-
-
-写
-发出特定命令，慢
-发出特定命令，快
-
-
-价格
-
+2.修改root密码sudo passwd 
                             
                         </div>
                         <div class="publish-info">
@@ -495,8 +410,8 @@ RAM-Like，引脚多
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
                                 </a>
                                 
                                 
@@ -507,8 +422,8 @@ RAM-Like，引脚多
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/Ubuntu/">
+                            <span class="chip bg-color">Ubuntu</span>
                         </a>
                         
                     </div>
@@ -520,21 +435,22 @@ RAM-Like，引脚多
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-19-ke-3-nand-qu-dong-cheng-xu-bian-xie-cpu-yu-nand-de-yin-jiao-dian-ping-shi-xu-dui-ying-add-mtd-partitions-nfs-qi-dong-jia-zai-nand-qu-dong-ge-shi-hua-nand-gua-jie-local/">
+                    <a href="/2021/05/14/ubuntu-xia-chuan-kou-gong-ju-putty-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="WDS2期第19课 3 NAND驱动程序编写 cpu与nand的引脚电平时序对应，add_mtd_partitions，nfs启动-加载nand驱动-格式化nand-挂接">
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="ubuntu下串口工具putty">
                             
-                            <span class="card-title">WDS2期第19课 3 NAND驱动程序编写 cpu与nand的引脚电平时序对应，add_mtd_partitions，nfs启动-加载nand驱动-格式化nand-挂接</span>
+                            <span class="card-title">ubuntu下串口工具putty</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]参考：drivers\mtd\nand\s3c2410.cdrivers\mtd\nand\at91_nand.c
-设置电平维持时间的寄存器，需要将cpu和nand对应看2440手册 ，P225，2440手册nand P217，
+                                
+安装sudo apt-get install putty
+简单配置先配置自己的需要，然后save，或者load已存在的配置，在这基础上再配置，最终记得保存如默认颜色蓝色很难看，可以在Window–colours–ANSI Blue Bol
                             
                         </div>
                         <div class="publish-info">
@@ -545,8 +461,8 @@ RAM-Like，引脚多
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
                                 </a>
                                 
                                 
@@ -557,8 +473,8 @@ RAM-Like，引脚多
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/Ubuntu/">
+                            <span class="chip bg-color">Ubuntu</span>
                         </a>
                         
                     </div>
@@ -570,21 +486,23 @@ RAM-Like，引脚多
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-19-ke-2-nand-qu-dong-kuang-jia-local/">
+                    <a href="/2021/05/14/ubuntu-dong-tai-bi-zhi-shi-pin-komorebi-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="WDS2期第19课 2 NAND驱动框架">
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="ubuntu动态壁纸 视频 Komorebi">
                             
-                            <span class="card-title">WDS2期第19课 2 NAND驱动框架</span>
+                            <span class="card-title">ubuntu动态壁纸 视频 Komorebi</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                每一层专注自己的一小块，命令层关注 具体怎么收发，协议层关注 收发什么实现控制（识别 读写 擦除），块设备关注 优化工作（合并 调序等），字符设备直接调取mtd_info的read write就行。
-MTD ( Memory Technol
+                                
+安装软件 Komorebi先下载，再安装https://github.com/cheesecakeufo/komorebi/releases
+ sudo apt install ./-2.1-64-bit.deb
+支持视频还需要安装库 g
                             
                         </div>
                         <div class="publish-info">
@@ -595,8 +513,8 @@ MTD ( Memory Technol
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
                                 </a>
                                 
                                 
@@ -607,8 +525,8 @@ MTD ( Memory Technol
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/Ubuntu/">
+                            <span class="chip bg-color">Ubuntu</span>
                         </a>
                         
                     </div>
@@ -620,13 +538,13 @@ MTD ( Memory Technol
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-19-ke-1-nand-yuan-li-ji-ying-jian-cao-zuo-tong-guo-ming-ling-zai-uboot-zhong-cao-zuo-nand-lian-xu-fa-song-5-ge-zhou-qi-de-di-zhi-zhi-local/">
+                    <a href="/2021/05/14/putty-huo-zhe-qi-ta-gong-ju-ssh-lian-jie-linux-chu-xian-access-denied-mi-ma-ye-zheng-que-root-neng-deng-qi-ta-yong-hu-deng-bu-liao-zhi-you-root-yong-hu-bu-neng-deng-mou-ge-yong-hu-bu-neng-deng-de-qing-kuang-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="WDS2期第19课 1 NAND原理及硬件操作 通过命令在uboot中操作NAND 连续发送5个周期的地址值">
+                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="putty或者其他工具 ssh连接Linux出现Access denied 密码也正确 root能登其他用户登不了，只有root用户不能登 某个用户不能登的情况">
                             
-                            <span class="card-title">WDS2期第19课 1 NAND原理及硬件操作 通过命令在uboot中操作NAND 连续发送5个周期的地址值</span>
+                            <span class="card-title">putty或者其他工具 ssh连接Linux出现Access denied 密码也正确 root能登其他用户登不了，只有root用户不能登 某个用户不能登的情况</span>
                         </div>
                     </a>
 
@@ -634,9 +552,11 @@ MTD ( Memory Technol
                         <div class="summary block-with-text">
                             
                                 @[toc]
-app：open read write "xxx.txt"
-= = = = = = = = = = = = = = = = = = = = = = = = 文件的读写
-文件系统：vfat、ext2、ext3、yaffs2、jf
+简单说明需要配置这个文件，sudo vim /etc/ssh/sshd_config。
+在文件内容中加入相应内容即可：
+
+PermitRootLogin yes 首先这个选项 ，是保证root用户登陆的必须选项，
+AllowU
                             
                         </div>
                         <div class="publish-info">
@@ -647,8 +567,8 @@ app：open read write "xxx.txt"
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
                                 </a>
                                 
                                 
@@ -659,8 +579,8 @@ app：open read write "xxx.txt"
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/Ubuntu/">
+                            <span class="chip bg-color">Ubuntu</span>
                         </a>
                         
                     </div>
@@ -672,22 +592,25 @@ app：open read write "xxx.txt"
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-18-ke-3-kuai-she-bei-qu-dong-cheng-xu-yong-nei-cun-mo-ni-ci-pan-dian-ti-suan-fa-du-qu-xie-ru-fen-qu-ge-shi-hua-local/">
+                    <a href="/2021/05/14/ubuntu16.04-an-zhuang-nvidia-xian-qia-cuda-cudnn-tensorflow-zhuang-wan-xian-qia-wu-fa-deng-ru-ubuntu-deng-wen-ti-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="WDS2期第18课 3 块设备驱动程序 用内存模拟磁盘 电梯算法 读取写入 分区 格式化">
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="ubuntu16.04 安装nvidia显卡、cuda、cuDNN、tensorflow 装完显卡无法登入ubuntu等问题">
                             
-                            <span class="card-title">WDS2期第18课 3 块设备驱动程序 用内存模拟磁盘 电梯算法 读取写入 分区 格式化</span>
+                            <span class="card-title">ubuntu16.04 安装nvidia显卡、cuda、cuDNN、tensorflow 装完显卡无法登入ubuntu等问题</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]参考drivers\block\xd.c和drivers\block\z2ram.c
-ls /dev/sd* -l 查看所有磁盘设备，次设备号为0的磁盘表示整个磁盘，此设备号为1、2、3表示该盘的第几个分区。
-程序1 用内存模拟
+                                下载地址1.nvidia显卡驱动下载https://www.geforce.cn/drivers
+
+2.cuDNN下载https://developer.nvidia.com/rdp/cudnn-archive
+
+下载需要账号。
+3.ten
                             
                         </div>
                         <div class="publish-info">
@@ -698,8 +621,8 @@ ls /dev/sd* -l 查看所有磁盘设备，次设备号为0的磁盘表示整个�
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
                                 </a>
                                 
                                 
@@ -710,8 +633,8 @@ ls /dev/sd* -l 查看所有磁盘设备，次设备号为0的磁盘表示整个�
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/Ubuntu/">
+                            <span class="chip bg-color">Ubuntu</span>
                         </a>
                         
                     </div>
@@ -723,23 +646,22 @@ ls /dev/sd* -l 查看所有磁盘设备，次设备号为0的磁盘表示整个�
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-17-ke-3-4-usb-she-bei-qu-dong-cheng-xu-1-jian-dan-bian-xie-shu-biao-an-jian-lse-usb-request-block-struct-urb-zong-xian-qu-dong-she-bei-mo-xing-ti-gong-shu-ju-she-bei-qu-dong-cheng-xu-chu-li-shu-ju-local/">
+                    <a href="/2021/05/14/ubuntu16.04-an-zhuang-python36-da-bu-kai-zhong-duan-pip-wu-fa-shi-yong-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="WDS2期第17课 3 4 USB设备驱动程序1简单编写 鼠标按键lse usb request block struct urb 总线驱动设备模型提供数据 设备驱动程序处理数据">
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="ubuntu16.04安装python36 打不开终端  pip无法使用">
                             
-                            <span class="card-title">WDS2期第17课 3 4 USB设备驱动程序1简单编写 鼠标按键lse usb request block struct urb 总线驱动设备模型提供数据 设备驱动程序处理数据</span>
+                            <span class="card-title">ubuntu16.04安装python36 打不开终端  pip无法使用</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                如何写驱动程序USB总线驱动程序 在我们接入USB设备时会自动构建一个USBdevice并注册到bus的dev中。我们需要做的是构建driver驱动程序，将程序注册到bus中。
-如何写USB设备驱动程序：
-
-分配/设置usb_driver结
+                                
+配置软件仓库   sudo add-apt-repository ppa:jonathonf/python-3.6
+检查系统软件包并安装Python3.6 sudo apt-get update sudo apt-get install 
                             
                         </div>
                         <div class="publish-info">
@@ -750,8 +672,8 @@ ls /dev/sd* -l 查看所有磁盘设备，次设备号为0的磁盘表示整个�
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
                                 </a>
                                 
                                 
@@ -762,8 +684,8 @@ ls /dev/sd* -l 查看所有磁盘设备，次设备号为0的磁盘表示整个�
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/Ubuntu/">
+                            <span class="chip bg-color">Ubuntu</span>
                         </a>
                         
                     </div>
@@ -775,13 +697,13 @@ ls /dev/sd* -l 查看所有磁盘设备，次设备号为0的磁盘表示整个�
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-18-ke-1-2-kuai-she-bei-qu-dong-cheng-xu-fen-xi-ll-rw-block-di-ceng-du-xie-kuai-wen-jian-xi-tong-jiang-dui-wen-jian-de-du-xie-zhuan-hua-cheng-dui-shan-qu-de-du-xie-local/">
+                    <a href="/2021/05/14/ubuntu18-ruan-jian-yuan-chang-yong-ruan-jian-an-zhuang-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="WDS2期第18课 1 2 块设备驱动程序 分析ll_rw_block底层读写块 文件系统将对文件的读写转化成对扇区的读写">
+                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="ubuntu18软件源 常用软件安装">
                             
-                            <span class="card-title">WDS2期第18课 1 2 块设备驱动程序 分析ll_rw_block底层读写块 文件系统将对文件的读写转化成对扇区的读写</span>
+                            <span class="card-title">ubuntu18软件源 常用软件安装</span>
                         </div>
                     </a>
 
@@ -789,11 +711,9 @@ ls /dev/sd* -l 查看所有磁盘设备，次设备号为0的磁盘表示整个�
                         <div class="summary block-with-text">
                             
                                 @[toc]
-总结字符设备驱动程序
 
-查询方式：在读函数中返回引脚状态，比较前后值。（cpu占用太高）
-休眠唤醒：用户读驱动读，没有数据休眠，有数据被中断服务程序唤醒然后copy_to_user。（没有数据则一直休眠）
-poll机制：休眠时
+先备份文件/etc/apt/sources.list cp &#x2F;etc&#x2F;apt&#x2F;sources.list &#x2F;etc&#x2F;apt&#x2F;sources.list.bakxxx
+然
                             
                         </div>
                         <div class="publish-info">
@@ -804,8 +724,8 @@ poll机制：休眠时
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
                                 </a>
                                 
                                 
@@ -816,8 +736,61 @@ poll机制：休眠时
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/Ubuntu/">
+                            <span class="chip bg-color">Ubuntu</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/gnu-grub-she-zhi-grub-jie-mian-qi-dong-deng-dai-shi-jian-local/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="gnu grub 设置grub界面启动等待时间">
+                            
+                            <span class="card-title">gnu grub 设置grub界面启动等待时间</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                默认10秒，有时有点措手不及，这里改成60秒
+
+超级权限修改 /etc/default/grub 文件内容。（权限修改保存文件简单方法sudo gedit /etc/default/grub）
+终端运行 sudo update-grub
+重
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/Ubuntu/">
+                            <span class="chip bg-color">Ubuntu</span>
                         </a>
                         
                     </div>
@@ -843,7 +816,7 @@ poll机制：休眠时
             
         </div>
         <div class="page-info col m4 l4 hide-on-small-only">
-            <div class="center-align b-text-gray">4 / 9</div>
+            <div class="center-align b-text-gray">4 / 14</div>
         </div>
         <div class="col s6 m4 l4">
             

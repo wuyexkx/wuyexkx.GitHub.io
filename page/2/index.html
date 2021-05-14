@@ -241,7 +241,7 @@
                     var typed = new Typed("#subtitle", {
                         strings: [ 
                             
-                                "The only constant in life is change.",
+                                "The only constant is change.",
                             
                         ],
                         startDelay: 300,
@@ -280,22 +280,21 @@
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/shi-pin-xue-uboot-jian-dan-shi-yong-yi-zhi-shi-xu-yao-local/">
+                    <a href="/2021/05/14/c-yu-yan-wei-yu-struct-union-nei-cun-dui-qi-alignment-shou-xian-gao-ding-dui-qi-dan-wei-ran-hou-que-ding-cheng-yuan-offset-offset-bei-cheng-yuan-da-xiao-yu-dui-qi-dan-wei-xiao-de-na-ge-zheng-chu-zui-hou-jian-cha-zong-size-wei-dui-qi-dan-wei-zheng-shu-bei-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="视频学 uboot简单使用，移植时需要">
+                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="C语言 位域 struct union内存对齐alignment 首先搞定对齐单位，然后确定成员offset，offset被成员大小与对齐单位小的那个整除，最后检查总size为对齐单位整数倍">
                             
-                            <span class="card-title">视频学 uboot简单使用，移植时需要</span>
+                            <span class="card-title">C语言 位域 struct union内存对齐alignment 首先搞定对齐单位，然后确定成员offset，offset被成员大小与对齐单位小的那个整除，最后检查总size为对齐单位整数倍</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Uboot常用命令 Uboot是一款软件，是bootloader的一个子系统
-print 打印出uboot的环境变量变量名=变量值
-setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flash/Nor/
+                                @[toc]关于内存对齐参考
+位域位域的type只能为 int(整型)，unsigned int(无符号整型)，signed int(有符号整型) 三种类型，决定了如何解释位域的值。但是一般编译器都扩展了，char也可以。未命名位域不可引用
                             
                         </div>
                         <div class="publish-info">
@@ -306,8 +305,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -318,8 +317,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -331,20 +330,21 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/qian-ru-shi-wen-ti-wei-zhi-ling-pc-crt-8-nei-cun-zi-jie-xu-local/">
+                    <a href="/2021/05/14/c-new-features-delete-default-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="嵌入式问题 伪指令 PC=crt+8 内存字节序">
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="C++new features   =delete  =default">
                             
-                            <span class="card-title">嵌入式问题 伪指令 PC=crt+8 内存字节序</span>
+                            <span class="card-title">C++new features   =delete  =default</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                2440是一个SOC，它里面的CPU有R1、R2、R3……等寄存器；它里面的GPIO控制器也有很多寄存器，如 GPFCON、GPFDAT。这两个寄存器是有差异的，在写代码的时候，CPU里面的寄存器可以直接访问，其它的寄存器要以地址进行访问。
+                                在构造函数、拷贝构造函数、拷贝赋值函数、搬移构造函数、搬移赋值函数后面加上=delete，=default，告诉编译器，尽管我定义了但是还是用（不用）编译器默认的那个函数。编译器默认有这些函数，如果自己写了就不会再给默认的了。
+拷贝构造函数
                             
                         </div>
                         <div class="publish-info">
@@ -355,8 +355,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -367,8 +367,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -380,22 +380,21 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/bian-yi-di-zhi-he-yun-xing-di-zhi-wei-zhi-wu-guan-ma-pic-position-independent-code-lian-jie-di-zhi-yu-gu-de-yun-xing-di-zhi-zhen-shi-de-local/">
+                    <a href="/2021/05/14/c-new-features-biao-zhun-ku-he-yu-yan-uniform-initialization-initializer-list-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="编译地址 和 运行地址 位置无关码（PIC position independent code）链接地址(预估的) 运行地址(真实的)">
+                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="C++ new features 标准库 和 语言—Uniform Initialization (Initializer List)">
                             
-                            <span class="card-title">编译地址 和 运行地址 位置无关码（PIC position independent code）链接地址(预估的) 运行地址(真实的)</span>
+                            <span class="card-title">C++ new features 标准库 和 语言—Uniform Initialization (Initializer List)</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]
-什么是《编译地址》？什么是《运行地址》？
-编译地址 32位的处理器，它的每一条指令是4个字节，以4个字节存储顺序，进行顺序执行，CPU是顺序执行的，只要没发生什么跳转，它会顺序进行执行行， 编译器会对每一条指令分配一个编译地址
+                                初始化的格式统一用“&#123; &#125;”，背后是用initializer_list&lt;T&gt;实现的。
+initializer_list&lt;T&gt;传入参数&#123;12,3,5,7,11,13,17&#125;，编译
                             
                         </div>
                         <div class="publish-info">
@@ -406,8 +405,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -418,8 +417,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -431,21 +430,24 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/qian-feng-shi-pin-nei-he-mo-kuai-bian-xie-liu-cheng-module-init-module-exit-module-license-zui-jian-dan-de-nei-he-mo-kuai-bian-xie-local/">
+                    <a href="/2021/05/14/c-zuo-you-zhi-ji-qi-yin-yong-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="千峰视频 内核模块编写流程module_init，module_exit，MODULE_LICENSE 最简单的内核模块编写">
+                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="C++ 左、右值及其引用">
                             
-                            <span class="card-title">千峰视频 内核模块编写流程module_init，module_exit，MODULE_LICENSE 最简单的内核模块编写</span>
+                            <span class="card-title">C++ 左、右值及其引用</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                doc@[toc]
-模块编写的流程，先在pc上测试pc也是linux内核。内核提供的三个宏，module_init，module_exit，MODULE_LICENSE前俩在include/linux/init.h中定义，MODULE_LI
+                                左、右值概念左值：一个标识非临时性对象的表达式（通常程序中所有带名字的变量都可以叫左值）右值：标识临时性对象的表达式（临时生成的）
+int x = 10;
+int y = 20;
+int z = x + y;
+const int a = 1
                             
                         </div>
                         <div class="publish-info">
@@ -456,8 +458,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -468,8 +470,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -481,26 +483,23 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/qian-feng-shi-pin-cao-zuo-xi-tong-de-5-da-gong-neng-she-bei-kong-zhi-jin-cheng-guan-li-nei-cun-guan-li-wen-jian-xi-tong-wang-luo-yong-hu-kong-jian-nei-he-kong-jian-ying-jian-local/">
+                    <a href="/2021/05/14/c-bao-cuo-ji-he-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="千峰视频  操作系统的5大功能 设备控制、进程管理、内存管理、文件系统、网络 用户空间--内核空间--硬件">
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="C++ 报错集合">
                             
-                            <span class="card-title">千峰视频  操作系统的5大功能 设备控制、进程管理、内存管理、文件系统、网络 用户空间--内核空间--硬件</span>
+                            <span class="card-title">C++ 报错集合</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                操作系统的5大功能：
-
-设备控制
-进程管理
-内存管理
-文件系统
-网络open write函数是在C库里的函数，属于应用层程序，（User space），在这类函数中，肯定包含swi指令去触发某个异常val进入内核空间（Kernel spac
+                                [with T = int]’ is private within this context原因：class成员默认私有，可能是class定义里忘了写public了。
+template&lt;class T>
+class AAA
+&#123
                             
                         </div>
                         <div class="publish-info">
@@ -511,8 +510,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -523,8 +522,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -536,22 +535,26 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/windows-ubuntu-vmware-board-qian-ru-shi-kai-fa-ban-yu-pc-de-wang-luo-lian-jie-fang-fa-local/">
+                    <a href="/2021/05/14/c-an-zhao-map-de-value-pai-xu-sheng-xu-huo-zhe-jiang-xu-zi-ding-yi-pai-xu-fang-shi-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="windows ubuntu VMware board 嵌入式开发板与pc的网络连接方法">
+                            <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="C++ 按照map的value排序 升序或者降序 自定义排序方式">
                             
-                            <span class="card-title">windows ubuntu VMware board 嵌入式开发板与pc的网络连接方法</span>
+                            <span class="card-title">C++ 按照map的value排序 升序或者降序 自定义排序方式</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]
-1. 单系统+开发板 最方便的连接方法使用路由器单系统windows或ubuntu直接连接路由器（有线无线皆可），开发板有线直接连接路由器，只要保证系统和开发板处于同一网段就可以连通。
-2. windows+VMware 开发
+                                #include &lt;iostream>
+#include &lt;map>
+#include &lt;string>
+#include &lt;vector>
+#include&lt;algorithm>
+
+using namespa
                             
                         </div>
                         <div class="publish-info">
@@ -562,8 +565,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -574,8 +577,8 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -587,22 +590,24 @@ setenv saveenv 设置环境变量set只保存在RAM中，saveenv才保存到flas
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/jiao-cha-bian-yi-gong-ju-ji-de-yi-xie-xiao-gong-ju-local/">
+                    <a href="/2021/05/14/c-shu-ju-lei-xing-xuan-yong-jing-yan-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="交叉编译工具集的一些小工具">
+                            <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="C++ 数据类型选用经验">
                             
-                            <span class="card-title">交叉编译工具集的一些小工具</span>
+                            <span class="card-title">C++ 数据类型选用经验</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                交叉编译工具集的一些小工具
-1. elf操作系统之上的可执行文件包含头信息，可以,windows下是PE  readelf读取可执行文件支持的平台等信息readelf -h xxx
-aaa@aaa:~&#x2F;Desktop$ reade
+                                C++ primer 第五版本
+
+明确知道数值不可能为负时, 选用无符号类型
+使用int, 不够就用long long
+不在算数表达式中用char类型(机器处理符号有所不同), 所以如果要用不大的整数, 一定指定具体类型是signed ch
                             
                         </div>
                         <div class="publish-info">
@@ -613,8 +618,8 @@ aaa@aaa:~&#x2F;Desktop$ reade
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -625,8 +630,8 @@ aaa@aaa:~&#x2F;Desktop$ reade
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -638,28 +643,21 @@ aaa@aaa:~&#x2F;Desktop$ reade
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-32-ke-1-3.4.2-nei-he-xia-de-i2c-qu-dong-zhi-kuang-jia-local/">
+                    <a href="/2021/05/14/c-new-features-biao-zhun-ku-he-yu-yan-xiao-dian-dian-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="WDS2期第32课 1 3.4.2内核下的I2C驱动之框架">
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="C++ new features 标准库 和 语言 — 小点点">
                             
-                            <span class="card-title">WDS2期第32课 1 3.4.2内核下的I2C驱动之框架</span>
+                            <span class="card-title">C++ new features 标准库 和 语言 — 小点点</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]
-时序，
-读写流程，
-总线设备驱动模型，虚拟的
-IIC驱动框架 分三层 设备驱动 总线驱动（核心层 适配器）
-IIC 总线设备驱动
-左边注册一个设备，i2c_client
-右边注册一个驱动，i2c_driver
-比较名字id，相
+                                1. 头文件写法变化c++ 标准库头文件不带 .h，#include&lt;vector&gt;c 新式也不带.h， #include&lt;cstdio&gt;
+2. Spaces in Template Expressions新特性去掉
                             
                         </div>
                         <div class="publish-info">
@@ -670,8 +668,8 @@ IIC 总线设备驱动
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -682,8 +680,8 @@ IIC 总线设备驱动
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -695,26 +693,24 @@ IIC 总线设备驱动
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-31-ke-2-app-diao-shi-gdb-ling-wai-de-an-zhuang-mou-ku-ti-shi-wei-ding-yi-zhao-bu-dao-shi-chu-li-i-mei-qu-bian-yi-ku-zhao-gen-ju-jie-guo-xiu-gai-tou-wen-jian-local/">
+                    <a href="/2021/05/14/c-new-features-biao-zhun-ku-he-yu-yan-variadic-templates1-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="WDS2期第31课 2 应用调试gdb，另外的-安装某些库提示未定义找不到时处理 -I没有去编译库里找 根据结果修改头文件">
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="C++ new features 标准库 和 语言 -- variadic templates1">
                             
-                            <span class="card-title">WDS2期第31课 2 应用调试gdb，另外的-安装某些库提示未定义找不到时处理 -I没有去编译库里找 根据结果修改头文件</span>
+                            <span class="card-title">C++ new features 标准库 和 语言 -- variadic templates1</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                gdb在pc运行，gdb-server在ARM 板子上运行，gdb-server是arm app的父进程。
+                                注意...的三个不同位置。
+ex1 print(1)和(3)可以共存，编译通过，一直都会调用(1)，它是模板特化，而(3)永远也不会被调用。
+ex2 printf
+ex3 max
 
-设置 host target
-
-编译gdb
-
-安装 到 tmp默认安装到pc机，可以改变安装目录，查看vi Makefile，修改
                             
                         </div>
                         <div class="publish-info">
@@ -725,8 +721,8 @@ IIC 总线设备驱动
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -737,8 +733,8 @@ IIC 总线设备驱动
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -750,23 +746,24 @@ IIC 总线设备驱动
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-30-ke-2.1-fu-hao-biao-qu-dong-diao-shi-zhi-duan-cuo-wu-fen-xi-jie-he-nei-he-da-yin-xin-xi-pc-zhi-que-ding-di-zhi-fan-wei-shi-shu-yu-nei-he-huan-shi-jia-zai-mo-kuai-de-kong-jian-system.map-cha-kan-nei-he-huo-mo-kuai-fan-hui-bian-wen-jian-local/">
+                    <a href="/2021/05/14/c-new-features-biao-zhun-ku-he-yu-yan-variadic-templates-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="WDS2期第30课2.1 符号表 驱动调试之段错误分析 结合内核打印信息PC值  确定地址范围是属于内核还是加载模块的空间System.map  查看内核或模块反汇编文件">
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="C++ new features 标准库 和 语言 -- variadic templates">
                             
-                            <span class="card-title">WDS2期第30课2.1 符号表 驱动调试之段错误分析 结合内核打印信息PC值  确定地址范围是属于内核还是加载模块的空间System.map  查看内核或模块反汇编文件</span>
+                            <span class="card-title">C++ new features 标准库 和 语言 -- variadic templates</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                大致流程如下：
-
-结合内核打印信息PC值 ，
-确定地址范围是属于内核还是加载模块的空间， vi System.map(内核源代码根目录下)确定内核的函数的地址范围；  把内核所有函数名及对应地址保存到文件cat /proc/kallsyms
+                                大致分为如下几个部分:
+1.variadic templates（…）应用1—递归调用函数参数（print）
+// 1. 用于函数 
+// ...就是一个所谓的包
+// --------------------------这种写法必须并存-
                             
                         </div>
                         <div class="publish-info">
@@ -777,8 +774,8 @@ IIC 总线设备驱动
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
+                                <a href="/categories/C-C/" class="post-category">
+                                    C-C++
                                 </a>
                                 
                                 
@@ -789,8 +786,8 @@ IIC 总线设备驱动
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
+                        <a href="/tags/C-C/">
+                            <span class="chip bg-color">C-C++</span>
                         </a>
                         
                     </div>
@@ -816,7 +813,7 @@ IIC 总线设备驱动
             
         </div>
         <div class="page-info col m4 l4 hide-on-small-only">
-            <div class="center-align b-text-gray">2 / 9</div>
+            <div class="center-align b-text-gray">2 / 14</div>
         </div>
         <div class="col s6 m4 l4">
             

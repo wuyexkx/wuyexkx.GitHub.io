@@ -1,0 +1,1303 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Linux内核设计与实现 第12章 内存管理, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Linux内核设计与实现 第12章 内存管理 | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Linux内核设计与实现 第12章 内存管理</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                                <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/" class="post-category">
+                                Linux内核设计与实现 陈莉君（第三版）
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.3k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]<br>内核空间和用户空间不同。</p>
+<h1 id="页（Pages）"><a href="#页（Pages）" class="headerlink" title="页（Pages）"></a>页（Pages）</h1><p>内核把<strong>物理页</strong>作为内存管理的基本单位。<br>内存管理单元MMU通常以<strong>页</strong>为单位进行处理，以页大小为单位管理系统中的页表，从虚拟内存的角度看页就是最小单位。</p>
+<p>体系结构不同，支持也大小不尽相同。通常32位体系支持4KB的页，64位体系支持8KB的页。如 在支持4KB页大小有1GB物理内存的机器上，物理内存将被划分为262144个页,<br>（1 * 1024 * 1024 / 4 = 262144）。</p>
+<p>内核用结构<code>struct page</code>表示系统中的每个物理页，在linux/mm_types.h中，简化后，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">page</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> flags<span class="token punctuation">;</span>
+	<span class="token class-name">atomic_t</span> _count<span class="token punctuation">;</span>
+	<span class="token class-name">atomic_t</span> _mapcount<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> private<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">address_space</span> <span class="token operator">*</span>mapping<span class="token punctuation">;</span>
+	<span class="token class-name">pgoff_t</span> index<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span> lru<span class="token punctuation">;</span>
+	<span class="token keyword">void</span> <span class="token operator">*</span>virtual<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><code>flags</code>存放页状态，是否脏页，是否被锁定，每个位表示一个状态，至少32个状态，这些- 状态定义在linux/page-flags.h。</li>
+<li><code>_count</code>引用计数，-1时表示当前内核没有引用该页，内核应用page_count()检查页引用状态。</li>
+<li><code>virtual</code>页的虚拟地址，通常就是页在虚拟内存中的地址，高端内存并不永久映射到内核空间。</li>
+</ul>
+<p><code>page</code>结构与物理页相关，并非与虚拟地址相关。page对页的描述是短暂的，目的在于描述物理页本身而不是所包含的数据。<br>系统为每个物理页分配page结构，但是开销并不算大。假设一个page占40字节，系统物理页大小为8KB，物理内存4GB，那只需要20M空间就可以管理这524,288个物理页。</p>
+<h1 id="区（Zones）"><a href="#区（Zones）" class="headerlink" title="区（Zones）"></a>区（Zones）</h1><p>由于硬件限制，内核不能对所有页一视同仁，有些页位于内存中特定的物理地址，不能将其用于某些特定任务。因此内核把页划分为不同的区。<br>Linux必须处理两种由于硬件存在缺陷而引起的寻址问题：</p>
+<ul>
+<li>一些硬件只能访问特定的内存地址来执行DMA（直接内存访问）</li>
+<li>一些体系结构的物理寻址范围比虚拟寻址范围大很多，有一些内存不能永久映射到内核空间。</li>
+</ul>
+<p>linux主要使用4种区，在linux/mmzone.h中定义：</p>
+<ul>
+<li>ZONE_DMA此区包含的页能用来执行DMA操作</li>
+<li>ZONE_DMA32与ZONE_DMA类似，但只能被32位设备访问</li>
+<li>ZONE_NORMAL此区包含正常映射的页</li>
+<li>ZONE_HIGHMEM此区包含高端内存，其中某些页不能永久映射到内核空间<br><img src="/images/2020022109471774.png"><br>区的划分没有任何物理意义，这只是内核为管理物理页而进行的逻辑分组。</li>
+</ul>
+<p>内核用结构<code>struct zone</code>表示每个区，在linux/mmzone.h中定义，这些结构体很大，但是只有3个区，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">zone</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> watermark<span class="token punctuation">[</span>NR_WMARK<span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> lowmem_reserve<span class="token punctuation">[</span>MAX_NR_ZONES<span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">per_cpu_pageset</span> pageset<span class="token punctuation">[</span>NR_CPUS<span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token class-name">spinlock_t</span> lock<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">free_area</span> free_area<span class="token punctuation">[</span>MAX_ORDER<span class="token punctuation">]</span>
+	<span class="token class-name">spinlock_t</span> lru_lock<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">zone_lru</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span> list<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> nr_saved_scan<span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span> lru<span class="token punctuation">[</span>NR_LRU_LISTS<span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">zone_reclaim_stat</span> reclaim_stat<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> pages_scanned<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> flags<span class="token punctuation">;</span>
+	<span class="token class-name">atomic_long_t</span> vm_stat<span class="token punctuation">[</span>NR_VM_ZONE_STAT_ITEMS<span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token keyword">int</span> prev_priority<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span> inactive_ratio<span class="token punctuation">;</span>
+	<span class="token class-name">wait_queue_head_t</span> <span class="token operator">*</span>wait_table<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> wait_table_hash_nr_entries<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> wait_table_bits<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">pglist_data</span> <span class="token operator">*</span>zone_pgdat<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> zone_start_pfn<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> spanned_pages<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> present_pages<span class="token punctuation">;</span>
+	<span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><code>lock</code>自旋锁，防止该结构被并发访问</li>
+<li><code>watermark</code>数组持有该区的最小值、最低和最高水位值，随空闲内存多少而变化</li>
+<li><code>name</code>以NULL结束的字符串表示该区名字， 三个区名字分别为DMA、Normal、HighMem</li>
+</ul>
+<h1 id="获得页-以页为单位分配"><a href="#获得页-以页为单位分配" class="headerlink" title="获得页 以页为单位分配"></a>获得页 以页为单位分配</h1><p>内核通过页、区等管理内存，通过接口在内核内分配和释放内存的。<br>内核提供请求内存的底层机制，提供了相应接口这些接口都<strong>以页为单位分配内存</strong>，定义在linux/gfp.h，最核心的函数是，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 分配2^order个连续物理页，返回指向第一个page的指针，出错返回NULL</span>
+<span class="token keyword">struct</span> <span class="token class-name">page</span> <span class="token operator">*</span> <span class="token function">alloc_pages</span><span class="token punctuation">(</span><span class="token class-name">gfp_t</span> gfp_mask<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> order<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 获取某个页的逻辑地址</span>
+<span class="token keyword">void</span> <span class="token operator">*</span> <span class="token function">page_address</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">page</span> <span class="token operator">*</span>page<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 直接分配连续物理页 并 返回首页 逻辑地址</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token function">__get_free_pages</span><span class="token punctuation">(</span><span class="token class-name">gfp_t</span> gfp_mask<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> order<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 如果只需要一页</span>
+<span class="token keyword">struct</span> <span class="token class-name">page</span> <span class="token operator">*</span> <span class="token function">alloc_page</span><span class="token punctuation">(</span><span class="token class-name">gfp_t</span> gfp_mask<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token function">__get_free_page</span><span class="token punctuation">(</span><span class="token class-name">gfp_t</span> gfp_mask<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="获得填充为0的页"><a href="#获得填充为0的页" class="headerlink" title="获得填充为0的页"></a>获得填充为0的页</h2><p>所分配的页是给用户空间用时，需要把所有数据清0或其他处理，保障系统安全。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 分配页，填充0</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token function">get_zeroed_page</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> gfp_mask<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="/images/20200221104004670.png"></p>
+<h2 id="释放页"><a href="#释放页" class="headerlink" title="释放页"></a>释放页</h2><p>释放需谨慎，只能释放自己的页，传递错误页可能导致系统崩溃，<strong>内核完全信赖自己</strong>，与用户空间不同。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">__free_pages</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">page</span> <span class="token operator">*</span>page<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> order<span class="token punctuation">)</span>
+<span class="token keyword">void</span> <span class="token function">free_pages</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span> addr<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> order<span class="token punctuation">)</span>
+<span class="token keyword">void</span> <span class="token function">free_page</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span> addr<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h1 id="kmalloc-（内存物理地址连续）以字节为单位分配，"><a href="#kmalloc-（内存物理地址连续）以字节为单位分配，" class="headerlink" title="kmalloc() （内存物理地址连续）以字节为单位分配，"></a>kmalloc() （内存物理地址连续）以字节为单位分配，</h1><p>与用户空间的malloc()很类似，多了一个flag参数。相对页分配，kmalloc()用的更多。在linux/slab.h中声明，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token operator">*</span> <span class="token function">kmalloc</span><span class="token punctuation">(</span><span class="token class-name">size_t</span> size<span class="token punctuation">,</span> <span class="token class-name">gfp_t</span> flags<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>所分配的内存在物理上是连续的，所有虚拟地址肯定连续。</strong> 必须检查kmalloc()的返回值，如果是NULL必须处理错误。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">dog</span> <span class="token operator">*</span>p<span class="token punctuation">;</span>
+p <span class="token operator">=</span> <span class="token function">kmalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">dog</span><span class="token punctuation">)</span><span class="token punctuation">,</span> GFP_KERNEL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>p<span class="token punctuation">)</span>
+	<span class="token comment">/* handle error ... */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="gfp-mask-标志"><a href="#gfp-mask-标志" class="headerlink" title="gfp_mask 标志"></a>gfp_mask 标志</h2><p>在页分配和kmalloc分配内存中都会用到分配器标志。<br>这些标志可分为三类：行为修饰符、区修饰符、类型</p>
+<ul>
+<li>行为修饰符，表示内核应该如何分配内存，特殊情况只能用特定行为修饰符。如在中断处理程序中分配内存要求不能休眠。</li>
+<li>区修饰符，从哪儿分配内存。</li>
+<li>类型修饰符，组合了行为修饰符 和 区修饰符。</li>
+</ul>
+<p>这些修饰符都在linux/gfp.h中，通常包含头文件linux/slab.h就可以了，一般只用类型修饰符就够了。<br><img src="/images/20200221110219521.png"><br><img src="/images/20200221110243669.png"><br><img src="/images/20200221110350892.png"></p>
+<ul>
+<li>GFP_KERNEL是一种类型修饰符，进程上下文中代码可以使用它。这种分配可能引起睡眠，使用的是普通优先级。因为可能阻塞，因此这个标志只用在可以重新安全调度的进程上下文中（没有锁被持有等情况）。</li>
+<li>GFP_ATOMIC是一种类型修饰符，与上面截然相反。不能睡眠。在当前代码不能睡眠时只能用它。如中断处理程序、软中断和tasklet。</li>
+<li>GFP_DMA 是一种类型修饰符，常用前两种。分配器从ZONE_DMA分配，用在需要DMA的内存的设备驱动程序中。一般与GFP_ATOMIC或GFP_KERNEL结合使用。<h3 id="gfp-mask-使用总结"><a href="#gfp-mask-使用总结" class="headerlink" title="gfp_mask 使用总结"></a>gfp_mask 使用总结</h3><img src="/images/20200221112614413.png"><h2 id="kfree-（与-kmalloc-对应）"><a href="#kfree-（与-kmalloc-对应）" class="headerlink" title="kfree()  （与 kmalloc()对应）"></a>kfree()  （与 kmalloc()对应）</h2>必须配对使用，否则内存泄漏或bug，都在linux/slab.h中，<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">kfree</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span>ptr<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="vmalloc-（内存虚拟地址连续）"><a href="#vmalloc-（内存虚拟地址连续）" class="headerlink" title="vmalloc() （内存虚拟地址连续）"></a>vmalloc() （内存虚拟地址连续）</h1><font color=red><strong>工作方式与kmalloc()类似，但是vmalloc()分配的虚拟地址连续，而物理地址无需连续。这也是用户空间的内存分配函数malloc()的工作方式，通过分配非连续的物理内存块，再修正页表，把内存地址映射到逻辑地址空间的连续区域中。</strong></font><br>vmalloc()必须专门建立页表项，获取的页必须一个个映射，这就导致比直接内存映射更多的TLB抖动，所以性能没有kmalloc()好。<br>TLB（translation lookaside buffer），是一种硬件缓冲区，很多体系结构用它缓冲 虚拟地址到物理地址的映射关系，极大的提高了系统性能。</li>
+</ul>
+<p>大多数情况下，只有硬件设备需要连续的物理内存地址空间。很多体系结构硬件设备存在于MMU之外，没有虚拟地址的概念。</p>
+<h2 id="什么时候用vmalloc"><a href="#什么时候用vmalloc" class="headerlink" title="什么时候用vmalloc()"></a>什么时候用vmalloc()</h2><p>为了获得大块内存时，如模块被动态插入到内核时，内核把模块装载到由vmalloc() 分配的内存上。</p>
+<p>声明在linux/vmalloc.h中，用法与kmalloc()相同。函数可能睡眠不能在中断上下文中调用，也不能在其他不允许阻塞的代码中调用。vfree也是。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token operator">*</span> <span class="token function">vmalloc</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span> size<span class="token punctuation">)</span>
+
+<span class="token keyword">void</span> <span class="token function">vfree</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span>addr<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h1 id="slab层"><a href="#slab层" class="headerlink" title="slab层"></a>slab层</h1><p>slab分配器 扮演了通用数据结构缓存层 的角色。</p>
+<h2 id="slab层产生原因"><a href="#slab层产生原因" class="headerlink" title="slab层产生原因"></a>slab层产生原因</h2><p>分配和释放数据结构是内核中最普遍的操作，为便于数据的频繁分配和回收，常常用到<strong>空闲链表</strong>，它是可供使用已经分配好的数据结构块，需要使用数据结构实例时直接拿过来用而不用分配内存，用完再放回空闲链表就行了，相当于快速存储频繁使用的对象类型。<br>而空闲链表的主要问题之一是不能全局控制，当内存吃紧时，内核无法使空闲链表让出内存，实际上内核根本就不知道有空闲链表。<br>为了弥补这一缺陷，也为了使代码更加稳固，Linux内核提供slab层。</p>
+<h2 id="slab层的设计"><a href="#slab层的设计" class="headerlink" title="slab层的设计"></a>slab层的设计</h2><p>slab把不同的对象划分成所谓的高速缓存组，每个高速缓存组都存放不同类型的对象（被缓存的数据结构）。<br>slab由一个或者多个物理上连续的页组成，一般情况slab由一页组成。<br>如一个高速缓冲用于存放进程描述符（task_struct结构的一个空闲链表），另一个高速缓冲存放索引节点对象（struck inode）。kmalloc()接口建立在slab层上。<br><img src="/images/20200302154420342.png"><br>slab处于三种状态之一：满、部分满、空。<br>当内核某部分需要新对象时，先从部分满的slab中分配；如果没有部分满的slab就从空的slab中分配；如果空的slab没有就创建一个slab。</p>
+<p>每个高速缓存都使用<code>kmem_cache</code> 结构表示，它包含三个链表，<code>slabs_full</code>、<code>slabs_partial</code>、 <code>slabs_empty</code>，这三个链表存放在<code>kmem_list3</code>结构内，这个结构在<code>mm/slab.c</code>定义，这些链表包含高速缓存中的所有slab。slab描述符<code>struct slab</code>用来描述每个slab，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">slab</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">struct</span> 			<span class="token class-name">list_head</span> list<span class="token punctuation">;</span> <span class="token comment">/* full, partial, or empty list */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> 	colouroff<span class="token punctuation">;</span> 		<span class="token comment">/* offset for the slab coloring */</span>
+	<span class="token keyword">void</span> 			<span class="token operator">*</span>s_mem<span class="token punctuation">;</span> 		<span class="token comment">/* slab中的第一个对象 */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span> 	inuse<span class="token punctuation">;</span> 			<span class="token comment">/* slab中已分配的对象数 */</span>
+	<span class="token class-name">kmem_bufctl_t</span> 	free<span class="token punctuation">;</span> 			<span class="token comment">/* 第一个空闲对象 */</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>slab描述符要么在slab之外分配，要么就在slab自身开始的地方，如果slab很小或者slab内有足够的空间容纳slab描述符，那就放在里边。</p>
+<p>slab层负责内存紧缺情况下所有底层的对齐、着色、分配、释放和回收等。如果要频繁创建很多相同类型的对象，就应该考虑使用slab高速缓存。不要自己去实现空闲链表。</p>
+<h1 id="在栈上的静态分配"><a href="#在栈上的静态分配" class="headerlink" title="在栈上的静态分配"></a>在栈上的静态分配</h1><p>用户空间可以轻松使用大栈，还可以在栈上为所欲为。而内核不能这么奢侈<strong>，内核栈小而且固定</strong>，给每个进程分配一个固定大小的小栈后，不仅可以减少内存的消耗，而且内核也无须负担太重的栈管理任务。<br>每个进程的内核栈大小依赖体系结构和编译器，通常是两页大小，也就是8KB或16KB。</p>
+<p>任意的函数都必须尽量节省栈资源，只需在具体的函数中让局部变量所占空间之和不要超过几百字节。在栈上大量的静态分配是很危险的（如大型数组和结构体）。内核在内核栈管理中没有做足工作，栈溢出时会覆盖掉紧邻堆栈末端的东西。<br>因此进行动态分配是一种明智的选择。</p>
+<h1 id="高端内存映射"><a href="#高端内存映射" class="headerlink" title="高端内存映射"></a>高端内存映射</h1><p>高端内存中的页不能永久的映射到内核地址空间上。</p>
+<h2 id="永久映射"><a href="#永久映射" class="headerlink" title="永久映射"></a>永久映射</h2><p>在linux/highmem.h中声明的函数，在高低端内存都能用，如果page结构对应的是低端内存则返回该页虚拟地址，如果是高端内存，则会建立一个永久映射在返回地址。<strong>可以睡眠，只能用在进程上下文中。</strong></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token operator">*</span><span class="token function">kmap</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">page</span> <span class="token operator">*</span>page<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>因为永久映射数量有限，当不再需要高端内存时应该接触映射，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">kunmap</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">page</span> <span class="token operator">*</span>page<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="临时映射"><a href="#临时映射" class="headerlink" title="临时映射"></a>临时映射</h2><p>当必须创建映射而当前上下文又不能睡眠时，内核提供临时映射（原子映射）。内核可以原子地把高端内存中的一个页映射到某个保留的映射中。<strong>可以用在不能睡眠的地方，获得此映射时绝不会阻塞。</strong></p>
+<p>建立临时映射，不会阻塞，因此可以用在中断上下文和其他不能重新调度的地方。它也禁止内核抢占。映射对于每个处理器都是唯一的，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token operator">*</span><span class="token function">kmap_atomic</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">page</span> <span class="token operator">*</span>page<span class="token punctuation">,</span> <span class="token keyword">enum</span> <span class="token class-name">km_type</span> type<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>参数type表示临时映射的目的，定义在asm-generic/kmap_types.h中，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">enum</span> <span class="token class-name">km_type</span> <span class="token punctuation">&#123;</span>
+	KM_BOUNCE_READ<span class="token punctuation">,</span>
+	KM_SKB_SUNRPC_DATA<span class="token punctuation">,</span>
+	KM_SKB_DATA_SOFTIRQ<span class="token punctuation">,</span>
+	KM_USER0<span class="token punctuation">,</span>
+	KM_USER1<span class="token punctuation">,</span>
+	KM_BIO_SRC_IRQ<span class="token punctuation">,</span>
+	KM_BIO_DST_IRQ<span class="token punctuation">,</span>
+	KM_PTE0<span class="token punctuation">,</span>
+	KM_PTE1<span class="token punctuation">,</span>
+	KM_PTE2<span class="token punctuation">,</span>
+	KM_IRQ0<span class="token punctuation">,</span>
+	KM_IRQ1<span class="token punctuation">,</span>
+	KM_SOFTIRQ0<span class="token punctuation">,</span>
+	KM_SOFTIRQ1<span class="token punctuation">,</span>
+	KM_SYNC_ICACHE<span class="token punctuation">,</span>
+	KM_SYNC_DCACHE<span class="token punctuation">,</span>
+	KM_UML_USERCOPY<span class="token punctuation">,</span>
+	KM_IRQ_PTE<span class="token punctuation">,</span>
+	KM_NMI<span class="token punctuation">,</span>
+	KM_NMI_PTE<span class="token punctuation">,</span>
+	KM_TYPE_NR
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>取消映射，也不会阻塞，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">kunmap_atomic</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>kvaddr<span class="token punctuation">,</span> <span class="token keyword">enum</span> <span class="token class-name">km_type</span> type<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="每个CPU的分配"><a href="#每个CPU的分配" class="headerlink" title="每个CPU的分配"></a>每个CPU的分配</h1><p>每个CPU有只属于自己的数据，因此只需要禁止内核抢占就ok，不需要繁杂的锁。在中断上下文和进程上下文中使用都很安全。但不能睡眠。<br><img src="/images/20200302212732737.png"></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-12-zhang-nei-cun-guan-li-local/">https://wuyexkx.github.io/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-12-zhang-nei-cun-guan-li-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                                    <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-5-zhang-xi-tong-diao-yong-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Linux内核设计与实现 第5章 系统调用">
+                        
+                        <span class="card-title">Linux内核设计与实现 第5章 系统调用</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/" class="post-category">
+                                    Linux内核设计与实现 陈莉君（第三版）
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                        <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-3-zhang-jin-cheng-guan-li-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Linux内核设计与实现 第3章 进程管理">
+                        
+                        <span class="card-title">Linux内核设计与实现 第3章 进程管理</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/" class="post-category">
+                                    Linux内核设计与实现 陈莉君（第三版）
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                        <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

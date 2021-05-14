@@ -240,7 +240,7 @@
                     var typed = new Typed("#subtitle", {
                         strings: [ 
                             
-                                "The only constant in life is change.",
+                                "The only constant is change.",
                             
                         ],
                         startDelay: 300,
@@ -288,11 +288,38 @@
                 </a>
                 
                 
-                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" title="嵌入式Linux: 76">
+                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" title="嵌入式Linux: 80">
                     <span class="chip center-align waves-effect waves-light
                              chip-active "
                             style="background-color: #F5EEF8;">嵌入式Linux
-                        <span class="tag-length">76</span>
+                        <span class="tag-length">80</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/categories/C-C/" title="C-C++: 27">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #D5F5E3;">C-C++
+                        <span class="tag-length">27</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/categories/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/" title="Linux内核设计与实现 陈莉君（第三版）: 10">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #E8F8F5;">Linux内核设计与实现 陈莉君（第三版）
+                        <span class="tag-length">10</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/categories/Ubuntu/" title="Ubuntu: 9">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #FEF9E7;">Ubuntu
+                        <span class="tag-length">9</span>
                     </span>
                 </a>
                 
@@ -307,6 +334,204 @@
 
     <article id="articles" class="container articles">
         <div class="row tags-posts">
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds2-qi-di-13-ke-2-shu-ru-zi-xi-tong-1-fen-pei-yi-ge-input-dev-jie-gou-ti-2-she-zhi-3-zhu-ce-4-ying-jian-xiang-guan-cao-zuo-chong-fu-shi-jian-xiu-gai-ding-shi-qi-chao-shi-shi-jian-gai-biao-zhun-shu-ru-dao-zhi-ding-she-bei-exec-local/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="WDS2期第13课 2 输入子系统 1分配一个input_dev结构体 2设置 3注册 4硬件相关操作 重复事件修改定时器超时时间 改标准输入到指定设备exec _">
+                            
+                            <span class="card-title">WDS2期第13课 2 输入子系统 1分配一个input_dev结构体 2设置 3注册 4硬件相关操作 重复事件修改定时器超时时间 改标准输入到指定设备exec _</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                之前不用input_subsystem的步骤自己写驱动程序用户需要open，read，write驱动也要完成对应的drv_open, drv_read, drv_write
+
+主设备号
+构造fops.read.open.poll.fasyn
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds2-qi-di-13-ke-1-shu-ru-zi-xi-tong-kuang-jia-input.c-shi-he-xin-ceng-dai-biao-ying-jian-input-dev-chun-ruan-jian-input-handler-input-handle-lian-jie-local/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="WDS2期第13课 1 输入子系统框架 input.c是核心层 代表硬件input_dev 纯软件input_handler input_handle连接">
+                            
+                            <span class="card-title">WDS2期第13课 1 输入子系统框架 input.c是核心层 代表硬件input_dev 纯软件input_handler input_handle连接</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                @[toc]
+之前写的代码只适合内部使用（自己用或者公司内部用），不能通用，也许通过scanf就要去打开某个设备。想要用户代码无需任何修改就能使用之前的驱动， 就要使用输入子系统。
+输入子系统框架input.c 是核心层
+// 流程
+dri
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds1-qi-di-9-ke-uboot-5-zhi-uboot-qi-dong-nei-he-tftp-xia-zai-nei-he-xie-ru-nand-local/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="WDS1期第9课 uboot 5 之uboot启动内核 tftp下载内核 写入nand">
+                            
+                            <span class="card-title">WDS1期第9课 uboot 5 之uboot启动内核 tftp下载内核 写入nand</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                @[toc]
+bootcmd=nand read.jffs2 0x30007fc0 kernel;bootm 0x30007fc0
+1. nand read.jffs2 0x30007fc0 kernel 读出内核到SDRAM&#8195;
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2021/05/14/wds1-qi-di-9-ke-uboot-4-zhi-uboot-ming-ling-fen-xi-local/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="WDS1期第9课 uboot 4 之uboot命令分析">
+                            
+                            <span class="card-title">WDS1期第9课 uboot 4 之uboot命令分析</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+根据命令找到对应的函数命令结构体
+分离开命令，命令中有 ; 等，还是在common/main.c中，
+/*
+ * Find separator, or string end
+ * Allow simple escape of ';' by
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                            <span class="chip bg-color">嵌入式Linux</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
@@ -568,201 +793,6 @@ _start_armboot:	.word start_armboot
                                 @[toc]
 
 修改超时时间jiffies, jiffies是全局变量,每隔10ms系统产生一个时钟中断, 10ms每次进中断都修改jiffies往后延迟10ms, 10ms内可能多次进入中断,直到抖动到最后一次进中断 后超时，然后调用ke
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/wds1-qi-di-12-ke-zi-fu-she-bei-qu-dong-8-yi-bu-hu-chi-zu-sai-tong-yi-shi-ke-zhi-neng-you-yi-ge-yong-hu-jin-cheng-da-kai-mou-ge-qu-dong-cheng-xu-yuan-zi-cao-zuo-hu-chi-liang-xin-hao-liang-local/">
-                        <div class="card-image tag-image">
-                            
-                            
-                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="WDS1期第12课 字符设备驱动 8 异步互斥阻塞 同一时刻，只能有一个用户进程打开某个驱动程序（原子操作 互斥量 信号量）">
-                            
-                            <span class="card-title">WDS1期第12课 字符设备驱动 8 异步互斥阻塞 同一时刻，只能有一个用户进程打开某个驱动程序（原子操作 互斥量 信号量）</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]信号量（semaphore[ˈseməfɔ:]）用在多线程多任务同步的，一个线程完成了某一个动作就通过信号量告诉别的线程，别的线程再进行某些动作。互斥锁（Mutual exclusion）是用在多线程多任务互斥的，一个线程占用了
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/wds1-qi-di-12-ke-zi-fu-she-bei-qu-dong-7-async-yi-bu-tong-zhi-yong-hu-kong-jian-qu-dong-dai-ma-de-kill-fasync-han-shu-tong-zhi-yong-hu-de-signal-han-shu-fcntl-local/">
-                        <div class="card-image tag-image">
-                            
-                            
-                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="WDS1期第12课 字符设备驱动 7 async异步通知用户空间 驱动代码的kill_fasync函数通知用户的signal函数 fcntl">
-                            
-                            <span class="card-title">WDS1期第12课 字符设备驱动 7 async异步通知用户空间 驱动代码的kill_fasync函数通知用户的signal函数 fcntl</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                前面的query interrupt poll都需要用户程序去主动去读或查询。async异步通知—可以由驱动程序主动去通知用户程序中断的到来。
-信号也可以通知TASK_INTERRUPTIBLE的进程，SIGKILL可以杀掉任何进程，就是传
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/wds1-qi-di-12-ke-zi-fu-she-bei-qu-dong-6-key-poll-ji-zhi-zhi-shui-mian-gu-ding-shi-jian-bu-ying-xiang-hou-xu-cheng-xu-zhi-xing-deng-dai-qi-jian-jiang-jin-cheng-xiu-mian-li-yong-shi-jian-qu-dong-lai-huan-xing-jin-cheng-local/">
-                        <div class="card-image tag-image">
-                            
-                            
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="WDS1期第12课 字符设备驱动 6 key poll机制，只睡眠固定时间不影响后续程序执行。等待期间将进程休眠，利用事件驱动来唤醒进程">
-                            
-                            <span class="card-title">WDS1期第12课 字符设备驱动 6 key poll机制，只睡眠固定时间不影响后续程序执行。等待期间将进程休眠，利用事件驱动来唤醒进程</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                poll情景描述poll就是 休眠 +超时。   
-  以按键驱动为例进行说明，用阻塞的方式打开按键驱动文件/dev/buttons，应用程序使用read()函数来读取按键的键值。这样做的效果是：如果有按键按下了，调用该read()函数的进
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
-                                    嵌入式Linux
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
-                            <span class="chip bg-color">嵌入式Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/05/14/wds1-qi-di-12-ke-zi-fu-she-bei-qu-dong-5-key-zhong-duan-exec-zai-irq-zhong-du-qu-yin-jiao-xiu-mian-declare-wait-queue-head-wake-up-wait-event-interrupti-local/">
-                        <div class="card-image tag-image">
-                            
-                            
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="WDS1期第12课 字符设备驱动 5 key 中断 exec 在irq中读取引脚 休眠 DECLARE_WAIT_QUEUE_HEAD wake_up_ wait_event_interrupti">
-                            
-                            <span class="card-title">WDS1期第12课 字符设备驱动 5 key 中断 exec 在irq中读取引脚 休眠 DECLARE_WAIT_QUEUE_HEAD wake_up_ wait_event_interrupti</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                @[toc]单片机开发
-
-有按键按下
-cpu中断，强制跳转到中断入口执行
-在中断入口函数中
-1 保存现场（各种寄存器的值）
-2 执行中断处理函数
-3 恢复现场
-
-他人优秀总结 字符设备驱动三 中断框架中断描述符表（Interrupt Des
                             
                         </div>
                         <div class="publish-info">

@@ -1,0 +1,1183 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Linux内核设计与实现 第4章 进程调度, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Linux内核设计与实现 第4章 进程调度 | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Linux内核设计与实现 第4章 进程调度</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                                <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/" class="post-category">
+                                Linux内核设计与实现 陈莉君（第三版）
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.3k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]<br>进程调度程序可看作是：<strong>可运行态进程</strong>之间 <strong>分配有限的处理器时间资源</strong> 的内核子系统。<br>在一组处于可运行状态的程序中选择一个来执行，是调度程序的基本工作。<br>目标是： <strong>在进程响应时间</strong> 和 <strong>最大系统利用率（吞吐量高）</strong> 两个矛盾中寻找平衡。</p>
+<p>有如下调度算法：O(1)调度算法 [早期]；反转楼梯最后期限调度算法(RSDL)，完全公平调度算法(CFS, Completely Fair Scheduler)，这俩是一个东西。</p>
+<h1 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h1><p>进程可以分为<strong>I/O消耗性</strong> 和 <strong>处理器消耗性</strong>。<br><strong>I/O消耗性</strong>：经常处于可运行状态，运行一会儿等待IO请求阻塞。如键盘输入，网络IO，用户GUI程序（IO密集型）。<br><strong>处理器消耗性</strong>：一直不停运转不需要太多IO需求。调度策略是尽量降低调度频率、延长运行时间。如大量数学运算程序。</p>
+<p>不完全是明确的两类，如字处理器，X Windows服务器。</p>
+<h2 id="进程优先级"><a href="#进程优先级" class="headerlink" title="进程优先级"></a>进程优先级</h2><p>Linux采用两种不同的优先级范围。<strong>普通任务nice值</strong>和<strong>实时优先级</strong>。<br><strong>nice值</strong>：-20<del>+19，默认为0，值越低优先级越高获得越多处理器时间。<br><strong>实时优先级</strong>：0</del>99，可配置，值越高优先级越高。<br>任何实时进程的优先级都高于普通进程，也就是说实时优先级和nice优先级处于互不相交的范畴。<br>实际上，内核看到的任务优先级和用户看到的并不相同。Linux 内核中使用 0<del>139 表示任务的优先级，并且，值越小，优先级越高（注意和用户空间的区别）。其中 0</del>99 保留给实时进程，100<del>139（映射成 nice 值就是 -20</del>19）保留给普通进程。</p>
+<p><code>ps -el</code>查看NI列为进程对应nice值。<br><img src="/images/20200201110816677.png"><br>查看进程的实时优先级，实时进程在RTPRIO列显示优先级，<code>ps -eo state,uid,pid,ppid,rtprio,time,comm</code>，**–** 则不是实时进程。<br><img src="/images/20200201110656171.png"></p>
+<h2 id="时间片-timeslice"><a href="#时间片-timeslice" class="headerlink" title="时间片(timeslice)"></a>时间片(timeslice)</h2><p>时间片是一个数值，表示进程再被抢占前所能持续运行的时间。太长导致系统对交互的相应欠佳，太短导致系统进程切换带来大量处理器消耗。<br>Linux并没有直接分配时间片到进程，它是将<font color=red><strong>处理器的使用比</strong></font>分给进程，也就是进程分的<strong>实际时间片跟系统负载密切相关</strong>。很多其他操作系统的默认时间片为10ms。</p>
+<h2 id="Linux调度算法"><a href="#Linux调度算法" class="headerlink" title="Linux调度算法"></a>Linux调度算法</h2><p>linux调度器是以模块的方式提供，目地是对于不同类型的进程可以有针对性的选择调度算法。该模块化结构被称为调度器类(scheduler classes)。<br>CFS是针对普通进程的调度类。获得的最小时间片称 最小粒度默认是1ms，不是算数加权是几何加权，分配得到的时间片不再是跟nice的绝对值直接相关，而是相对值处理器使用比。</p>
+<h1 id="Linux调度实现"><a href="#Linux调度实现" class="headerlink" title="Linux调度实现"></a>Linux调度实现</h1><p>包括了四个组成部分：</p>
+<ol>
+<li>时间记账(Time Accounting)</li>
+<li>进程选择（Process Selection）</li>
+<li>调度器入口（The Scheduler Entry Point）</li>
+<li>睡眠和唤醒（Sleeping and Waking Up）<h2 id="1-时间记账"><a href="#1-时间记账" class="headerlink" title="1. 时间记账"></a>1. 时间记账</h2>在include\linux\sched.h中定义，**调度器实体<code>struct sched_entity</code>**，成员<code>vruntime</code>记录程序运行了多长时间还应该运行多长时间ns。update_curr()计算当前进程执行时间，由系统定时器周期调用。<br>update_curr()<h2 id="2-进程选择"><a href="#2-进程选择" class="headerlink" title="2. 进程选择"></a>2. 进程选择</h2>CFS调度算法的核心是 选择具有最小vruntime的任务。<br>CFS采用<strong>红黑树</strong>来组织可运行的进程队列，节点键值是vruntime。<br>选择下一个要运行的任务：就是红黑树<strong>最左边叶子节点</strong>所代表的那个进程。若返回NULL则表示没有可运行的节点，CFS便选择idle任务运行。__pick_next_entity()<br>加入进程到树：进程变为可运行状态fork()。enqueue_entity()<br>删除进程从树中：dequeue_entity()<h2 id="3-调度器入口"><a href="#3-调度器入口" class="headerlink" title="3. 调度器入口"></a>3. 调度器入口</h2>统一的调度器入口schedule()，通常和一个具体的调度器类相关联，在kernel/sched/core.c中定义。找到一个最高优先级的调度类，调度类有自己的运行队列，知道谁是下一个该运行的进程。<br>pick_next_task()按优先级检查每一个调度类，选择高优先级进程。每个调度类也自己实现了pick_next_task()。<br>schedule()<br>&emsp;pick_next_task()<br>&emsp;&emsp;&emsp;&emsp;class-&gt;pick_next_task()<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;pick_next_entity()<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;__pick_next_entity()<h2 id="4-睡眠和唤醒"><a href="#4-睡眠和唤醒" class="headerlink" title="4. 睡眠和唤醒"></a>4. 睡眠和唤醒</h2></li>
+</ol>
+<p><strong>休眠</strong>（被阻塞。INT、UNINT）的进程处于一个特殊的不可执行状态。为等待某一事件进入休眠。<br>内核干的事：进程把自己标记称休眠，从可执行红黑树中移除，放入等待队列；任何调用schedule()选择和执行一个其他进程。<br><strong>唤醒：</strong> 过程刚好相反，进程被设置为可执行状态，然后从等待队列中移入可执行红黑树中。<br><strong>等待队列：</strong> 由 等待某些事件的进程组成 的简单<strong>链表</strong>。TASK_INTERRUPTIBLE和TASK_UNINTERRUPTIBLE位于同一等待队列，等待事件不能运行。不同的是TASK_UNINTERRUPTIBLE的进程会忽略信号。<br><strong>伪唤醒：</strong> （被唤醒不是因为等待的事件发生了）。进程状态被设置为TASK_INTERRUPTIBLE，则信号可以唤醒线程，因此进程检查并处理信号。</p>
+<h1 id="抢占和上下文切换"><a href="#抢占和上下文切换" class="headerlink" title="抢占和上下文切换"></a>抢占和上下文切换</h1><p><strong>上下文切换：</strong> 从一个可执行进程切换到另一个可执行进程。由context_switch()函数负责处理，当一个进程被选为下一个运行的对象时，schedule()就会调用该函数。<br>context_switch()函数中主要调用两个函数，</p>
+<ol>
+<li>switch_mm()切换虚拟内存，</li>
+<li>switch_to()切换处理器状态，包括了栈信息、寄存器信息、与体系结构相关的状态信息。</li>
+</ol>
+<p>schedule()<br>&emsp;&emsp;context_switch()<br>&emsp;&emsp;&emsp;&emsp;switch_mm()<br>&emsp;&emsp;&emsp;&emsp;switch_to()</p>
+<h2 id="need-resched标志"><a href="#need-resched标志" class="headerlink" title="need_resched标志"></a>need_resched标志</h2><p>内核提供need_resched标志 表明是否需要重新执行一次调度。<br>每个进程都包含need_resched标志，当某个进程应该被抢占或者优先级高的进程进入可执行状态时，这个标志将被设置。内核会检查该标志确认被设置 并调用schedule()切换到新进程。<br><strong>位置：</strong> need_resched标志在thread_info结构体里，在某个标志变量的某个位里边。<br><strong>访问和操作：</strong> 用于访问和操作need_resched标志的函数有三个：</p>
+<ol>
+<li>set_tsk_need_reshed()</li>
+<li>clear_tsk_need_reshed()</li>
+<li>need_resched()  // 检查标志值并返回真假<h2 id="用户抢占"><a href="#用户抢占" class="headerlink" title="用户抢占"></a>用户抢占</h2>内核无论是在 <em>中断处理程序</em> 还是 <em>在系统调用后</em> <em>返回</em>，都会检查need_resched标志，如果need_resched标志被设置会导致schedule()被调用，此时发生用户抢占。</li>
+</ol>
+<p><strong>中断处理程序或系统调用返回的路径</strong>跟具体的体系结构有关，在entry.S中实现。<br>用户抢占在以下情况产生：</p>
+<ol>
+<li>从系统调用返回用户空间时。</li>
+<li>从中断处理程序返回用户空间时。<h2 id="内核抢占"><a href="#内核抢占" class="headerlink" title="内核抢占"></a>内核抢占</h2>其他大部分操作系统，调度程序无法在 内核级的任务正在执行时 重新调度，不具备抢占性。<br>对于Linux来说，只要重新调度是安全的（没有持有锁，锁是非抢占区域的标志），内核可以在任何时间抢占正在执行的任务。<br>每个进程的thread_info有preempt_count计数器，使用锁时加1，释放锁时减1。<br>内核抢占在以下情况产生：</li>
+<li>中断处理程序正在执行，且返回内核空间之前。</li>
+<li>内核代码再一次具有可抢占性时。</li>
+<li>内核任务显示调用schedule()。</li>
+<li>内核任务被阻塞，同样也会导致调用schedule()。</li>
+</ol>
+<h2 id="实时调度策略"><a href="#实时调度策略" class="headerlink" title="实时调度策略"></a>实时调度策略</h2><p>SCHED_NORMAL, SCHED_BATCH 和 SCHED_IDLE 进程会映射到 fair_sched_class （由 CFS 实现）；SCHED_RR 和 SCHED_FIFO 则映射的 rt_sched_class （实时调度器）。</p>
+<p>实时任务的优先级是静态的。</p>
+<p><strong>SCHED_FIFO</strong>，简单先入先出，无时间片，一直执行直道被阻塞或显示释放处理器，同优先级则轮流执行（也就是当一个任务完成后，会被放到队列尾部等待下次执行），只有更高优先级的FIFO或者RR才能抢占。<br><strong>SCHED_RR</strong>，实时轮流调度算法，带有时间片的SCHED_FIFO。默认的时间片是 100ms。</p>
+<p><strong>硬实时任务</strong>：会有严格的时间限制，任务必须在时限内完成。比如直升机的飞控系统。然而，Linux 本身并不支持硬实时任务，但是有一些基于它修改的版本，如 RTLinux（它们通常被称为 RTOS）则是支持硬实时调度的。<br><strong>软实时任务</strong>：软实时任务其实也会有时间限制，但不是那么严格。也就是说，任务晚一点运行任务，并不会造成不可挽回的灾难性事故。例如，VOIP 软件会使用软实时保障的协议传来送音视频信号，但是即便因为操作系统负载过高，而产生一点延迟，也不会造成很大影响。<br>无论如何，软实时任务总会比普通任务的优先级更高。</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-4-zhang-jin-cheng-diao-du-local/">https://wuyexkx.github.io/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-4-zhang-jin-cheng-diao-du-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                                    <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-6-zhang-nei-he-shu-ju-jie-gou-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Linux内核设计与实现 第6章 内核数据结构">
+                        
+                        <span class="card-title">Linux内核设计与实现 第6章 内核数据结构</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/" class="post-category">
+                                    Linux内核设计与实现 陈莉君（第三版）
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                        <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-5-zhang-xi-tong-diao-yong-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Linux内核设计与实现 第5章 系统调用">
+                        
+                        <span class="card-title">Linux内核设计与实现 第5章 系统调用</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/" class="post-category">
+                                    Linux内核设计与实现 陈莉君（第三版）
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                        <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

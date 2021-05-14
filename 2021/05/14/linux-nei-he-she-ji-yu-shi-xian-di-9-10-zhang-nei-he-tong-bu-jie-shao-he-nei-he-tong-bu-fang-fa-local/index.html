@@ -1,0 +1,1365 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Linux内核设计与实现 第9 10章 内核同步介绍 和 内核同步方法, miemieda">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Linux内核设计与实现 第9 10章 内核同步介绍 和 内核同步方法 | miemieda</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">miemieda</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">miemieda</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Linux内核设计与实现 第9 10章 内核同步介绍 和 内核同步方法</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                                <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/" class="post-category">
+                                Linux内核设计与实现 陈莉君（第三版）
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.8k
+                </div>
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>@[toc]</p>
+<h1 id="9-内核同步介绍"><a href="#9-内核同步介绍" class="headerlink" title="9 内核同步介绍"></a>9 内核同步介绍</h1><h2 id="临界区和竞争条件"><a href="#临界区和竞争条件" class="headerlink" title="临界区和竞争条件"></a>临界区和竞争条件</h2><p>临界区（段）就是访问和操作共享数据的代码段。多个执行线程都处于同一临界区中同时执行，则产生竞争条件。<br>避免并发和防止竞争条件称 同步（synchronization）。</p>
+<h3 id="造成并发执行的原因"><a href="#造成并发执行的原因" class="headerlink" title="造成并发执行的原因"></a>造成并发执行的原因</h3><p>锁是采用原子操作实现。</p>
+<p>用户空间之所以需要同步，是因为用户程序会被调度程序抢占和重新调度。</p>
+<p><strong>内核中造成并发执行的原因：</strong></p>
+<ol>
+<li>中断，几乎在任何时刻异步发生，打断当前代码</li>
+<li>软中断和tasklet，内核能在任何时刻唤醒和调度软中断和tasklet</li>
+<li>内核抢占，内核具有抢占性，内核中的任何可能会被另一个任务抢占</li>
+<li>睡眠及与用户空间同步，内核执行的进程可能休眠，这会唤醒调度程序，导致调度一个新的用户进程执行</li>
+<li>SMP，多处理器同时执行代码</li>
+</ol>
+<p>用锁保护共享数据并不困难，辨认出真正需要保护的共享数据和相应的临界区，才是有挑战的地方。</p>
+<p>中断安全代码（interrupt-safe）：在中断处理程序中能避免并发访问的代码。<br>SMP安全代码（SMP-safe）：在对称多处理器中能避免并发访问的代码。<br>抢占安全代码（preempt-safe）：在内核抢占时能避免并发访问的代码。</p>
+<h3 id="要保护些什么，哪些数据"><a href="#要保护些什么，哪些数据" class="headerlink" title="要保护些什么，哪些数据"></a>要保护些什么，哪些数据</h3><p>大多数内核数据结构都需要加锁。有其他执行线程可以访问的数据。<br>在编写内核代码时，以下问题很重要：</p>
+<ol>
+<li>此数据是不是全局，其他线程能不能访问？</li>
+<li>此数据会在进程上下文中、中断上下文中共享吗？会在两个不同的中断处理程序中共享？</li>
+<li>进程在访问时此数据时可不可能被抢占，被调度的新进程会不会访问此数据？</li>
+<li>当前进程会不会阻塞在此数据上，会让此数据处于何种状态？</li>
+<li>怎样防止数据失控？</li>
+<li>此函数在另一个处理器上被调度会发生什么？<h3 id="对于处理并发的配置选项"><a href="#对于处理并发的配置选项" class="headerlink" title="对于处理并发的配置选项"></a>对于处理并发的配置选项</h3>Linux内核可在编译时配置，所以可以针对指定机器进行裁剪。<br><code>CONFIG_SMP</code>选项控制内核是否支持SMP， 很多加锁问题在单处理器上不存在，可以避免自旋锁的开销。<code>CONFIG_PREEMPT</code>运行内核抢占的配置选项。</li>
+</ol>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>都在相互等待，但都不释放已占有的资源，都无法继续执行。</p>
+<p>最简单的死锁是<strong>自死锁</strong>：一个执行线程试图去获取自己已持有的锁。递归锁可以解决自死锁，但是Linux不提供，因为递归锁会使逻辑杂乱无章。<br>典型的两个线程两把锁，也称ABBA死锁：<br><img src="/images/20200214173706667.png"></p>
+<h3 id="避免死锁的方法："><a href="#避免死锁的方法：" class="headerlink" title="避免死锁的方法："></a>避免死锁的方法：</h3><h4 id="1-按顺序加锁，最有用"><a href="#1-按顺序加锁，最有用" class="headerlink" title="1. 按顺序加锁，最有用"></a>1. 按顺序加锁，最有用</h4><p>使用嵌套锁时保证以相同顺序获取锁。</p>
+<h4 id="2-防止饥饿发生"><a href="#2-防止饥饿发生" class="headerlink" title="2. 防止饥饿发生"></a>2. 防止饥饿发生</h4><p>假设本代码不会结束，加跳出的代码</p>
+<h4 id="3-不重复请求同一锁"><a href="#3-不重复请求同一锁" class="headerlink" title="3. 不重复请求同一锁"></a>3. 不重复请求同一锁</h4><h4 id="4-设计求简单，加锁越复杂，死锁越容易出现"><a href="#4-设计求简单，加锁越复杂，死锁越容易出现" class="headerlink" title="4. 设计求简单，加锁越复杂，死锁越容易出现"></a>4. 设计求简单，加锁越复杂，死锁越容易出现</h4><h2 id="争用和扩展性"><a href="#争用和扩展性" class="headerlink" title="争用和扩展性"></a>争用和扩展性</h2><p>锁的争用（lock contention），当锁被占据时，其他线程试图获得该锁。<br>高度争用状态是指有多个其他线程等待获取该锁。</p>
+<p>细粒度： 锁太粗造成系统性能瓶颈，锁太细增大系统开销。</p>
+<h1 id="10-内核同步方法"><a href="#10-内核同步方法" class="headerlink" title="10 内核同步方法"></a>10 内核同步方法</h1><p>Linux内核提供了相当完备的同步方法，这里讨论它们的接口、行为和用途。</p>
+<h2 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h2><p>原子操作可以保证指令执行过程不被打断。多个原子操作绝不可能并发的访问同一变量，不会引起竞争。<br>内核提供了两组原子操作接口，一组针对整数的操作，一组针对单独的位操作。</p>
+<h3 id="1-原子整数操作"><a href="#1-原子整数操作" class="headerlink" title="1. 原子整数操作"></a>1. 原子整数操作</h3><p><strong>常见用途是 实现计数器</strong>，用上锁机制就大炮打蚊子了。<br>原子整数操作只能对<code>atomic_t</code>类型数据进行操作，为什么不直接用c语言里的<code>int</code>表示，两个原因：</p>
+<ul>
+<li>让原子函数只能接收<code>atomic_t</code>类型的操作数，保证原子操作函数只与这种特殊类型一起使用，保证<code>atomic_t</code>数据类型不会被传递到非原子函数</li>
+<li>确保编译器不对相应的值进行访问优化，使得原子操作接收正确的内存地址也不是一个别名</li>
+</ul>
+<p><code>atomic_t</code>在linux/types.h中定义，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">volatile</span> <span class="token keyword">int</span> counter<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span> <span class="token class-name">atomic_t</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>在老的Linux版本，atomic_t实际只有24位长，低8位用来做锁。这是由于Linux是一个跨平台的实现，可以运行在多种 CPU上，有些类型的CPU比如SPARC并没有原生的atomic指令支持，所以只能在32位int使用8位来做同步锁，避免多个线程同时访问。</p>
+<p>老版本中关于原子整数的操作函数在asm/atomic.h中，尽管不同体系结构可能有额外的实现方法，但是Linux提供的是都已经实现了的，原子操作函数通常是内联函数，往往通过内嵌汇编指令实现，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token class-name">atomic_t</span> v<span class="token punctuation">;</span> <span class="token comment">/* define v */</span>
+<span class="token class-name">atomic_t</span> u <span class="token operator">=</span> <span class="token function">ATOMIC_INIT</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* define u and initialize it to zero */</span>
+
+<span class="token comment">// 操作也很简单</span>
+<span class="token function">atomic_set</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>v<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* v = 4 (atomically) */</span>
+<span class="token function">atomic_add</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>v<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* v = v + 2 = 6 (atomically) */</span>
+<span class="token function">atomic_inc</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>v<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* v = v + 1 = 7 (atomically) */</span>
+
+<span class="token comment">// 将atomic_t类型转换成int</span>
+<span class="token function">printk</span><span class="token punctuation">(</span>“<span class="token operator">%</span>d\n”<span class="token punctuation">,</span> <span class="token function">atomic_read</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>v<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* will print “7” */</span>
+
+<span class="token comment">// 检查原子整数并返回结果，减1后判断结构为0则返回true，否则返回false</span>
+<span class="token keyword">int</span> <span class="token function">atomic_dec_and_test</span><span class="token punctuation">(</span><span class="token class-name">atomic_t</span> <span class="token operator">*</span>v<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>在编写代码时，能使用原子操作就不用锁机制</strong>，原子操作开销很小，对处理器高速缓冲影响也小。<br>原子变量是32位的，也有64位的实现，atomic_t代表32位的，atomic_t64代表64位的。但多数32位机器不支持64位的原子整数。</p>
+<h3 id="2-原子位操作"><a href="#2-原子位操作" class="headerlink" title="2. 原子位操作"></a>2. 原子位操作</h3><p>与体系结构相关，2.6版本定义在文件asm/bitops.h中，位操作函数是对普通内存地址进行操作的。<strong>参数是一个指针和一个位号。</strong> 对位号范围没有限制。并没有像原子整数操作有专门的数据结构，原子位操作直接提供指针和位号就行。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">unsigned</span> <span class="token keyword">long</span> word <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token function">set_bit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>word<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* bit zero is now set (atomically) */</span>
+<span class="token function">set_bit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>word<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* bit one is now set (atomically) */</span>
+<span class="token function">printk</span><span class="token punctuation">(</span>“<span class="token operator">%</span>ul\n”<span class="token punctuation">,</span> word<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* will print “3” */</span>
+<span class="token function">clear_bit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>word<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* bit one is now unset (atomically) */</span>
+<span class="token function">change_bit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>word<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* bit zero is flipped; now it is unset (atomically) */</span>
+
+<span class="token comment">// 语句合法，知识不是原子</span>
+word <span class="token operator">=</span> <span class="token number">7</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>除此之外内核还提供对应的非原子操作，前面多加两条下划线，<code>test_bit() 对应 __test_bit()</code>。通常非原子操作执行更快。如果代码已经有避免竞争的锁，非原子位操作更好。</p>
+<h2 id="自旋锁（spin-lock）"><a href="#自旋锁（spin-lock）" class="headerlink" title="自旋锁（spin lock）"></a>自旋锁（spin lock）</h2><p>很多情况是通过原子操作解决不了的，如从一个数据结构中取出数据，然后操作，然后放入另一个数据结构。内核提供更复杂的同步方法—锁。</p>
+<p>Linux内核最常见的锁时自旋锁，它最多只能被一个可执行线程拥有，如果该锁已被一个线程持有，那么其他线程就要自旋等待（循环等待，特别浪费处理器时间）锁重新可用。<br>所以<strong>自旋锁不应该被长时间持有，初衷就是短时间轻量加锁。通常持有自旋锁的时间要短于完成两次上下文切换时间。</strong>。<br>信号量就是在发生争用时，等待的线程进入睡眠，直到锁重新可用时再唤醒它。有睡眠所以有明显的两次上下文切换，较耗时。</p>
+<h3 id="自旋锁方法"><a href="#自旋锁方法" class="headerlink" title="自旋锁方法"></a>自旋锁方法</h3><p>自旋锁的实现与体系结构密切相关，汇编实现。代码在asm/spinlock.h，实际接口在linux/spinlock.h中定义，基本使用形式，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">DEFINE_SPINLOCK</span><span class="token punctuation">(</span>mr_lock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">spin_lock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_lock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">/* 临界区critical region ... */</span>
+<span class="token function">spin_unlock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_lock<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>自旋锁同一时刻只能有一个线程持有锁，所以同一时刻只有一个线程位于临界区，为多处理器机器提供了防止并发访问的所需的保护机制。在单处理器上，编译时并不会加入自旋锁，如果禁止内核抢占则在编译时自旋锁就完全被踢出内核。</p>
+<h4 id="自旋锁可能导致自锁（不递归）和双重请求锁（中断中）原因"><a href="#自旋锁可能导致自锁（不递归）和双重请求锁（中断中）原因" class="headerlink" title="自旋锁可能导致自锁（不递归）和双重请求锁（中断中）原因"></a>自旋锁可能导致自锁（不递归）和双重请求锁（中断中）原因</h4><p><strong>在Linux内核中实现的自旋锁不可递归，与其他操作系统不同。获取已持被自己有的锁将死锁。</strong><br>自旋锁使用在中断处理程序中，自旋锁不会引起调用者睡眠。而信号量可以导致睡眠。<br><em>在中断处理程序中使用自旋锁时，一定要在获取所之前禁止本地中断（当前处理器上的中断请求）</em>，否则可能导致双重请求死锁ABBA锁。解释：中断可能打断内核持有锁的代码，在中断处理程序中去争用那个锁而自旋，但本中断不结束内核代码不能执行就不能释放锁，死锁产生。<br>？？？？？？解释不通啊，我认为应该是内核代码在请求锁前都要禁止本地中断，否则被中断后中断中再去请求已被其他代码持有的锁，那中断就自旋了，死锁了。</p>
+<p>因此内核提供禁止本地中断（当前处理器上）同时请求锁的代码。在单处理器上虽然编译时抛弃了锁机制，但禁止中断访问共享数据，对应加锁和解锁分别可以禁止和允许内核抢占。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">DEFINE_SPINLOCK</span><span class="token punctuation">(</span>mr_lock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> flags<span class="token punctuation">;</span>
+
+<span class="token function">spin_lock_irqsave</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_lock<span class="token punctuation">,</span> flags<span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">// 保存中断当前状态 并 禁止本地中断，再获取锁</span>
+<span class="token comment">/* critical region ... */</span>
+<span class="token function">spin_unlock_irqrestore</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_lock<span class="token punctuation">,</span> flags<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 解锁，恢复中断到之前状态 </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果加锁前已知中断是激活状态，那解锁后就不需要恢复中断以前样子，无条件地在解锁时激活中断，不提倡这种方法，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">DEFINE_SPINLOCK</span><span class="token punctuation">(</span>mr_lock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">spin_lock_irq</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_lock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">/* critical section ... */</span>
+<span class="token function">spin_unlock_irq</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_lock<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="调试自旋锁"><a href="#调试自旋锁" class="headerlink" title="调试自旋锁"></a>调试自旋锁</h4><p>配置选项CONFIG_DEBUG_SPINLOCK，为使用自旋锁的代码加入了很多调试检测手段，如内核是否使用了未初始化的锁，在未加锁前就就要解锁等操作，测试代码时应该打开这个选项。如果要进一步全程调试锁，还应该打开CONFIG_DEBUG_LOCK_ALLOC。</p>
+<h4 id="试图获取锁-和-查看锁的状态"><a href="#试图获取锁-和-查看锁的状态" class="headerlink" title="试图获取锁 和 查看锁的状态"></a>试图获取锁 和 查看锁的状态</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 初始化动态创建的自旋锁</span>
+<span class="token function">spin_lock_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">// 试图获取自旋锁，如果已被争用则返回非0而不自旋，成功则获得了该锁</span>
+<span class="token function">spin_try_lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">// 检查锁的状态，已被占用返回非0，否则返回0</span>
+<span class="token function">spin_is_locked</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="自旋锁和下半部"><a href="#自旋锁和下半部" class="headerlink" title="自旋锁和下半部"></a>自旋锁和下半部</h3><p>在与下半部配合时，必须小心锁机制。<br>函数<code>spin_lock_bh()</code>用于获取指定锁，同时禁止所有下半部执行，<code>spin_unlock_bh()</code>相反操作。<br><img src="/images/2020021620431486.png"><br><strong>下半部可以抢占进程上下文中的代码</strong>，当下半部和进程上下文共享数据时，必须保护进程上下文的共享数据，<font color=red><strong>所以进程上下文中和下半部共享数据时， 进程上下文中加锁的同时还要禁止下半部执行。</strong></font></p>
+<p><font color=red><strong>中断处理程序可以抢占下半部，中断处理程序和下半部共享数据时 下半部在加锁的同时还要禁止中断。</strong></font></p>
+<p><font color=red><strong>同类的tasklet不可能同时运行，所以同类tasklet中共享数据不需要保护。</strong> 不同类tasklet之间共享数据时 需要在访问数据前先获得一个自旋锁。因为同一处理器上绝不会出现tasklet相互抢占。</font></p>
+<p><font color=red><strong>软中断共享数据必须得到锁的保护，同种类型软中断也能同时在多处理器上运行。同一处理器上的软中断绝不会抢占另一个软中断，所以无需禁止下半部。</strong></font></p>
+<p><font color=red>linux上的自旋锁有三种实现：<br>          1. 在单cpu，不可抢占内核中，自旋锁为空操作。<br>          2. 在单cpu，可抢占内核中，自旋锁实现为“禁止内核抢占”，并不实现“自旋”。<br>          3. 在多cpu，可抢占内核中，自旋锁实现为“禁止内核抢占” + “自旋”。 </font></p>
+<h2 id="读写自旋锁（共享-排斥锁，并发-排斥锁）"><a href="#读写自旋锁（共享-排斥锁，并发-排斥锁）" class="headerlink" title="读写自旋锁（共享/排斥锁，并发/排斥锁）"></a>读写自旋锁（共享/排斥锁，并发/排斥锁）</h2><p>对于共享数据，只要没有写操作则可以并发读取，一旦有写则不能并发。比如任务链表就是通过<strong>读写自旋锁</strong>获得保护。<br>对于读/写 或 生产者/消费者类型数据结构，可以用读写自旋锁。<br>Linux专门提供了读写自旋锁，这种锁为 读 和 写分别提供了不同的锁，<font color=red><strong>一个和多个读任务可以并发持有读者锁，用于写的锁只能被一个写任务持有而且此时不能有并发的读操作。</strong></font></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 初始化读写自旋锁</span>
+<span class="token function">DEFINE_RWLOCK</span><span class="token punctuation">(</span>mr_rwlock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 读者代码中这样</span>
+<span class="token function">read_lock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_rwlock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">/* critical section (read only) ... */</span>
+<span class="token function">read_unlock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_rwlock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 写者代码中这样</span>
+<span class="token function">write_lock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_rwlock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">/* critical section (read and write) ... */</span>
+<span class="token function">write_unlock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_lock<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样会死锁，读者持有锁，写者自旋等待读者释放，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">read_lock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_rwlock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">write_lock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_rwlock<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><strong>在中断处理程序中只有读没有写操作，使用<code>read_lock()</code>而不是<code>read_lock_irqsave()</code>，但是还是要用<code>write_lock_irqsave()</code>禁止包含写操作的中断。<br>在中断中有写的操作，可能导致死锁。若其他地方有读者在操作，而中断中需要获取锁之后才能写进而自旋等待，死锁。</strong> ？？？？？没搞明白<br><img src="/images/20200216204224210.png"><br><strong>读写自旋锁 照顾读比写要多，大量的读者会使写处于饥饿状态，编程需要注意。</strong></p>
+<h2 id="信号量（Semaphores）"><a href="#信号量（Semaphores）" class="headerlink" title="信号量（Semaphores）"></a>信号量（Semaphores）</h2><p>Linux中的信号量是一种睡眠锁。若有任务试图获取已被占用的信号量，信号量会使该任务进入一个等待队列，然后让其睡眠。处理器重获自由去执行其他代码。当持有信号量的任务释放锁后，处于等待队列的那个任务将被唤醒。<br>信号量比自旋锁有更好的CPU利用率，但是开销更大。</p>
+<h3 id="信号量与自旋锁使用差异"><a href="#信号量与自旋锁使用差异" class="headerlink" title="信号量与自旋锁使用差异"></a>信号量与自旋锁使用差异</h3><ul>
+<li>争用信号量的进程可能睡眠，所以信号量适用于锁被长时间持有的情况。使用信号量不太合适短时间持有锁的情况，因为睡眠、维护等待队列、唤醒所花费的开销可能比锁占用时间还长。</li>
+<li>由于争用信号量锁的进程会睡眠，所有只能在进程上下文中获取信号量锁，因为中断上下文不能调度。</li>
+<li>持有信号量再去睡眠不会导致死锁，因为其他争用锁任务也只是睡眠，而本锁迟早释放。</li>
+<li>持有信号量的同时不能持有自旋锁，因为等待信号量可能睡眠，而持有自旋锁不允许睡眠。</li>
+</ul>
+<p>往往在需要和用户空间同步时，代码会需要睡眠，信号量是唯一选择。信号量不受睡眠限制，使用信号量更容易一些。</p>
+<p><font color=red> <strong>自旋锁会禁止内核抢占，而信号量代码可以被抢占，意味着信号量不会负面影响系统调用时间。</strong></font></p>
+<h3 id="计数信号量-和-二值信号量（互斥信号量）"><a href="#计数信号量-和-二值信号量（互斥信号量）" class="headerlink" title="计数信号量 和 二值信号量（互斥信号量）"></a>计数信号量 和 二值信号量（互斥信号量）</h3><p>信号量有个特性，允许任意多个数量的持有者，具体数量（使用者数量，usage count）可以在声明信号量时指定。自旋锁在同一时刻只能允许一个锁持有者。<br>计数信号量，不能用来强制互斥，它允许多个执行线程同时访问临界区，内核使用不多。<br>二值信号量，也称互斥信号量，计数等于1的信号量，强制互斥。</p>
+<p>信号量支持两个原子操作，<code>P()</code>和<code>V()</code>，后来系统叫<code>down()</code>和<code>up()</code>。<br><code>down()</code>对信号计数量减1表示请求信号量，<code>up()</code>表示释放信号量。</p>
+<h3 id="创建和初始化信号量"><a href="#创建和初始化信号量" class="headerlink" title="创建和初始化信号量"></a>创建和初始化信号量</h3><p>信号量实现与体系结构相关，在asm/semaphore.h中。用<code>struct semaphore</code>类型表示信号量。<br>以下方式静态声明信号量，name信号量名称，count使用数量。<br>更为普遍的互斥量用<code>DECLARE_MUTEX</code>定义。<br>常见情况是信号量作为大数据结构的一部分动态创建，所以需要初始化指针，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">semaphore</span> name<span class="token punctuation">;</span>
+<span class="token function">sema_init</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>name<span class="token punctuation">,</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 互斥量</span>
+<span class="token keyword">static</span> <span class="token function">DECLARE_MUTEX</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 初始化动态创建的信号量指针</span>
+<span class="token function">sema_init</span><span class="token punctuation">(</span>sem<span class="token punctuation">,</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 初始化动态创建的互斥量指针</span>
+<span class="token function">init_MUTEX</span><span class="token punctuation">(</span>sem<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="使用信号量"><a href="#使用信号量" class="headerlink" title="使用信号量"></a>使用信号量</h3><p>争用信号量使调用它的进程进入睡眠，既可以是interruptible也可以是uninterruptible，所以有不同的获取信号量的函数，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 获取不可用信号量锁时睡眠，睡眠中可被信号唤醒，返回-EINTR</span>
+<span class="token function">down_interruptible</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// uninterruptible睡眠，不再响应信号</span>
+<span class="token function">down</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 以非阻塞方式获取信号量，获取到了返回0，否则立即返回非0值</span>
+<span class="token function">down_trylock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/images/20200217104250324.png"></p>
+<h2 id="读写信号量（都是互斥信号量）"><a href="#读写信号量（都是互斥信号量）" class="headerlink" title="读写信号量（都是互斥信号量）"></a>读写信号量（都是互斥信号量）</h2><p>由<code>struct rw_semaphore</code>结构表示，在linux/rwsem.h中，静态创建读写信号量，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token function">DECLARE_RWSEM</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 初始化动态创建的信号量</span>
+<span class="token function">init_rwsem</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">rw_semaphore</span> <span class="token operator">*</span>sem<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><font color=red> <strong>只对写者互斥，读者不是。只要没有写者，并发读者数量不限。<br>只有唯一写者在没有读者时可以获取锁，所有读写锁的睡眠都不会被信号打断，因此只有一个版本down，</strong></font>例操作，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token function">DECLARE_RWSEM</span><span class="token punctuation">(</span>mr_rwsem<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">/* attempt to acquire the semaphore for reading ... */</span>
+<span class="token function">down_read</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_rwsem<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">/* critical region (read only) ... */</span>
+<span class="token comment">/* release the semaphore */</span>
+<span class="token function">up_read</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_rwsem<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">/* attempt to acquire the semaphore for writing ... */</span>
+<span class="token function">down_write</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_rwsem<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">/* critical region (read and write) ... */</span>
+<span class="token comment">/* release the semaphore */</span>
+<span class="token function">up_write</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mr_sem<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也提供了<code>down_read_trylock()</code>和<code>down_write_trylock()</code>操作。但是小心获取成功返回非0，失败返回0，与普通信号量相反。<br>读写信号量比读写自旋锁多一个操作<code>downgrade_write()</code>，他可以动态将获取的写锁转化为读锁。</p>
+<h2 id="互斥体（Mutexes）"><a href="#互斥体（Mutexes）" class="headerlink" title="互斥体（Mutexes）"></a>互斥体（Mutexes）</h2><p>互斥体指任何可以睡眠的强制互斥锁。如计数为1的信号量。<br>信号量的用途更通用，没有多少限制，适用于那些较复杂、未明情况下的互斥访问，如内核与用户空间复杂的交互行为。<br>互斥体操作接口更简单，实现更高效，使用限制更强，（因为受限制所以简洁高效）。</p>
+<p>常用方法：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 静态定义</span>
+<span class="token function">DEFINE_MUTEX</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 初始化动态指针</span>
+<span class="token function">mutex_init</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 锁定和解锁</span>
+<span class="token function">mutex_lock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">/* critical region ... */</span>
+<span class="token function">mutex_unlock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/images/2020021711364778.png"></p>
+<ul>
+<li>任何时刻只有一个任务可以持有mutex</li>
+<li>上锁者必须负责解锁，不能再一个地方上锁在另一个地方解锁，使得mutex不能用在内核与用户空间同步</li>
+<li>不支持递归</li>
+<li>持有mutex的进程不允许退出</li>
+<li>不能在中断 或 下半部使用</li>
+<li>只能通过官方API管理</li>
+</ul>
+<p>自旋锁支持调试，信号量不支持调试，而互斥体mutex支持，需要在内核配置选项打开CONFIG_DEBUG_MUTEXES。</p>
+<p><strong>优先使用mutex，再考虑信号量（在很底层的代码中才用）。<br>中断上下文中只能使用自旋锁，而在任务睡眠时只能使用互斥体。</strong></p>
+<h2 id="完成变量（Completion-Variables）"><a href="#完成变量（Completion-Variables）" class="headerlink" title="完成变量（Completion Variables）"></a>完成变量（Completion Variables）</h2><p>一个任务发出信号通知另一个任务已完成特定任务，用完成变量来同步。<br>与信号量思想一致。例如当子进程执行或者退出时，vfork()系统调用通过完成变量唤醒父进程。<br>由<code>struct completion</code>表示，在linux/completion.h中，通过宏静态创建并初始化，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">DECLARE_COMPLETION</span><span class="token punctuation">(</span>mr_comp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 初始化动态创建的完成变量</span>
+<span class="token function">init_completion</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>需要等待的任务调用<code>wait_for_completion()</code>，完成工作后的任务调用<code>complete()</code>唤醒正在等待的任务。完成变量通常用法是 将完成变量作为数据结构中的一项动态创建。<br><img src="/images/20200217115938680.png"></p>
+<h2 id="BKL-大内核锁"><a href="#BKL-大内核锁" class="headerlink" title="BKL 大内核锁"></a>BKL 大内核锁</h2><p>BKL是一个全局的自旋锁。它的存在是为Linux从最初的SMP过渡到细粒度加锁机制。</p>
+<h2 id="顺序锁（Sequential-Locks）"><a href="#顺序锁（Sequential-Locks）" class="headerlink" title="顺序锁（Sequential Locks）"></a>顺序锁（Sequential Locks）</h2><p>常称seq锁。在2.6版中引入的新锁。<br>主要依靠序列计数器。对于多个读者少数写者的情况，seq锁对写者有利，不会让写者饥饿。没有其他写者情况下写锁总是能被获取。</p>
+<p>最有说服力的例子是jiffies变量。该64位变量存储了Linux机器启动到当前的时间。获取jiffies的值用到<code>get_jiffies_64()</code>，该方法用到了seq锁，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">u64 <span class="token function">get_jiffies_64</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> seq<span class="token punctuation">;</span>
+u64 ret<span class="token punctuation">;</span>
+<span class="token keyword">do</span> <span class="token punctuation">&#123;</span>
+		seq <span class="token operator">=</span> <span class="token function">read_seqbegin</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>xtime_lock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		ret <span class="token operator">=</span> jiffies_64<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">read_seqretry</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>xtime_lock<span class="token punctuation">,</span> seq<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">return</span> ret<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 定时器中断更新该值</span>
+<span class="token function">write_seqlock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>xtime_lock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+jiffies_64 <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token function">write_sequnlock</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>xtime_lock<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="禁止抢占"><a href="#禁止抢占" class="headerlink" title="禁止抢占"></a>禁止抢占</h2><p><strong>内核是抢占性的，内核进程在任何时刻都可能停下来以便更高优先级的进程运行。<br>这可能导致两个任务访问同一临界区，为避免这种情况，内核用自旋锁作为非抢占区域的标记。如果一个自旋锁被持有，内核便不能进行抢占。</strong> 内核本身已经是SMP安全的，加上这个小变化使得内核也是抢占安全的（preempt-safe）。</p>
+<p>可以通过<code>preempt_disable();</code>禁止内核抢占，可以调用任意次，但是要与<code>preempt_enable();</code>对应调用。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">preempt_disable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">/* 抢占被禁止，preemption is disabled ... */</span>
+<span class="token function">preempt_enable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>抢占计数存放着被持有锁的数量和<code>preempt_disable();</code>的调用次数，如果是0则可以抢占，大于等于1是内核就不会抢占。<code> preempt_count()</code>返回这个值。<br><img src="/images/20200217155032539.png"></p>
+<h2 id="顺序和屏障"><a href="#顺序和屏障" class="headerlink" title="顺序和屏障"></a>顺序和屏障</h2><p>编译器和处理器为了提高效率，可能对读和写重新排序，而多处理器时读数据可能需要按照写的顺序进行，所以有<strong>确保顺序的指令，叫做屏障（barriers）</strong>。</p>
+<p>处理器在执行指令期间，会在取指令和分派时，把表面看似无关的指令按照自认为最好的顺序执行。现代处理器为了优化其传送管道（ pipelines）而发生指令重排。</p>
+<p>但是不管是编译器还是处理器都不知道其他上下文中的代码，所以有时保证一下执行顺序是有必要的，特别是在硬件设备上的这种情况最多，多处理器机器上也常见。</p>
+<p><code> rmb()</code>提供“读”内存屏障，它确保跨越<code> rmb()</code>的读入动作不被重排，<code> rmb()</code>之前的操作不会排在之后，之后不排在之前。<br> <code>wmb()</code>提供“写”内存屏障。<br>  <code>mb</code>提供“读写”内存屏障。载入和存储动作都不会发生重排。<br>  <code>read_barrier_depends()</code>是<code>rmb()</code>的变种，提供读屏障，但是只针对那些相互依赖的读操作，在有些体系结构上，  <code>read_barrier_depends()</code>比<code>rmb()</code>快，可能仅仅是个空操作。<br><img src="/images/20200217180027901.png"></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wuyexkx</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://wuyexkx.github.io/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-9-10-zhang-nei-he-tong-bu-jie-shao-he-nei-he-tong-bu-fang-fa-local/">https://wuyexkx.github.io/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-9-10-zhang-nei-he-tong-bu-jie-shao-he-nei-he-tong-bu-fang-fa-local/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wuyexkx</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                                    <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的鼓励是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/14/gnu-grub-she-zhi-grub-jie-mian-qi-dong-deng-dai-shi-jian-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="gnu grub 设置grub界面启动等待时间">
+                        
+                        <span class="card-title">gnu grub 设置grub界面启动等待时间</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Ubuntu/" class="post-category">
+                                    Ubuntu
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Ubuntu/">
+                        <span class="chip bg-color">Ubuntu</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/14/linux-nei-he-she-ji-yu-shi-xian-di-8-zhang-xia-ban-bu-he-tui-hou-zhi-xing-de-gong-zuo-local/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Linux内核设计与实现 第8章 下半部和推后执行的工作">
+                        
+                        <span class="card-title">Linux内核设计与实现 第8章 下半部和推后执行的工作</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/" class="post-category">
+                                    Linux内核设计与实现 陈莉君（第三版）
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%88%E8%8E%89%E5%90%9B%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89/">
+                        <span class="chip bg-color">Linux内核设计与实现 陈莉君（第三版）</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('3'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">wuyexkx</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="''" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:1191468572@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1191468572" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1191468572" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
