@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="git常用基本命令, miemieda">
+    <meta name="keywords" content="WDS2期第17课 2 USB总线驱动程序 接设备-测电平-生中断-分配编号-告知设备-取描述符-注册dev-放入bus的dev链表-读出drv-比较匹配-调用drv的probe, miemieda">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>git常用基本命令 | miemieda</title>
+    <title>WDS2期第17课 2 USB总线驱动程序 接设备-测电平-生中断-分配编号-告知设备-取描述符-注册dev-放入bus的dev链表-读出drv-比较匹配-调用drv的probe | miemieda</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -225,12 +225,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">git常用基本命令</h1>
+                    <h1 class="description center-align post-title">WDS2期第17课 2 USB总线驱动程序 接设备-测电平-生中断-分配编号-告知设备-取描述符-注册dev-放入bus的dev链表-读出drv-比较匹配-调用drv的probe</h1>
                 </div>
             </div>
         </div>
@@ -346,8 +346,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/">
-                                <span class="chip bg-color">代码管理</span>
+                            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                <span class="chip bg-color">嵌入式Linux</span>
                             </a>
                         
                     </div>
@@ -358,8 +358,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/" class="post-category">
-                                代码管理
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                嵌入式Linux
                             </a>
                         
                     </div>
@@ -380,7 +380,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.8k
+                    1.3k
                 </div>
                 
 
@@ -400,94 +400,171 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
-<p>title: git常用基本命令<br>date: 2021-05-14 17:27:11<br>categories: 代码管理<br>tags:</p>
-<ul>
-<li>代码管理</li>
-</ul>
-<hr>
-<p>@[toc]<br>很好的教程<a target="_blank" rel="noopener" href="https://backlog.com/git-tutorial/cn/stepup/stepup2_3.html">https://backlog.com/git-tutorial/cn/stepup/stepup2_3.html</a></p>
-<h1 id="1-几个重要概念"><a href="#1-几个重要概念" class="headerlink" title="1.几个重要概念"></a>1.几个重要概念</h1><pre><code> 工作区---------缓存区---------本地仓库--------远程仓库端
-git init ------git add ------git commit-------git push
-</code></pre>
-<p>整个流程是串行过程，每次修改，如果不用git add 到缓存区，commit就不会提交到本地仓库。</p>
-<h2 id="Git文件的状态分为untracked和tracked"><a href="#Git文件的状态分为untracked和tracked" class="headerlink" title="Git文件的状态分为untracked和tracked"></a>Git文件的状态分为untracked和tracked</h2><p>untracked文件是指新建的文件，尚未被git管理起来。</p>
-<h3 id="tracked又分为三种状态"><a href="#tracked又分为三种状态" class="headerlink" title="tracked又分为三种状态"></a>tracked又分为三种状态</h3><p>已提交（committed），已修改（modified）和已暂存（staged）。已提交表示文件已被安全地保存在本地数据库中了；已修改表示修改了某个文件，但没有提交保存；已暂存表示把已修改的文件放在下次提交时要保存的清单中。</p>
-<h1 id="2-保存"><a href="#2-保存" class="headerlink" title="2.保存"></a>2.保存</h1><p><code>git add xx</code> 将修改 保存到缓存区<br><code>git commit xx</code> 提交缓存区 保存到本地库<br><code>git push xx</code> 本地库 推上远程仓库端</p>
-<h1 id="3-退回到指定版本"><a href="#3-退回到指定版本" class="headerlink" title="3.退回到指定版本"></a>3.退回到指定版本</h1><p><code>git log</code> 查看所有提交的版本 （<code>git log --pretty=oneline</code> 单行显示）<br><code>git relog</code> 查看历史退回版本操作，包括对应版本号</p>
-<p><code>git reset --hard HEAD^</code> 退回到上个版本<br><code>git reset --hard HEAD^^</code> 退回到上上个版本<br><code>git reset --hard commit_id</code> 退回到指定版本</p>
-<h1 id="4-丢弃工作区的修改"><a href="#4-丢弃工作区的修改" class="headerlink" title="4.丢弃工作区的修改"></a>4.丢弃工作区的修改</h1><ul>
-<li>场景1：当你仅仅是改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout – file。</li>
-<li>场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步：第一步用命令git reset HEAD <file>，就回到了场景1，第二步按场景1操作。</li>
-<li>场景3：已经commit提交了修改 到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。<h2 id="场景1：add之前，丢弃工作区的修改"><a href="#场景1：add之前，丢弃工作区的修改" class="headerlink" title="场景1：add之前，丢弃工作区的修改"></a>场景1：add之前，丢弃工作区的修改</h2><code>git checkout  --  xxx</code> (checkout让这个文件回到最近一次git commit或git add时的状态)<h2 id="场景2：add之后commit之前，丢弃工作区的修改"><a href="#场景2：add之后commit之前，丢弃工作区的修改" class="headerlink" title="场景2：add之后commit之前，丢弃工作区的修改"></a>场景2：add之后commit之前，丢弃工作区的修改</h2>需要两步：</li>
-</ul>
-<ol>
-<li><code>git reset  HEAD  xxx</code> 退回上次提交的某个文件到缓存区</li>
-<li><code>git checkout  --  xxx</code>从缓存区退回某个文件<h1 id="5-远程"><a href="#5-远程" class="headerlink" title="5. 远程"></a>5. 远程</h1><h2 id="5-1git配置"><a href="#5-1git配置" class="headerlink" title="5.1git配置"></a>5.1git配置</h2><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zeo-to-one/p/8367801.html">https://www.cnblogs.com/zeo-to-one/p/8367801.html</a> <h2 id="5-2-连接远程仓库-下面两种方式都可以"><a href="#5-2-连接远程仓库-下面两种方式都可以" class="headerlink" title="5.2 连接远程仓库(下面两种方式都可以)"></a>5.2 连接远程仓库(下面两种方式都可以)</h2>找到github仓库对应的 URL<pre class="line-numbers language-none"><code class="language-none">git remote add origin git@github.com:yourName&#x2F;repositoryname.git
-git remote add origin https:&#x2F;&#x2F;github.com&#x2F;yourName&#x2F;repositoryname.git<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-若提示：<code>fatal: remote origin already exists.</code>,则删除，然后重新add:<pre class="line-numbers language-none"><code class="language-none">git remote remove origin<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+                <p>app<br>= = = = = = = = = = = = = = = = = =  = =<br>&emsp;&emsp;&emsp;&emsp;USB设备驱动程序<br>内核 = = = = = = = = = = = = == = = ==<br>&emsp;&emsp;&emsp;&emsp;USB总线驱动程序<br>= = = = = = = = = = = = = = = = = =  = =<br>&emsp;&emsp;&emsp;&emsp;&emsp;USB主机控制器<br>&emsp;&emsp;&emsp;&emsp;（UHCI OHCI EHCI）<br>硬件&emsp;&emsp;&emsp;= = = = = = = = =<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;USB设备</p>
+<p>UHCI：intel，低速（1.5Mbps）/全速（12Mbps）硬件复杂软件简单<br>OHCI：microsoft，低速/全速 硬件一般软件厉害<br>EHCI： 高速</p>
+<p>s3c用的是OHCI <code>drivers\usb\host\ohci-s3c2410.c</code>。</p>
+<h1 id="USB总线驱动程序的作用，分析这些步骤在哪里实现"><a href="#USB总线驱动程序的作用，分析这些步骤在哪里实现" class="headerlink" title="USB总线驱动程序的作用，分析这些步骤在哪里实现"></a>USB总线驱动程序的作用，分析这些步骤在哪里实现</h1><ol>
+<li>识别USB设备<br> 1.1 分配地址，并告诉USB设备（set address）<br> 1.2 发出命令获取描述符</li>
+<li>查找并安装对应的设备驱动程序</li>
+<li>提供USB读写函数（不管数据的含义）</li>
 </ol>
-<h2 id="5-3推送到远程仓库"><a href="#5-3推送到远程仓库" class="headerlink" title="5.3推送到远程仓库"></a>5.3推送到远程仓库</h2><pre><code>git push -u origin branch1  // 没什么卵用？？？
-</code></pre>
-<h2 id="5-4-强制推送"><a href="#5-4-强制推送" class="headerlink" title="5.4 强制推送"></a>5.4 强制推送</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/gddxz_zhouhao/article/details/53070317">https://blog.csdn.net/gddxz_zhouhao/article/details/53070317</a></p>
-<pre><code> git push -f origin master
-</code></pre>
-<h2 id="5-5-查看远程连接"><a href="#5-5-查看远程连接" class="headerlink" title="5.5 查看远程连接"></a>5.5 查看远程连接</h2><pre><code>git remote -v
-</code></pre>
-<h1 id="分支操作"><a href="#分支操作" class="headerlink" title="分支操作"></a>分支操作</h1><h2 id="新建分支"><a href="#新建分支" class="headerlink" title="新建分支"></a>新建分支</h2><pre><code>git checkout -b branch1 【-b新建并HEAD到这个分支 -d删除分支 】
-</code></pre>
-<h2 id="指定从某个分支下载"><a href="#指定从某个分支下载" class="headerlink" title="指定从某个分支下载"></a>指定从某个分支下载</h2><pre><code>git clone -b  xxx  https://xxxx
-</code></pre>
-<h2 id="查看分支状态"><a href="#查看分支状态" class="headerlink" title="查看分支状态"></a>查看分支状态</h2><pre><code>git branch      // 查看本地分支
-git branch -a   // 包括远程分支
-</code></pre>
-<h2 id="新建远程分支（先建远程分支，再push到远程分支）"><a href="#新建远程分支（先建远程分支，再push到远程分支）" class="headerlink" title="新建远程分支（先建远程分支，再push到远程分支）"></a>新建远程分支（先建远程分支，再push到远程分支）</h2><pre><code>git push origin local_branchxxx:remote_branchxxx // 建立分支 push都是这条吧，前提是与远程有连接 5.2步
-</code></pre>
-<p>使用git branch -a查看所有分支，会看到remotes/origin/remote_branchxxx这个远程分支，说明新建远程分支成功。</p>
-<h2 id="删除远程分支（推送空分支到远程）"><a href="#删除远程分支（推送空分支到远程）" class="headerlink" title="删除远程分支（推送空分支到远程）"></a>删除远程分支（推送空分支到远程）</h2><pre><code> git push origin  :remote_branchxxx
-</code></pre>
-<h2 id="从远程分支下载"><a href="#从远程分支下载" class="headerlink" title="从远程分支下载"></a>从远程分支下载</h2><pre class="line-numbers language-none"><code class="language-none">git clone -b branch_name  https:&#x2F;&#x2F;github.com&#x2F;user_name&#x2F;repositorie_name.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h1 id="常见错误"><a href="#常见错误" class="headerlink" title="常见错误"></a>常见错误</h1><h2 id="若公钥出现问题"><a href="#若公钥出现问题" class="headerlink" title="若公钥出现问题"></a>若公钥出现问题</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/xc917563264/article/details/80533734">https://blog.csdn.net/xc917563264/article/details/80533734</a></p>
-<h2 id="若提示Permissiondenied-publickey-fatal-Could-not-read-from-remote-repository-Pleasemake-sure-you-have-the-correct-access-rights-and-the-repository-exists"><a href="#若提示Permissiondenied-publickey-fatal-Could-not-read-from-remote-repository-Pleasemake-sure-you-have-the-correct-access-rights-and-the-repository-exists" class="headerlink" title="若提示Permissiondenied (publickey).　　fatal:Could not read from remote repository.　　Pleasemake sure you have the correct access rights and the repository exists."></a>若提示Permissiondenied (publickey).　　fatal:Could not read from remote repository.　　Pleasemake sure you have the correct access rights and the repository exists.</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wmr95/p/7852832.html">https://www.cnblogs.com/wmr95/p/7852832.html</a></p>
-<h2 id="若提示Please-make-sure-you-have-the-correct-access-rights"><a href="#若提示Please-make-sure-you-have-the-correct-access-rights" class="headerlink" title="若提示Please make sure you have the correct access rights"></a>若提示Please make sure you have the correct access rights</h2><p>and the repository exists.<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/hanchao5272/article/details/79393393">https://blog.csdn.net/hanchao5272/article/details/79393393</a></p>
-<h2 id="ssh-connect-to-host-github-com-port-22-Operation-timed-out-fatal-Could-not-read-from-remote-repository"><a href="#ssh-connect-to-host-github-com-port-22-Operation-timed-out-fatal-Could-not-read-from-remote-repository" class="headerlink" title="ssh: connect to host github.com port 22: Operation timed out fatal: Could not read from remote repository."></a>ssh: connect to host github.com port 22: Operation timed out fatal: Could not read from remote repository.</h2><p><a target="_blank" rel="noopener" href="https://www.gowhich.com/blog/781">https://www.gowhich.com/blog/781</a></p>
-<h2 id="Git-Connection-reset-by-xx-74-223-xxx-port-22"><a href="#Git-Connection-reset-by-xx-74-223-xxx-port-22" class="headerlink" title="Git: Connection reset by xx.74.223.xxx port 22"></a>Git: Connection reset by xx.74.223.xxx port 22</h2><p>尝试用命令推一波，<code> git push -u origin branch1</code></p>
-<h2 id="使用vscode总是让输入用户名和密码"><a href="#使用vscode总是让输入用户名和密码" class="headerlink" title="使用vscode总是让输入用户名和密码"></a>使用vscode总是让输入用户名和密码</h2><ol>
-<li><p>git bash中设置Git 全局设置:<br><code>git config --global user.name &quot;用户名&quot;</code><br><code>git config --global user.email &quot;用户邮箱&quot;</code></p>
-</li>
-<li><p>设置让VSCode记住git账号和密码：<br><code>git config --global credential.helper store</code></p>
-<h2 id="显示提交的信息"><a href="#显示提交的信息" class="headerlink" title="显示提交的信息"></a>显示提交的信息</h2><pre class="line-numbers language-c" data-language="c"><code class="language-c">git cherry <span class="token operator">-</span>v
+<p>从USB接入拔出打印的信息着手:<br>接上—-拔掉—-再接上<br><img src="/images/20200421103105222.png"><br>内核下搜索 <code>grep &quot;USB device using&quot; -nR</code>，在<code>drivers\usb\core\hub.c</code>路径下找到，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">int</span>
+<span class="token function">hub_port_init</span> <span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">usb_hub</span> <span class="token operator">*</span>hub<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">usb_device</span> <span class="token operator">*</span>udev<span class="token punctuation">,</span> <span class="token keyword">int</span> port1<span class="token punctuation">,</span>
+		<span class="token keyword">int</span> retry_counter<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token function">dev_info</span> <span class="token punctuation">(</span><span class="token operator">&amp;</span>udev<span class="token operator">-></span>dev<span class="token punctuation">,</span>
+		  <span class="token string">"%s %s speed %sUSB device using %s and address %d\n"</span><span class="token punctuation">,</span>
+		  <span class="token punctuation">(</span>udev<span class="token operator">-></span>config<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token string">"reset"</span> <span class="token operator">:</span> <span class="token string">"new"</span><span class="token punctuation">,</span> speed<span class="token punctuation">,</span> type<span class="token punctuation">,</span>
+		  udev<span class="token operator">-></span>bus<span class="token operator">-></span>controller<span class="token operator">-></span>driver<span class="token operator">-></span>name<span class="token punctuation">,</span> udev<span class="token operator">-></span>devnum<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-查看最新的commit
-git show<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="缓存太小，提交文件过大失败"><a href="#缓存太小，提交文件过大失败" class="headerlink" title="缓存太小，提交文件过大失败"></a>缓存太小，提交文件过大失败</h2><p>Err：Git: fatal; the remote end hung up unexpectedly</p>
-<h3 id="修改设置git-config文件的postBuffer的大小。（设置为500MB）"><a href="#修改设置git-config文件的postBuffer的大小。（设置为500MB）" class="headerlink" title="修改设置git config文件的postBuffer的大小。（设置为500MB）"></a>修改设置git config文件的postBuffer的大小。（设置为500MB）</h3><p><code>$ git config --local http.postBuffer 524288000</code><br>注：–local选项指定这个设置只对当前仓库生效。</p>
-</li>
-</ol>
-<h1 id="reset-revert-rebase"><a href="#reset-revert-rebase" class="headerlink" title="reset  revert rebase"></a>reset  revert rebase</h1><p>查看版本号，可以使用命令<code>git log</code>查看，就是<code>git commit -m &quot;messgae&quot;</code>的时候对应的版本。</p>
-<h2 id="reset-（复位-到-某一个版本）"><a href="#reset-（复位-到-某一个版本）" class="headerlink" title="reset （复位 到 某一个版本）"></a>reset （复位 到 某一个版本）</h2><p>git reset的作用是修改HEAD的位置，即将HEAD指向的位置改变为之前存在的某个版本。<br><strong>适用场景：</strong> 如果想恢复到之前某个提交的版本，且那个版本之后提交的版本我们都不要了，就可以用这种方法。</p>
-<p>使用<code>git reset --hard 目标版本号</code>命令将版本回退。当然可以反悔<code>git reset --hard 目标版本号</code>。<code>目标版本号</code>是commit后的字符<code>commit 98165a464fc4cdbbb45fcdc42bb4df1bbb22e92f</code>，输入前几位就可以。<br>reset之后再 <code>git push</code> 就不行了，因为这个版本是旧的，所以用<code>git push -f</code>强制推上去。<br><img src="/images/20200628215147327.png"><br><img src="/images/20200628215233369.png"></p>
-<h2 id="revert-（重做-某一个版本）"><a href="#revert-（重做-某一个版本）" class="headerlink" title="revert （重做 某一个版本）"></a>revert （重做 某一个版本）</h2><p><strong>适用场景：</strong> 如果我们想撤销之前的某一版本，但是又想保留该目标版本后面的版本，记录下这整个版本变动流程，就可以用这种方法。版本二已经没有了只是还有commit信息而已。</p>
-<p>使用<code>git revert -n 版本号</code>反做，并使用<code>git commit -m 版本名</code>提交。</p>
-<p><img src="/images/20200628220752221.png"></p>
-<h2 id="rebase-（重新和到同一分支）"><a href="#rebase-（重新和到同一分支）" class="headerlink" title="rebase （重新和到同一分支）"></a>rebase （重新和到同一分支）</h2><p><strong>适用场景：</strong> 多人同时在一个branch下操作，可能导致提交不了需要先pull再push，这样导致多个分支产生，合并这些分支用rebase</p>
-<h1 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h1><p><code>git merge &lt;branch1&gt;</code><br>该命令将指定分支导入到HEAD指定的分支。可能合并失败，1分支修改了同一行造成冲突，2分支删除了文件，3分支创建了同名文件。<br>冲突的地方用围起来<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>和 <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>，中间有冲突的改动会被 <code>=======</code> 分割起来。</p>
-<h1 id="追踪每行代码的修改是谁写的"><a href="#追踪每行代码的修改是谁写的" class="headerlink" title="追踪每行代码的修改是谁写的"></a>追踪每行代码的修改是谁写的</h1><p><code>git blame 文件名</code> 会显示每一行最后一次改动。</p>
-<h1 id="部分命令的区别与联系"><a href="#部分命令的区别与联系" class="headerlink" title="部分命令的区别与联系"></a>部分命令的区别与联系</h1><h2 id="git-commit-a-m"><a href="#git-commit-a-m" class="headerlink" title="git commit -a -m"></a>git commit -a -m</h2><p>-m 只提交暂存区的文件;<br>-ma 提交所有tracked的文件;</p>
-<p>git add命令是个多功能命令，根据目标文件的状态不同，此命令的效果也不同</p>
-<ul>
-<li>可以用它开始跟踪新文件，</li>
-<li>把已跟踪的文件放到暂存区，</li>
-<li>合并时把有冲突的文件标记为已解决状态等</li>
-</ul>
-<p>通常我们提交git是：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
-<span class="token function">git</span> commit -m <span class="token string">"messages"</span>
-<span class="token function">git</span> push<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>这三大步，而实际上，你只需要两条命令就够了，<strong>除非有新的文件要被添加进去[有新文件时需要先add改变文件状态]</strong></p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> commit -am <span class="token string">"messages"</span>
-<span class="token function">git</span> push<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+当接入USB设备时，主机硬件检测到电平拉高，
+产生中断，
+	在中断程序中分配编号，
+	然后把编号告诉USB设备，
+	发出命令获取描述符，
+	注册device，
+	然后把device放入USB bus的dev链表，
+	从链表中读取driver，一一比较，如果匹配则调用driver的probe，
+hub_irq
+	<span class="token function">kick_khubd</span> <span class="token punctuation">(</span>唤醒<span class="token punctuation">)</span>
+		<span class="token function">hub_thread</span> <span class="token punctuation">(</span>休眠<span class="token punctuation">)</span>
+			hub_events
+				hub_port_connect_change
+					udev <span class="token operator">=</span> <span class="token function">usb_alloc_dev</span><span class="token punctuation">(</span>hdev<span class="token punctuation">,</span> hdev<span class="token operator">-></span>bus<span class="token punctuation">,</span> port1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+						dev<span class="token operator">-></span>dev<span class="token punctuation">.</span>bus <span class="token operator">=</span> <span class="token operator">&amp;</span>usb_bus_type<span class="token punctuation">;</span>
+							<span class="token punctuation">.</span>match <span class="token operator">=</span>	usb_device_match<span class="token punctuation">,</span>
+					<span class="token function">choose_address</span><span class="token punctuation">(</span>udev<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 给新的设备分配编号（地址）</span>
+					<span class="token function">hub_port_init</span> 
+						<span class="token punctuation">(</span><span class="token string">"%s %s speed %sUSB device using %s and address %d\n"</span><span class="token punctuation">,</span><span class="token punctuation">)</span>
+						<span class="token function">hub_set_address</span><span class="token punctuation">(</span>udev<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 把编号地址告诉USB设备</span>
+						retval <span class="token operator">=</span> <span class="token function">usb_get_device_descriptor</span><span class="token punctuation">(</span>udev<span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获得设备描述符 8字节是因为不知道端的描述符		</span>
+						i <span class="token operator">=</span> udev<span class="token operator">-></span>descriptor<span class="token punctuation">.</span>bMaxPacketSize0 <span class="token operator">==</span> <span class="token number">0xff</span> <span class="token comment">// 设置						</span>
+						retval <span class="token operator">=</span> <span class="token function">usb_get_device_descriptor</span><span class="token punctuation">(</span>udev<span class="token punctuation">,</span> USB_DT_DEVICE_SIZE<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 再次获取</span>
+						status <span class="token operator">=</span> <span class="token function">usb_new_device</span><span class="token punctuation">(</span>udev<span class="token punctuation">)</span><span class="token punctuation">;</span>
+							err <span class="token operator">=</span> <span class="token function">usb_get_configuration</span><span class="token punctuation">(</span>udev<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获得所有描述符 解析描述符</span>
+								usb_get_descriptor 		<span class="token comment">// 获得所有描述符</span>
+								usb_parse_configuration <span class="token comment">// 解析描述符</span>
+							err <span class="token operator">=</span> <span class="token function">device_add</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>udev<span class="token operator">-></span>dev<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 把device放入bus的dev链表，</span>
+							<span class="token comment">// 从bus的driver链表里取出driver,一一比较，</span>
+							<span class="token comment">// 如果匹配则调用driver的probe函数									</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>分析<code>hub_port_connect_change</code>,给新设备分配编号，告知USB设备，获得设备描述符，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">drivers\usb\core\hub<span class="token punctuation">.</span>c
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">hub_port_connect_change</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">usb_hub</span> <span class="token operator">*</span>hub<span class="token punctuation">,</span> <span class="token keyword">int</span> port1<span class="token punctuation">,</span>
+					u16 portstatus<span class="token punctuation">,</span> u16 portchange<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+		udev <span class="token operator">=</span> <span class="token function">usb_alloc_dev</span><span class="token punctuation">(</span>hdev<span class="token punctuation">,</span> hdev<span class="token operator">-></span>bus<span class="token punctuation">,</span> port1<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
+		<span class="token comment">/* set the address */</span>
+		<span class="token function">choose_address</span><span class="token punctuation">(</span>udev<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 给新的设备分配编号（地址）</span>
+
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">choose_address</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">usb_device</span> <span class="token operator">*</span>udev<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span>		devnum<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">usb_bus</span>	<span class="token operator">*</span>bus <span class="token operator">=</span> udev<span class="token operator">-></span>bus<span class="token punctuation">;</span>
+
+	<span class="token comment">/* If khubd ever becomes multithreaded, this will need a lock */</span>
+
+	<span class="token comment">/* Try to allocate the next devnum beginning at bus->devnum_next. */</span>
+	devnum <span class="token operator">=</span> <span class="token function">find_next_zero_bit</span><span class="token punctuation">(</span>bus<span class="token operator">-></span>devmap<span class="token punctuation">.</span>devicemap<span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token comment">// 寻找为0的标记，表示还没有被分配的usb</span>
+			bus<span class="token operator">-></span>devnum_next<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>devnum <span class="token operator">>=</span> <span class="token number">128</span><span class="token punctuation">)</span> <span class="token comment">// 如果>=128则从头开始找，因此一个USB控制器最多分配127个USB设备</span>
+		devnum <span class="token operator">=</span> <span class="token function">find_next_zero_bit</span><span class="token punctuation">(</span>bus<span class="token operator">-></span>devmap<span class="token punctuation">.</span>devicemap<span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+	
+<span class="token keyword">static</span> <span class="token keyword">int</span>
+<span class="token function">hub_port_init</span> <span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">usb_hub</span> <span class="token operator">*</span>hub<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">usb_device</span> <span class="token operator">*</span>udev<span class="token punctuation">,</span> <span class="token keyword">int</span> port1<span class="token punctuation">,</span>
+		<span class="token keyword">int</span> retry_counter<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>	
+	<span class="token function">dev_info</span> <span class="token punctuation">(</span><span class="token operator">&amp;</span>udev<span class="token operator">-></span>dev<span class="token punctuation">,</span>
+		  <span class="token string">"%s %s speed %sUSB device using %s and address %d\n"</span><span class="token punctuation">,</span>
+		  <span class="token punctuation">(</span>udev<span class="token operator">-></span>config<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token string">"reset"</span> <span class="token operator">:</span> <span class="token string">"new"</span><span class="token punctuation">,</span> speed<span class="token punctuation">,</span> type<span class="token punctuation">,</span>
+		  udev<span class="token operator">-></span>bus<span class="token operator">-></span>controller<span class="token operator">-></span>driver<span class="token operator">-></span>name<span class="token punctuation">,</span> udev<span class="token operator">-></span>devnum<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+				retval <span class="token operator">=</span> <span class="token function">hub_set_address</span><span class="token punctuation">(</span>udev<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 把编号地址告诉USB设备</span>
+		retval <span class="token operator">=</span> <span class="token function">usb_get_device_descriptor</span><span class="token punctuation">(</span>udev<span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获得设备描述符 8字节是因为不知道端的描述符</span>
+
+
+分析设个USB设备描述符是什么东西，drivers\usb\core\message<span class="token punctuation">.</span>c
+<span class="token keyword">int</span> <span class="token function">usb_get_device_descriptor</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">usb_device</span> <span class="token operator">*</span>dev<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> size<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">usb_device_descriptor</span> <span class="token operator">*</span>desc<span class="token punctuation">;</span>
+
+找到这个usb_device_descriptor设备描述符结构体的定义include\linux\usb\ch9<span class="token punctuation">.</span>h，是USB第九章，
+<span class="token keyword">struct</span> <span class="token class-name">usb_device_descriptor</span> <span class="token punctuation">&#123;</span>
+	__u8  bLength<span class="token punctuation">;</span>
+	__u8  bDescriptorType<span class="token punctuation">;</span>
+
+	__le16 bcdUSB<span class="token punctuation">;</span> <span class="token comment">// USB版本号</span>
+	__u8  bDeviceClass<span class="token punctuation">;</span>
+	__u8  bDeviceSubClass<span class="token punctuation">;</span>
+	__u8  bDeviceProtocol<span class="token punctuation">;</span>
+	__u8  bMaxPacketSize0<span class="token punctuation">;</span> <span class="token comment">// 最大包大小，端点0，每个设备都有端点0，</span>
+						   <span class="token comment">// 就是通过这个端点0识别USB设备，</span>
+						   <span class="token comment">// 把地址 控制信息发送到端点0，从端点0读到描述符信息</span>
+	__le16 idVendor<span class="token punctuation">;</span>
+	__le16 idProduct<span class="token punctuation">;</span>
+	__le16 bcdDevice<span class="token punctuation">;</span>
+	__u8  iManufacturer<span class="token punctuation">;</span>
+	__u8  iProduct<span class="token punctuation">;</span>
+	__u8  iSerialNumber<span class="token punctuation">;</span>
+	__u8  bNumConfigurations<span class="token punctuation">;</span> <span class="token comment">// 设备有多少种配置</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">__attribute__</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>packed<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+配置描述符include\linux\usb\ch9<span class="token punctuation">.</span>h
+<span class="token keyword">struct</span> <span class="token class-name">usb_config_descriptor</span> <span class="token punctuation">&#123;</span>
+	__u8  bLength<span class="token punctuation">;</span>			<span class="token comment">// 配置描述符本身的长度</span>
+	__u8  bDescriptorType<span class="token punctuation">;</span>	
+
+	__le16 wTotalLength<span class="token punctuation">;</span>
+	__u8  bNumInterfaces<span class="token punctuation">;</span>  <span class="token comment">// 接口的个数，每个配置下可有多个接口，</span>
+						   <span class="token comment">// 逻辑上的功能，如声卡实际一个硬件但是有录音和播放两个接口</span>
+						   <span class="token comment">// 因此用两个接口描述符描述</span>
+	__u8  bConfigurationValue<span class="token punctuation">;</span>
+	__u8  iConfiguration<span class="token punctuation">;</span>
+	__u8  bmAttributes<span class="token punctuation">;</span>
+	__u8  bMaxPower<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">__attribute__</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>packed<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+接口描述符<span class="token keyword">struct</span> <span class="token class-name">usb_interface_descriptor</span> <span class="token punctuation">&#123;</span>
+	__u8  bLength<span class="token punctuation">;</span>
+	__u8  bDescriptorType<span class="token punctuation">;</span>
+
+	__u8  bInterfaceNumber<span class="token punctuation">;</span>
+	__u8  bAlternateSetting<span class="token punctuation">;</span>
+	__u8  bNumEndpoints<span class="token punctuation">;</span>		<span class="token comment">// 端点个数</span>
+	__u8  bInterfaceClass<span class="token punctuation">;</span>
+	__u8  bInterfaceSubClass<span class="token punctuation">;</span>
+	__u8  bInterfaceProtocol<span class="token punctuation">;</span>
+	__u8  iInterface<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">__attribute__</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>packed<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+端点描述符include\linux\usb\ch9<span class="token punctuation">.</span>h
+<span class="token keyword">struct</span> <span class="token class-name">usb_endpoint_descriptor</span> <span class="token punctuation">&#123;</span>
+	__u8  bLength<span class="token punctuation">;</span>
+	__u8  bDescriptorType<span class="token punctuation">;</span>
+
+	__u8  bEndpointAddress<span class="token punctuation">;</span> <span class="token comment">// 端点地址</span>
+	__u8  bmAttributes<span class="token punctuation">;</span>		<span class="token comment">// 属性 表示哪一种端点类型，批量？实时？</span>
+	__le16 wMaxPacketSize<span class="token punctuation">;</span>	<span class="token comment">// 最大包大小 通过端点一次性传输多少数据</span>
+	__u8  bInterval<span class="token punctuation">;</span>		<span class="token comment">// 查询的频率，本来没有中断主动通知pc，但是通过查询来实时</span>
+
+	<span class="token comment">/* NOTE:  these two are _only_ in audio endpoints. */</span>
+	<span class="token comment">/* use USB_DT_ENDPOINT*_SIZE in bLength, not sizeof. */</span>
+	__u8  bRefresh<span class="token punctuation">;</span>
+	__u8  bSynchAddress<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">__attribute__</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>packed<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+						<span class="token macro property"><span class="token directive-hash">#</span> <span class="token expression">USB的传输类型：</span></span>
+						<span class="token number">1.</span> 批量传输：可靠，时间没有保障 如U盘
+						<span class="token number">2.</span> 中断传输：可靠实时，如USB鼠标
+						<span class="token number">3.</span> 实时传输：不可靠、实时，如USB摄像头
+						<span class="token number">4.</span> 控制传输：可靠，时间有保证，如USB设备的识别过程<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="描述符的层次-设备—配置—接口—端点"><a href="#描述符的层次-设备—配置—接口—端点" class="headerlink" title="描述符的层次 设备—配置—接口—端点"></a>描述符的层次 设备—配置—接口—端点</h1><pre class="line-numbers language-c" data-language="c"><code class="language-c">设备描述符 <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span> <span class="token number">1</span>个
+	配置描述符 <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span> 多个
+		接口描述符 <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span> 多个 （录音 播放）
+			端点描述符 <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span> 多个<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/images/20200421130441704.png"><br>我们需要写的是USB设备驱动程序，<br><img src="/images/20200421214102184.png"></p>
 
                 
             </div>
@@ -514,7 +591,7 @@ git show<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wuyexkx.github.io/2021/05/14/git-chang-yong-ji-ben-ming-ling-local-local/">https://wuyexkx.github.io/2021/05/14/git-chang-yong-ji-ben-ming-ling-local-local/</a>
+                    <a href="https://wuyexkx.github.io/2021/05/14/wds2-qi-di-17-ke-2-usb-zong-xian-jie-she-bei-ce-dian-ping-sheng-zhong-duan-fen-bian-hao-gao-she-bei-qu-desc-zhu-ce-dev-ru-bus-de-dev-list-du-drv-match-diao-probe-local/">https://wuyexkx.github.io/2021/05/14/wds2-qi-di-17-ke-2-usb-zong-xian-jie-she-bei-ce-dian-ping-sheng-zhong-duan-fen-bian-hao-gao-she-bei-qu-desc-zhu-ce-dev-ru-bus-de-dev-list-du-drv-match-diao-probe-local/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -552,8 +629,8 @@ git show<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/">
-                                    <span class="chip bg-color">代码管理</span>
+                                <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                                    <span class="chip bg-color">嵌入式Linux</span>
                                 </a>
                             
                         </div>
@@ -726,13 +803,13 @@ git show<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/05/14/chu-liao-mou-ge-yuan-su-zhi-chu-xian-yi-ci-yi-wai-qi-yu-mei-ge-yuan-su-jun-chu-xian-liang-ci-zhao-chu-ta-local/">
+                <a href="/2021/05/14/wds2-qi-di-18-ke-1-2-kuai-she-bei-qu-dong-cheng-xu-fen-xi-ll-rw-block-di-ceng-du-xie-kuai-fs-jiang-dui-file-de-du-xie-zhuan-cheng-dui-shan-qu-de-local/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="除了某个元素只出现一次以外，其余每个元素均出现两次，找出它">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="WDS2期第18课 1 2 块设备驱动程序 分析ll_rw_block底层读写块 文件系统将对文件的读写转化成对扇区的读写">
                         
-                        <span class="card-title">除了某个元素只出现一次以外，其余每个元素均出现两次，找出它</span>
+                        <span class="card-title">WDS2期第18课 1 2 块设备驱动程序 分析ll_rw_block底层读写块 文件系统将对文件的读写转化成对扇区的读写</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -749,8 +826,8 @@ git show<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%8A%9B%E6%89%A3%E7%BC%96%E7%A8%8B%E9%A2%98%EF%BC%88c-%EF%BC%89/" class="post-category">
-                                    力扣编程题（c++）
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
                                 </a>
                             
                             
@@ -760,8 +837,8 @@ git show<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8A%9B%E6%89%A3%E7%BC%96%E7%A8%8B%E9%A2%98%EF%BC%88c-%EF%BC%89/">
-                        <span class="chip bg-color">力扣编程题（c++）</span>
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
                     </a>
                     
                 </div>
@@ -775,13 +852,13 @@ git show<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/14/shi-pin.m4s-ge-shi-zhuan-huan-cheng-mp4-m4s-yin-pin-zhuan-mp3-he-bing-b-zhan-huan-cun-shi-yin-pin-b-zhan-app-xia-zai-huan-cun-lu-jing-local/">
+                <a href="/2021/05/14/wds2-qi-di-17-ke-1-usb-qu-dong-zhi-gai-nian-dian-ping-chuan-shu-lei-xing-usb-qu-dong-kuang-tu-usb-she-bei-qu-usbbus-qu-usb-zhu-controler-local/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="视频.m4s格式转换成mp4，m4s音频转mp3,或者除了加密的文件外其他乱七八糟的格式都可以转换。合并B站缓存视频和音频 B站APP下载缓存路径">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="WDS2期第17课 1 USB驱动程序之概念介绍 电平 传输类型 USB驱动框架图 app-_USB设备驱动程序-_USB总线驱动程序-_USB主机控制器-_USB设备">
                         
-                        <span class="card-title">视频.m4s格式转换成mp4，m4s音频转mp3,或者除了加密的文件外其他乱七八糟的格式都可以转换。合并B站缓存视频和音频 B站APP下载缓存路径</span>
+                        <span class="card-title">WDS2期第17课 1 USB驱动程序之概念介绍 电平 传输类型 USB驱动框架图 app-_USB设备驱动程序-_USB总线驱动程序-_USB主机控制器-_USB设备</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -798,8 +875,8 @@ git show<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/windows/" class="post-category">
-                                    windows
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="post-category">
+                                    嵌入式Linux
                                 </a>
                             
                             
@@ -809,8 +886,8 @@ git show<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/windows/">
-                        <span class="chip bg-color">windows</span>
+                    <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/">
+                        <span class="chip bg-color">嵌入式Linux</span>
                     </a>
                     
                 </div>
