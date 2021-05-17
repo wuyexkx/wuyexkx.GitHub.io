@@ -280,21 +280,21 @@
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/c-ke-bian-can-shu-local/">
+                    <a href="/2021/05/14/c-yu-yan-wei-yu-struct-union-nei-cun-dui-qi-alignment-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="C可变参数">
+                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="C语言 位域 struct union内存对齐alignment 首先搞定对齐单位，然后确定成员offset，offset被成员大小与对齐单位小的那个整除，最后检查总size为对齐单位整数倍">
                             
-                            <span class="card-title">C可变参数</span>
+                            <span class="card-title">C语言 位域 struct union内存对齐alignment 首先搞定对齐单位，然后确定成员offset，offset被成员大小与对齐单位小的那个整除，最后检查总size为对齐单位整数倍</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                函数 func() 最后一个参数写成省略号，即三个点号（…），省略号之前的那个参数是 int，代表了要传递的可变参数的总数。为了使用这个功能，您需要使用stdarg.h头文件，该文件提供了实现可变参数功能的函数和宏。
-https://www
+                                @[toc]关于内存对齐参考
+位域位域的type只能为 int(整型)，unsigned int(无符号整型)，signed int(有符号整型) 三种类型，决定了如何解释位域的值。但是一般编译器都扩展了，char也可以。未命名位域不可引用
                             
                         </div>
                         <div class="publish-info">
@@ -330,21 +330,20 @@ https://www
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/c-yu-yan-wei-yu-struct-union-nei-cun-dui-qi-alignment-local/">
+                    <a href="/2021/05/14/c-new-features-lambda-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="C语言 位域 struct union内存对齐alignment 首先搞定对齐单位，然后确定成员offset，offset被成员大小与对齐单位小的那个整除，最后检查总size为对齐单位整数倍">
+                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="C++new features — lambda">
                             
-                            <span class="card-title">C语言 位域 struct union内存对齐alignment 首先搞定对齐单位，然后确定成员offset，offset被成员大小与对齐单位小的那个整除，最后检查总size为对齐单位整数倍</span>
+                            <span class="card-title">C++new features — lambda</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]关于内存对齐参考
-位域位域的type只能为 int(整型)，unsigned int(无符号整型)，signed int(有符号整型) 三种类型，决定了如何解释位域的值。但是一般编译器都扩展了，char也可以。未命名位域不可引用
+                                lambda产生的是一个对象。[]导入符号，()函数参数，mutable说明[]内的参数是否可以改动，thowSpec抛出异常，-&gt;retType返回类型，后面三个为可选项，只要存在一个就要写前面的()。&#123;&#125;函数b
                             
                         </div>
                         <div class="publish-info">
@@ -480,23 +479,24 @@ initializer_list&lt;T&gt;传入参数&#123;12,3,5,7,11,13,17&#125;，编译
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/c-bao-cuo-ji-he-local/">
+                    <a href="/2021/05/14/c-zuo-you-zhi-ji-qi-yin-yong-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="C++ 报错集合">
+                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="C++ 左、右值及其引用">
                             
-                            <span class="card-title">C++ 报错集合</span>
+                            <span class="card-title">C++ 左、右值及其引用</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                [with T = int]’ is private within this context原因：class成员默认私有，可能是class定义里忘了写public了。
-template&lt;class T>
-class AAA
-&#123
+                                左、右值概念左值：一个标识非临时性对象的表达式（通常程序中所有带名字的变量都可以叫左值）右值：标识临时性对象的表达式（临时生成的）
+int x = 10;
+int y = 20;
+int z = x + y;
+const int a = 1
                             
                         </div>
                         <div class="publish-info">
@@ -532,24 +532,23 @@ class AAA
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/c-zuo-you-zhi-ji-qi-yin-yong-local/">
+                    <a href="/2021/05/14/c-bao-cuo-ji-he-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="C++ 左、右值及其引用">
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="C++ 报错集合">
                             
-                            <span class="card-title">C++ 左、右值及其引用</span>
+                            <span class="card-title">C++ 报错集合</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                左、右值概念左值：一个标识非临时性对象的表达式（通常程序中所有带名字的变量都可以叫左值）右值：标识临时性对象的表达式（临时生成的）
-int x = 10;
-int y = 20;
-int z = x + y;
-const int a = 1
+                                [with T = int]’ is private within this context原因：class成员默认私有，可能是class定义里忘了写public了。
+template&lt;class T>
+class AAA
+&#123
                             
                         </div>
                         <div class="publish-info">

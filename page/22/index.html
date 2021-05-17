@@ -280,25 +280,23 @@
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/05/14/wds2-qi-di-18-ke-1-2-kuai-she-bei-qu-dong-cheng-xu-fen-xi-ll-rw-block-di-ceng-du-xie-kuai-fs-jiang-dui-file-de-du-xie-zhuan-cheng-dui-shan-qu-de-local/">
+                    <a href="/2021/05/14/wds2-qi-di-17-ke-3-4-usb-she-bei-qu-dong-cheng-xu-jian-dan-shu-biao-an-jian-lse-usb-request-block-urb-local/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="WDS2期第18课 1 2 块设备驱动程序 分析ll_rw_block底层读写块 文件系统将对文件的读写转化成对扇区的读写">
+                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="WDS2期第17课 3 4 USB设备驱动程序1简单编写 鼠标按键lse usb request block struct urb 总线驱动设备模型提供数据 设备驱动程序处理数据">
                             
-                            <span class="card-title">WDS2期第18课 1 2 块设备驱动程序 分析ll_rw_block底层读写块 文件系统将对文件的读写转化成对扇区的读写</span>
+                            <span class="card-title">WDS2期第17课 3 4 USB设备驱动程序1简单编写 鼠标按键lse usb request block struct urb 总线驱动设备模型提供数据 设备驱动程序处理数据</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                @[toc]
-总结字符设备驱动程序
+                                如何写驱动程序USB总线驱动程序 在我们接入USB设备时会自动构建一个USBdevice并注册到bus的dev中。我们需要做的是构建driver驱动程序，将程序注册到bus中。
+如何写USB设备驱动程序：
 
-查询方式：在读函数中返回引脚状态，比较前后值。（cpu占用太高）
-休眠唤醒：用户读驱动读，没有数据休眠，有数据被中断服务程序唤醒然后copy_to_user。（没有数据则一直休眠）
-poll机制：休眠时
+分配/设置usb_driver结
                             
                         </div>
                         <div class="publish-info">
